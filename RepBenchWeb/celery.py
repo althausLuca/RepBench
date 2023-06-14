@@ -106,6 +106,10 @@ def flaml_search_task(self, settings, X_train, y_train, X_test, y_test, my_task_
     task_data.set_classifier(automl)
     task_data.set_done()
 
+
+    remove_files()
+    # print("DONE")
+
     # classifier = automl.model
     # try:
     #     print(classifier.feature_names_)
@@ -131,6 +135,27 @@ def flaml_search_task(self, settings, X_train, y_train, X_test, y_test, my_task_
 from ray.tune import Callback
 from ray import tune, air
 from ray.tune.search.zoopt import ZOOptSearch
+
+
+def remove_files():
+    import os
+    import shutil
+    from datetime import datetime, timedelta
+
+    folder_paths = [os.path.expanduser("~/ray_results")]
+    for folder_path in folder_paths:
+        threshold = datetime.now() - timedelta(minutes=10)
+
+        # List all files in the folder
+        files = os.listdir(folder_path)
+
+        # Iterate over the files and delete those older than the threshold
+        for file_name in files:
+            file_path = os.path.join(folder_path, file_name)
+            modified_time = datetime.fromtimestamp(os.path.getmtime(file_path))
+            if modified_time < threshold:
+                shutil.rmtree(file_path)
+                print(f"Deleted file: {file_name}")
 
 
 @shared_task(bind=True)
@@ -250,7 +275,7 @@ def ray_tune_search_task(self, settings, X_train, y_train, X_test, y_text, my_ta
         tuner = tune.Tuner(train_model, param_space=ray_tune_config, run_config=air.RunConfig(callbacks=[MyCallback()]),
                            tune_config=tune.TuneConfig(time_budget_s=settings["time_budget"], metric="score", mode="max",
                                                        max_concurrent_trials=3,
-                                                       num_samples=10000))
+                                                       num_samples=10000 ))
 
     result_grid = tuner.fit()
     best_result = result_grid.get_best_result()
@@ -273,6 +298,7 @@ def ray_tune_search_task(self, settings, X_train, y_train, X_test, y_text, my_ta
                                num_leaves=best_config["num_leaves"],
                                learning_rate=best_config["learning_rate"],
                                min_child_samples=best_config["min_child_samples"])
+
 
     model.fit(X, y)
     task_data.set_done()

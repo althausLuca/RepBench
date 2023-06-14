@@ -10,7 +10,7 @@ def imr(x, y_0, labels, tau=0.1, p=1, k=20000):
 
     n = len(x)
     iterations = 0
-    print(k)
+    # print(k)
     for iter_counter in range(k):
         y_k_x_diff = y_k - x
         V_k = y_k_x_diff[p:]

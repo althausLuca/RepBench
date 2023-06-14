@@ -1,0 +1,98 @@
+<script>
+
+    const RecommendationChart = {
+        chart: null,
+        parameterChart: null,
+        init: function () {
+            this.chart = Highcharts.chart('raytunes-chart', {
+                chart: {
+                    {#type: 'column',#}
+                    height: 250,
+                },
+                title: {
+                    text: ''
+                },
+                xAxis: {
+                },
+                yAxis: {
+                    {#min: 0,#}
+                    {#max: 1,#}
+                    title: {
+                        text: 'Test Score'
+                    },
+
+                },
+
+                plotOptions: {
+                    column: {
+                        borderWidth: 0
+                    }
+                },
+
+                series: [{name: "", data: [], showInLegend: false}]
+
+            });
+
+            this.parameterChart =  Highcharts.chart('raytunes-parameter-chart', {
+                chart: {
+                    {#type: 'column',#}
+                    height: 250,
+                },
+                title: {
+                    text: ''
+                },
+                xAxis: {
+                },
+                yAxis: {
+                    title: {
+                        text: 'Parameter Values'
+                    },
+
+                },
+
+                plotOptions: {
+                    column: {
+                        borderWidth: 0
+                    }
+                },
+
+                series: [{name: "", data: [], showInLegend: false}]
+
+            });
+        },
+        addData: function (score, estimator, iter, parameters) {
+            console.log(parameters)
+            {#let categories = this.chart.xAxis[0].categories#}
+            {#if (!categories.includes(estimator)) {#}
+            {#    this.chart.xAxis[0].setCategories([...categories, estimator]);#}
+            this.chart.series[0].update({name: estimator})
+            this.chart.series[0].addPoint(score)
+
+
+            let parameter_names = Object.keys(parameters)
+            parameter_names.forEach(name => {
+                let param_series = this.parameterChart.series.filter(s => s.name === name)
+                if(param_series.length === 0){
+                    this.parameterChart.addSeries({name: name , data: [parameters[name]]})
+                }
+                else{
+                    param_series[0].addPoint(parameters[name])
+                }
+            }
+        )
+
+
+            {# } else {#}
+            {#    let seriesData = this.chart.series.filter(s => s.name === "current")[0].data#}
+            {#    seriesData[categories.indexOf(estimator)].update(score)#}
+            {#    let best = seriesData[0]#}
+            {#    if (score > best.y) {#}
+            {#        best.update({color: "red", y: score})#}
+            {#        categories[0] = "<b>" + estimator + "</b>"#}
+            {#    }#}
+            {# }#}
+        }
+    }
+
+
+</script>

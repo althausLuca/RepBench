@@ -32,7 +32,8 @@
 {% block portlet-body %}
     <div class="row">
         <div class="col-md-9">
-            <div id="flaml-chart"></div>
+            <div id="raytunes-chart"></div>
+            <div id="raytunes-parameter-chart"></div>
         </div>
         <div class="form-group col-md-3">
             <form class="form-group" id="recommendation_settings_form"
@@ -62,4 +63,6 @@
             </form>
         </div>
     </div>
+
+    {% include "recommendation/raytunes_chart.html" %}
 {% endblock %}

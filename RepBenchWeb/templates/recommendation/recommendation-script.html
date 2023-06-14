@@ -12,11 +12,11 @@
             this.option = option//flaml or ray
             this.start_url = start_url
             this.retrieve_url = retrieve_url
-            flamlChart.init()
+            RecommendationChart.init()
 
         },
         startTuning: function () {
-            flamlChart.init()
+            RecommendationChart.init()
             this.playing = false
             this.flaml_response_iter = 0;
             this.flaml_response_data = [];
@@ -30,7 +30,7 @@
 
             document.getElementById("start-button-right-text").innerHTML = "Starting " + this.option;
             {#initFlamlChart([]);#}
-            flamlChart.chart.showLoading()
+            RecommendationChart.chart.showLoading()
 
             $.ajax({
                 type: 'POST',
@@ -45,7 +45,7 @@
                     document.getElementById("start-button-right-text").innerHTML = "Starting " + this.option + "..."
                     this.getRecommendationResults();
                     this.iterateData();
-                    flamlChart.chart.hideLoading()
+                    RecommendationChart.chart.hideLoading()
                     this.playing = true
 
                     const parameterNames = {
@@ -73,13 +73,14 @@
                     {#console.log("EYYY", response);#}
                     if (response.status === 'running') {
                         this.flaml_response_data = response.data;
-                        flamlChart.chart.redraw();
+                        RecommendationChart.chart.redraw();
                         setTimeout(() => {
                             this.getRecommendationResults();  // Pass the task_id again in the recursive call
                         }, 1000);
                     } else if (response.status === 'done') {
                         console.log("DONE");
                         this.playing = false
+                        showRecommendationBelow()
                         // Display message that Flaml is finished
                         // ...
                         {#getPrediction()#}
@@ -111,7 +112,7 @@
 
                 this.flaml_response_iter = this.flaml_response_iter + 1;
                 this.flaml_series.push({y: score, x: this.flaml_response_iter, name: estimator})
-                flamlChart.addData(score, estimator, this.flaml_response_iter);
+                RecommendationChart.addData(score, estimator, this.flaml_response_iter,parameters);
                 parameterTable.addData(roundedScore, estimator, parameters);
                 {#addDataToFlamlChart(score, currentData.estimator , 1);#}
             } else {

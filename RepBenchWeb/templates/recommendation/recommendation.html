@@ -3,7 +3,6 @@
 
 
 {% block content %}
-    <script src="{% static 'js/repBench/recommendation/flamlCharts.js' %}" type="text/javascript"></script>
     <style>
         .kt-checkbox > span::after {
             border: solid green;
@@ -12,9 +11,10 @@
         #start-button-right-text {
             color: gray;
         }
-    </style>
 
-    <style>
+        .recommendation-below {
+           display: none;
+        }
         #parameterTable {
             border-collapse: collapse;
             width: 100%;
@@ -47,7 +47,8 @@
             </div>
         {% endblock %}
 
-        <div id="main-chart" class="col-md-6">
+{#        <div id="below-chart" class="row col-md-12">#}
+        <div id="main-chart" class="col-md-6 recommendation-below">
             <div class="kt-portlet">
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label">
@@ -136,7 +137,7 @@
                 <!--end: Highcharts -->
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3 recommendation-below">
             <div class="kt-portlet">
                 <div class=" kt-portlet__head">
                     <div class="kt-portlet__head-label">
@@ -150,7 +151,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3 recommendation-below">
             <div class="kt-portlet">
                 <div class=" kt-portlet__head">
                     <div class="kt-portlet__head-label">
@@ -165,7 +166,8 @@
                 </div>
             </div>
         </div>
-    </div>
+        </div>
+{#    </div>#}
 
 {% endblock %}
 
@@ -258,6 +260,13 @@
                     console.log("Error message:", response.responseText);
                     alert('Error retrieving Flaml prediction');
                 }
+            });
+        }
+
+        function showRecommendationBelow() {
+            var recommendationBelow = Array.from(document.getElementsByClassName("recommendation-below"));
+            recommendationBelow.forEach(function (element) {
+                element.style.display = "block";
             });
         }
     </script>

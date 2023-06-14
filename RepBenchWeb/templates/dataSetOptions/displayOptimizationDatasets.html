@@ -1,30 +1,102 @@
-{% extends "base.html" %}
-{% load static %}
+{% extends "dataSetOptions/displayDatasets.html" %}
 
 {% block content %}
     <!-- import style sheet -->
-    <link rel="stylesheet" href="{% static 'css/revival/datasets.css' %}">
-    <div class="container">
-        <h2>Datasets to optimize on</h2>
-        <table class="table">
-            <tbody>
-            <tr>
-                <th>Title</th>
-                <th style="text-align: right">Time series</th>
-                <th style="text-align: right">Values</th>
-                <th style="text-align: right">Action</th>
-            </tr>
-            <tr>
+    <div class="kt-portlet">
+        <div class="kt-portlet__head kt-portlet__head--lg">
+            <div class="kt-portlet__head-label">
+                <span class="kt-portlet__head-icon">
+                    <i class="mdi mdi-chart-timeline-variant mdi-24px kt-font-brand"></i>
+                </span>
+                <h3 class="kt-portlet__head-title">
+                    Table of Synthetic Datasets
+                </h3>
+            </div>
+        </div>
+        <div class="kt-portlet__body">
+            <div class="kt-portlet shadow-none kt-portlet--fit  mb-0" data-ktportlet="true"> {# kt-portlet--collapsed #}
+                <div class="kt-portlet__body mt-3">
+                    <form class="kt-form kt-form--fit kt-margin-b-20" name="search_form_name">
+                        <div class="row kt-margin-b-20">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <table id="table_real_world_datasets"
+                                           class="table table-bordered table-hover table-checkable dataTable no-footer dtr-inline"
+                                           role="grid" aria-describedby="table_real_world_datasets_info"
+                                           style="width: 1341px;">
+                                        <thead>
+                                        <tr role="row">
+                                            <th class="" tabindex="0" aria-controls="table_real_world_datasets"
+                                                rowspan="1" colspan="1" style="width: 220.667px;"
+                                                aria-label="title: activate to sort column ascending">
+                                                Title
+                                            </th>
+                                            {#                                            <th class="" tabindex="0"#}
+                                            {#                                                aria-controls="table_real_world_datasets" rowspan="1" colspan="1"#}
+                                            {#                                                style="width: 184.6667px;"#}
+                                            {#                                                aria-label="owner: activate to sort column descending"#}
+                                            {#                                                aria-sort="ascending">Source#}
+                                            {#                                            </th>#}
+                                            <th class="" tabindex="0" aria-controls="table_real_world_datasets"
+                                                rowspan="1" colspan="1" style="width: 30.667px;"
+                                                aria-label="timeseries: activate to sort column ascending">
+                                                Timeseries
+                                            </th>
+                                            <th class="" tabindex="0" aria-controls="table_real_world_datasets"
+                                                rowspan="1" colspan="1" style="width: 85.6667px;"
+                                                aria-label="values: act     ivate to sort column ascending">Values
+                                            </th>
+                                            <th class="" tabindex="0" aria-controls="table_real_world_datasets"
+                                                rowspan="1" colspan="1" style="width: 26.667px;"
+                                                aria-label="granularity: activate to sort column ascending">
+                                                Granularity
+                                            </th>
+                                            <th class="" tabindex="0" aria-controls="table_real_world_datasets"
+                                                rowspan="1" colspan="1" style="width: 91.5px;"
+                                                aria-label="actions: activate to sort column ascending">Action
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
 
-                {% for name,attr in  syntheticDatasets.items %}
-                    <tr>
-                        <td><a href="{% url 'synthetic_dataset_view' setname=name %}">{{ attr.title }}</a>
-                        <td style="text-align: right">{{ attr.ts_nbr }}</td>
-                        <td style="text-align: right">{{ attr.values }}</td>
-                        <td style="text-align: right"><a href="{% url 'opt' setname=attr.title %}">Optimize</a></td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                                        {% for name,attr in  syntheticDatasets.items %}
+                                            <tr>
+                                               <td tabindex="0" class="">{{ attr.title }}</td>
+                                                <td style="text-align: right">{{ attr.ts_nbr }}</td>
+                                                <td style="text-align: right">{{ attr.values }}</td>
+                                                <td style="text-align: right">-</td>
+                                                <td style="text-align: right"><a href="{% url 'opt' setname=attr.title %}">Optimize</a></td>
+                                            </tr>
+                                        {% endfor %}
+{#                                        {% for name,attr in  datasets.items %}#}
+{#                                            <tr>#}
+{#                                                <td tabindex="0" class="">{{ attr.title }}</td>#}
+                                                {#                                              #}
+{#                                                <td style="text-align: right">{{ attr.ts_nbr }}</td>#}
+{#                                                <td style="text-align: right">{{ attr.values }}</td>#}
+{#                                                <td style="text-align: right">-</td>#}
+{#                                                <td>#}
+{#                                                    <a href="{% url 'dimensionality_reduction' setname=name %}">Display</a>#}
+{#                                            </tr>#}
+{#                                        {% endfor %}#}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row">
+
+                            </div>
+                        </div>
+                        <div class="kt-separator kt-separator--md kt-separator--dashed"></div>
+
+                    </form>
+                </div>
+            </div>
+            <!--begin: Datatable -->
+            <table id="table_real_world_datasets" class="table table-bordered table-hover table-checkable"></table>
+            <!--end: Datatable -->
+        </div>
     </div>
+
+
 {% endblock %}

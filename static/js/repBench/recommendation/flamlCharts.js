@@ -1,4 +1,4 @@
-const flamlChart = {
+const RecommendationChart = {
     chart: null,
     init: function () {
         this.chart = Highcharts.chart('flaml-chart', {
@@ -36,7 +36,7 @@ const flamlChart = {
 
         });
     },
-    addData: function (score, estimator, iter) {
+    addData: function (score, estimator, iter,parameters) {
         let categories = this.chart.xAxis[0].categories
         if (!categories.includes(estimator)) {
             this.chart.xAxis[0].setCategories([...categories, estimator]);

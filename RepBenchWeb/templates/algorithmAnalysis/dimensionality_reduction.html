@@ -40,7 +40,7 @@
                     </select>
                 </div>
                 {% for key, form in alg_forms.items %}
-                    {% include 'parts/form.html' with form=form form_id=key style="display:none;" button_label="RUN!" onclick="repair('"|add:key|add:"')" %}
+                    {% include 'parts/form.html' with form=form form_id=key style="display:none;" class="run-btn" button_label="RUN!" onclick="repair('"|add:key|add:"')" %}
                 {% endfor %}
 
             </div>
@@ -54,6 +54,9 @@
     <style>
         .form-group {
             display: inline-block;
+        }
+        .run-btn {
+            transform: translate(0, -10px);
         }
     </style>
 
@@ -161,7 +164,7 @@
 
                 x.style["margin-left"] = "10px";
                 x.style["transform"] = "translate(0, 1.2px)";
-                button.style["transform"] = "translate(0, -4.5px)";
+                button.style["transform"] = "translate(0, -2px)";
             } else {
                 x.style.display = "none";
             }

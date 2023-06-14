@@ -1,0 +1,1 @@
+from injection.injection_methods.full_injection import inject_data_df
