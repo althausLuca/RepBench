@@ -6,8 +6,6 @@ from multiprocessing.pool import ThreadPool as Pool
 import time
 
 
-
-
 class EstimatorOptimizer():
     def __init__(self, repair_estimator, error_score ,*, n_jobs = 6):
         self.error_score = error_score
@@ -46,7 +44,7 @@ class EstimatorOptimizer():
         param_combinations = list(dict(zip(param_grid.keys(), x)) for x in itertools.product(*param_grid.values()))
         return param_combinations
 
-    def param_map(self,repair_inputs,param_combinations , run_time = False):
+    def param_map(self,repair_inputs , param_combinations , run_time = False):
         """
         returns [(params , score )  , (params , score ,) .. ]
         """
@@ -79,7 +77,6 @@ class EstimatorOptimizer():
 
 
     def grid(self, repair_inputs, param_grid, combination_list = None):
-        print(param_grid)
         if combination_list is not None:
             param_combinations = combination_list
         else:

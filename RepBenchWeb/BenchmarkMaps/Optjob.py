@@ -47,7 +47,7 @@ def start(job_id, param_ranges, alg_type, injected_data_container: InjectedDataC
                                       )
 
         params, scores = optimizer.search(injected_data_container.repair_inputs, param_ranges,
-                                          return_full_minimize_result=True,
+                                          return_full_results=True,
                                           )
 
         min_index = list(scores).index(min(scores))

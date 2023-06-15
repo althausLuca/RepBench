@@ -17,7 +17,7 @@ def run_optimization_task(estimator, repair_inputs, param_ranges, error_loss, n_
                                   )
 
     params, scores = optimizer.search(repair_inputs, param_ranges,
-                                      return_full_minimize_result=True)
+                                      return_full_results=True)
 
 
 def run_optimization(*, alg_type, n_calls, n_initial_points, injected_data_container, param_ranges, error_loss):

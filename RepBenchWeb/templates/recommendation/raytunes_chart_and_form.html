@@ -3,10 +3,10 @@
 
 
 {% block portlet-title %}
-    <h3 class="kt-portlet__head-title"></h3>
+    <h3 class="kt-portlet__head-title"></h3> <!--needed for button size -->
     <form id="start-form">
         {% csrf_token %}
-        <button id="play" type="submit" class="play-btn"
+        <button id="play-recommendation" type="submit" class="play-btn"
         >
             <i class="mdi mdi-24px mdi-play"></i>
             <i style="display:none" class="mdi mdi-24px mdi-pause"></i>

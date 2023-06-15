@@ -120,7 +120,7 @@ const createEmptyChart = function (length, container = 'highcharts_container') {
     length = parseInt(length)
     if (length > 1000) length = 1000
     length =  timeInterval * 1000 * length
-    chartManager.setTimeInterval(timeInterval*1000)
+    // chartManager.setTimeInterval(timeInterval*1000)
     // let series = [{data:[] , visible:false, showInLegend: false}]
     let series = [{
         data: [[Date.UTC(2010, 0, 1), 7], [Date.UTC(2010, 0, 1)+length, 12]],

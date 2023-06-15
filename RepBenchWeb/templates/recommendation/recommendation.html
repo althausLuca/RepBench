@@ -12,9 +12,12 @@
             color: gray;
         }
 
-        .recommendation-below {
-           display: none;
+        .disable-mouse-events {
+            pointer-events: none;
+            opacity: 0.4;
         }
+
+
         #parameterTable {
             border-collapse: collapse;
             width: 100%;
@@ -42,13 +45,12 @@
     <div class="row">
         {% block recommendation_computation %}
             <div class="col-md-12">
-
                 {% include 'recommendation/flaml-example.html' %}
             </div>
         {% endblock %}
 
-{#        <div id="below-chart" class="row col-md-12">#}
-        <div id="main-chart" class="col-md-6 recommendation-below">
+        {#        <div id="below-chart" class="row col-md-12">#}
+        <div id="main-chart" class="col-md-6 disable-mouse-events">
             <div class="kt-portlet">
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label">
@@ -137,7 +139,7 @@
                 <!--end: Highcharts -->
             </div>
         </div>
-        <div class="col-md-3 recommendation-below">
+        <div class="col-md-3 disable-mouse-events">
             <div class="kt-portlet">
                 <div class=" kt-portlet__head">
                     <div class="kt-portlet__head-label">
@@ -151,7 +153,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3 recommendation-below">
+        <div class="col-md-3 disable-mouse-events">
             <div class="kt-portlet">
                 <div class=" kt-portlet__head">
                     <div class="kt-portlet__head-label">
@@ -166,8 +168,8 @@
                 </div>
             </div>
         </div>
-        </div>
-{#    </div>#}
+    </div>
+    {#    </div>#}
 
 {% endblock %}
 
@@ -264,7 +266,7 @@
         }
 
         function showRecommendationBelow() {
-            var recommendationBelow = Array.from(document.getElementsByClassName("recommendation-below"));
+            var recommendationBelow = Array.from(document.getElementsByClassName("disable-mouse-events"));
             recommendationBelow.forEach(function (element) {
                 element.style.display = "block";
             });

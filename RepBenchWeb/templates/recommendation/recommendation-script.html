@@ -80,7 +80,16 @@
                     } else if (response.status === 'done') {
                         console.log("DONE");
                         this.playing = false
+
+                        const elements = document.querySelectorAll('.disable-mouse-events');
+                        console.log("ELEMENTS TO DISABLE")
+                        elements.forEach(function (element) {
+                            element.classList.remove('disable-mouse-events');
+                            element.classList.add('disable-mouse-events-removed')
+                        });
+
                         showRecommendationBelow()
+
                         // Display message that Flaml is finished
                         // ...
                         {#getPrediction()#}
@@ -112,7 +121,7 @@
 
                 this.flaml_response_iter = this.flaml_response_iter + 1;
                 this.flaml_series.push({y: score, x: this.flaml_response_iter, name: estimator})
-                RecommendationChart.addData(score, estimator, this.flaml_response_iter,parameters);
+                RecommendationChart.addData(score, estimator, this.flaml_response_iter, parameters);
                 parameterTable.addData(roundedScore, estimator, parameters);
                 {#addDataToFlamlChart(score, currentData.estimator , 1);#}
             } else {
@@ -126,14 +135,19 @@
 
     }
 
+
     const parameterTable = {
         tableId: "parameterTable",
         data: {},
         dataHistory: [],
         parameter_names: null,
-        intervalTimer : 1000,
+        intervalTimer: 1000,
+        hasStarted: false,
+        isPaused: true,
+        breakHistoryFlag: false,
 
         init: function (parameter_names) {
+            console.log("INIT PARAMETER TABLE")
             this.data = {};
             this.dataHistory = [];
             this.parameter_names = parameter_names;
@@ -202,8 +216,10 @@
                 estimator: estimator,
                 parameters: parameters
             });
-            this.showData(score, estimator, parameters);
+            console.log("ADD DATA", this.dataHistory)
+            {#this.showData(score, estimator, parameters);#}
         },
+
         showData: function (score, estimator, parameters) {
             if (this.data.hasOwnProperty(estimator)) {
                 // If the estimator already exists, update its content
@@ -267,35 +283,49 @@
                 table.appendChild(newRow);
             }
         },
-        displayHistory: function (i) {
-            this.showData(this.dataHistory[i].score, this.dataHistory[i].estimator, this.dataHistory[i].parameters)
-        },
+        {#displayHistory: function (i) {#}
+        {#    this.showData(this.dataHistory[i].score, this.dataHistory[i].estimator, this.dataHistory[i].parameters)#}
+        {# },#}
 
         replayHistory: async function () {
+            this.breakHistoryFlag = true
+
+            // first stop all other instance of this.replayHistory running
+
+
             const history_ = [...this.dataHistory]
             console.log(history_)
             this.init(this.parameter_names)
-            await new Promise(resolve => setTimeout(resolve, this.intervalTimer));
+            this.dataHistory = history_
+
+            this.currentHistoryPromise = await new Promise(resolve => setTimeout(resolve, this.intervalTimer));
+
+            this.breakHistoryFlag = false
+            parameterTable.hasStarted = true;
 
             for (let i = 0; i < history_.length; i++) {
-                const dataPoint = history_[i];
-                this.addData(dataPoint.score, dataPoint.estimator, dataPoint.parameters);
-                console.log(this);
-
+                if (this.breakHistoryFlag) break;
+                if (!this.isPaused) {
+                    const dataPoint = history_[i];
+                    this.showData(dataPoint.score, dataPoint.estimator, dataPoint.parameters);
+                    console.log("parameter table is updating", this);
+                }
                 await new Promise(resolve => setTimeout(resolve, this.intervalTimer));
             }
+            this.hasStarted = false
         }
 
     }
 
 
     $(document).ready(function () {
-        $('.play-btn').on('click', function (event) {
+        $('#play-recommendation').on('click', function (event) {
             // Prevent form submission if it's a submit button
             {#event.preventDefault();#}
             $(this).find('i').toggle();
             recommendationHandler.playing = !recommendationHandler.playing
         });
+
 
         $('#start-form').on('submit', function (event) {
             event.preventDefault();
@@ -307,14 +337,64 @@
             }
         });
 
+
         $('#reload').on('click', function (event) {
             // Prevent form submission if it's a submit button
             event.preventDefault();
+
+            if (!recommendationHandler.playing && recommendationHandler.computing) {
+                recommendationHandler.playing = true
+                $('#play-recommendation').find('i').toggle();
+            }
+
             if (recommendationHandler.computing) {
                 recommendationHandler.startTuning()
             }
 
+
         });
+
+
+        //recommendation table settings
+        // play-recommendation-table
+
+        $('#play-recommendation-table').on('click', function (event) {
+            // Prevent form submission if it's a submit button
+            event.preventDefault();
+
+            console.log("play recommendation table")
+            $(this).find('i').toggle();
+            if (!parameterTable.hasStarted) {
+                parameterTable.replayHistory()
+            }
+            parameterTable.isPaused = !parameterTable.isPaused
+        });
+
+
+        $('#reload-recommendation-table').on('click', function (event) {
+            // Prevent form submission if it's a submit button
+            event.preventDefault();
+
+            if (parameterTable.isPaused) {
+                parameterTable.isPaused = false
+                $('#play-recommendation-table').find('i').toggle();
+            }
+
+            parameterTable.replayHistory()
+
+
+            // show the first <i> tag
+            {#$('#play-recommendation-table').find('i').first().show();#}
+
+
+
+            {#if (recommendationHandler.computing) {#}
+            {#    recommendationHandler.startTuning()#}
+            {# }#}
+
+        });
+
+
     });
 
 </script>

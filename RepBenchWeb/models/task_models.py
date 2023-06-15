@@ -1,4 +1,6 @@
 import pickle
+import sqlite3
+from django.db.utils import IntegrityError
 
 from django.utils import timezone
 from datetime import timedelta
@@ -68,7 +70,13 @@ class TaskData(models.Model):
                     data_iteration["runtime"] = round(data_iteration["time"] - self.data[i-1]["time"],3)
                 else:
                     data_iteration["runtime"] = 0.3
-        self.save()
+        try:
+            self.save()
+
+
+        except (sqlite3.IntegrityError , IntegrityError):
+           pass
+
         return self.data
 
 

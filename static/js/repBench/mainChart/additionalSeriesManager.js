@@ -13,13 +13,14 @@ class ChartManager {
             '#bcbd22', '#17becf', '#2ca02c', '#d62728', '#9467bd', '#e377c2', '#7f7f7f'];
     }
 
-    getColor(type = "default") {
-        if (type === "original") {
-            return this.colors[this.originalSeries.length % this.colors.length];
-        }
+    getColor(type) {
         if (type === "repair") {
             return this.repairedColors[this.repairedSeries.length % this.repairedColors.length];
         }
+        if (type === "injected") {
+            return "red"
+        }
+        return this.colors[this.originalSeries.length % this.colors.length];
     }
 
     setTimeInterval(timeStepMS, timeStart) {
@@ -31,7 +32,10 @@ class ChartManager {
         let {min, max} = mainChart.series[0].xAxis.getExtremes()
         let pointStart = mainChart.series[1].data[0].x
         let pointInterval = mainChart.series[1].data[1].x - pointStart
-        return {"min": parseInt((min-pointStart) / pointInterval), "max": parseInt((max-pointStart) /pointInterval)}
+        return {
+            "min": parseInt((min - pointStart) / pointInterval),
+            "max": parseInt((max - pointStart) / pointInterval)
+        }
     }
 
     getSeriesChartData(ser) {
