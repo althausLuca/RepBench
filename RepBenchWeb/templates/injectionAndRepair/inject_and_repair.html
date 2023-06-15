@@ -156,7 +156,12 @@
     </div>
 
     {#    </div>#}
-    <div class="row">
+    <div class="row" id="store-and-save-content" style="display:none;">
+        <script>
+            const showStoreAndSaveContent = () => {
+                document.getElementById('store-and-save-content').style.display = 'block';
+            }
+        </script>
         <div class="col-md-7">
             {% include "parts/store-form.html" %}
         </div>
