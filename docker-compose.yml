@@ -11,18 +11,19 @@ services:
     depends_on:
       - redis
     environment:
-      - DJANGO_SETTINGS_MODULE=RepBenchWeb.settings
+      - REDIS_URL=redis://redis:6379/0
+      - DEBUG=0
 
   celery:
     build: .
-    shm_size: 4294967296
-    command: celery -A RepBenchWeb worker --loglevel=info -c 4
+    command: celery -A RepBenchWeb worker --loglevel=info
     volumes:
       - .:/code
     depends_on:
-      - web
       - redis
     environment:
-      - DJANGO_SETTINGS_MODULE=RepBenchWeb.settings
+      - REDIS_URL=redis://redis:6379/0
+      - DEBUG=0
+
   redis:
     image: redis

@@ -23,8 +23,7 @@ import os
 
 SECRET_KEY = os.getenv("SECRET_KEY",
                        "AFR*VT%*RVTG&TE*TRE*DERG%TR")  # todo make sure env_file is in gjango_gunicorn -> enf_file: .env
-DEBUG = int(os.getenv("DEBUG", True))
-print("DEBUG: ", DEBUG)
+DEBUG = False # int(os.getenv("DEBUG", True))
 
 ALLOWED_HOSTS = ['*']  # todo: check this
 
@@ -32,7 +31,8 @@ ALLOWED_HOSTS = ['*']  # todo: check this
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
-    "http://127.0.0.1:8000"
+    "http://127.0.0.1:8000",
+    "http://localhost:8080",
 ]
 
 CORS_ALLOWED_ORIGIN_REGEXES = [
@@ -156,41 +156,49 @@ USE_L10N = True
 
 USE_TZ = True
 
+
+
+
 from os.path import abspath, basename, dirname, join, normpath
 
 DJANGO_ROOT = dirname(abspath(__file__))  # todo change this depending on file level
 PROJECT_ROOT = dirname(DJANGO_ROOT)
 SITE_NAME = basename(DJANGO_ROOT)
 
-STATIC_ROOT = join(PROJECT_ROOT, 'run', 'static')
 
 # look for static assets here
-STATICFILES_DIRS = [
-    join(PROJECT_ROOT, 'static'),
-]
-MEDIA_ROOT = join(PROJECT_ROOT, 'run', 'media')
+
 # look for static assets here
-STATICFILES_DIRS = [
-    join(PROJECT_ROOT, 'static'),
-]
-print(STATICFILES_DIRS, "STATICFILES_DIRS")
+
+
+import sys
+sys.path.append(normpath(join(PROJECT_ROOT, 'apps')))
+CELERY_BROKER_URL = 'redis://redis:6379'
+CELERY_RESULT_BACKEND = 'redis://redis:6379'
+CELERY_TASK_RESULT_EXPIRES = 1800  # 30min
+
+if DEBUG:
+    STATICFILES_DIRS = [join(PROJECT_ROOT, 'static')]
+    STATIC_URL = '/static/'
+else:
+    STATICFILES_DIRS = []
+    STATIC_ROOT = '/code/static/'
+    STATIC_URL = '/static/'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = '/code/media/'
+
+
+# ...
+
+if not DEBUG:
+    STATICFILES_DIRS = []
 
 PROJECT_TEMPLATES = [
     join(PROJECT_ROOT, 'templates'),
     join(PROJECT_ROOT, 'RepBenchWeb', 'templates'),  # vadetisweb site templates
     join(PROJECT_ROOT, 'RepBenchWeb', 'templates', 'allauth')  # vadetisweb allauth templates
 ]
-
-import sys
-
-sys.path.append(normpath(join(PROJECT_ROOT, 'apps')))
-
-STATIC_URL = '/static/'
-MEDIA_URL = '/media/'
-
-CELERY_BROKER_URL = 'redis://redis:6379'
-CELERY_RESULT_BACKEND = 'redis://redis:6379'
-CELERY_TASK_RESULT_EXPIRES = 1800  # 30min
 #
 # CACHES = {
 #     "default": {

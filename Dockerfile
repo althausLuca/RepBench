@@ -10,7 +10,7 @@ ENV PYTHONUNBUFFERED 1
 WORKDIR /code
 
 # Install dependencies
-COPY requirements.txt /code/
+COPY requirements.txt /code
 RUN pip install --upgrade pip
 
 RUN apt-get update && apt-get install -y gcc python3-dev
@@ -22,9 +22,9 @@ RUN pip install -U zoopt
 
 
 # Copy project
-COPY . /code/
+COPY . /code
 
-
+CMD ["gunicorn", "RepBenchWeb.wsgi:application", "--bind", "0.0.0.0:8000"]
 
 
 
