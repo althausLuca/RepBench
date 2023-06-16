@@ -56,15 +56,15 @@ $ python3 TestingFramework.py -d dataset -a anomaly_type -scen scenario_type -al
 ```
 ### Arguments
 
-| dataset  | anonaly_type  | scenario_type | algorithm | 
-| -------- | -------- |---------------| -------- | 
-| bafu5k     | shift   | ts_len        | rpca
- | humidity   |distortion  | a_size        | screen
- | msd1_5     | outlier    | a_rate        | imr
- | msd_hc     | all        | ts_nbr        | cdrec
- |  elec      |            | cts_nbr       | all
-|           |            | a_factor      | all
- |   all      |             | all           | |      
+| dataset  | anonaly_type | scenario_type | algorithm | 
+|----------|--------------|---------------| -------- | 
+| bafu5k   | shift        | ts_len        | rpca
+ | humidity | distortion   | a_size        | screen
+ | msd1_5   | outlier      | a_rate        | imr
+ | msd_hc   | all          | ts_nbr        | cdrec
+ | elec     |              | cts_nbr       | all
+|          |              | a_factor      | 
+ | all      |              | all           | |      
 
 
 ### Data

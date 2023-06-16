@@ -105,6 +105,12 @@ class ChartManager {
         return this.originalSeries.concat(this.injectedSeries).concat(this.repairedSeries).concat(this.reducedSeries)
     }
 
+    hideNoneInjectedSeries() {
+        let seriesNamesToHide = this.injectedSeries.map(s=>s._chartSeriesData.linkedTo)
+        let seriesToHide = mainChart.series.filter(s => !seriesNamesToHide.includes(s.userOptions.name) &&
+            this.originalSeries.map(s=>s.name).includes(s.userOptions.name))
+        seriesToHide.forEach(s => { s.hide() })
+    }
 
     removeSeries(id) {
         this.injectedSeries = this.injectedSeries.filter(s => s._chartSeriesData.id !== id)

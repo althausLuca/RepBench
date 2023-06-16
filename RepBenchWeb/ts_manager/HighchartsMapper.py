@@ -13,26 +13,25 @@ def map_truth_data(original_data: pd.DataFrame, norm_data: pd.DataFrame = None, 
 
 
     data =  [{"visible": i < RepBenchWeb, "id": col_name, "name": col_name, "data": list(df[col_name])
-                       , "norm_data": list(df_norm[col_name])} for (i, col_name)
-                   in
-                   enumerate(df.columns)]
+                       , "norm_data": list(df_norm[col_name])}
+             for (i, col_name) in enumerate(df.columns)]
 
     return data
 
-
-def map_injected_series(injected_series: pd.Series, injected_series_norm: pd.Series, col_name: str):
+def map_injected_series(injected_series: pd.Series, injected_series_norm: pd.Series, original_column: str):
     """
     map injected pandas series containing values only in anomalies
     and points next to anomalies to highcharts series
     """
     print("map_injected_series")
-    return {"linkedTo": col_name,
-            "id": f"{col_name}_injected",
-            "name": f"{col_name}_injected",
+    return {"linkedTo": original_column,
+            "id": f"{original_column}_injected",
+            "name": f"{original_column}_injected",
             "data": injected_series.replace({np.nan: None}).values.tolist(),
             "norm_data": injected_series_norm.replace({np.nan: None}).values.tolist(),
             "color": "red",
             "dashStyle": "ShortDot",
+
             }
 
 
@@ -76,10 +75,12 @@ def map_repair_data(repair: DataFrame, injected_data_container: InjectedDataCont
     data = {
         str(col_name) + "repair": {**({"linkedTo": links[col_name]} if links else {}),
                                    "id": str(col_name) + "repair" + alg_name,
-                                   "name": alg_name,
+                                   "name": alg_name.split("(")[0],
                                    "data": list(reverse_norm(repair[col_name], df_original[col_name])),
                                    "norm_data": list(repair[col_name]),
                                    "original_series_col": col_name,
+                                   "legendIndex": -1,
+                                   "showInLegend": True
                                    }
         for (i, col_name) in enumerate(injected_data_container.truth.columns) if
         i in injected_data_container.injected_columns}

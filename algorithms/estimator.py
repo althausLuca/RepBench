@@ -27,35 +27,46 @@ class Estimator(ABC, BaseEstimator):
         :param predicted: predicted data if none repair is called
         :param score: score if none a dictiornary with mae,rmse,partial_rmse is returned
 
-        :return: score or dict with scores
+        :return: score or dict with scores:
+        mae: mean absolute error
+        rmse: root mean squared error
+        partial_rmse: root mean squared error on the anomalies only
+        original_rmse: root mean squared error on the original anomalies
+        rmse_per_col: root mean squared error per column
         """
 
         if predicted is None:
-            predicted = self.repair(injected, truth, columns_to_repair, labels).values
+            predicted : np.ndarray = self.repair(injected, truth, columns_to_repair, labels).values
+        else:
+            predicted : np.ndarray = predicted.values if isinstance(predicted, pd.DataFrame) else predicted
 
         if labels is None:
             labels = np.zeros_like(injected)
-        labels = labels.values if isinstance(labels, pd.DataFrame) else labels
-        X = injected.values if isinstance(injected, pd.DataFrame) else injected
-        y = truth.values if isinstance(truth, pd.DataFrame) else truth
 
-        predicted = predicted.values if isinstance(predicted, pd.DataFrame) else predicted
+        labels : np.ndarray  = labels.values if isinstance(labels, pd.DataFrame) else labels
+        X : np.ndarray  = injected.values if isinstance(injected, pd.DataFrame) else injected
+        y : np.ndarray  = truth.values if isinstance(truth, pd.DataFrame) else truth
 
         non_labeled = np.invert(labels.astype(bool))
         partial_weights = np.logical_and(np.invert(np.isclose(X, y)), non_labeled)
 
         mae = 0
-        mse = 0
-        original_mse = 0
+        rmse = 0
+        original_rmse = 0
         partial_mse = 0
         rmse_per_col = []
+
         for col in columns_to_repair:  # assume same label rate on each column
-            mae += sm.mean_absolute_error(y[non_labeled[:, col], col], predicted[non_labeled[:, col], col]) / len(
+            y_col = y[non_labeled[:, col], col]
+            predicted_col = predicted[non_labeled[:, col], col]
+
+            mae += sm.mean_absolute_error(y_col, predicted_col) / len(
                 columns_to_repair)
-            mse_col = sm.mean_squared_error(y[non_labeled[:, col], col], predicted[non_labeled[:, col], col])
-            mse += mse_col / len(columns_to_repair)
-            rmse_per_col.append((col, np.sqrt(mse_col)))
-            original_mse += sm.mean_squared_error(y[:, col], X[:, col]) / len(columns_to_repair)
+
+            rmse_col = sm.mean_squared_error(y_col, predicted_col, squared=False)
+            rmse += rmse_col / len(columns_to_repair)
+            rmse_per_col.append((col, rmse_col))
+            original_rmse += sm.mean_squared_error(y[non_labeled[:, col], col], X[non_labeled[:, col], col]) / len(columns_to_repair)
 
             try:
                 partial_mse += sm.mean_squared_error(y[partial_weights[:, col], col],
@@ -63,12 +74,13 @@ class Estimator(ABC, BaseEstimator):
             except:
                 pass
 
+
         scores = {}
         scores['mae'] = mae
-        scores['rmse'] = np.sqrt(mse)
+        scores['rmse'] = np.sqrt(rmse)
         scores['partial_rmse'] = np.sqrt(partial_mse)
         scores['rmse_per_col'] = rmse_per_col
-        scores['original_rmse'] = np.sqrt(original_mse)
+        scores['original_rmse'] = np.sqrt(original_rmse)
 
         if score is not None:
             return scores[score]
@@ -76,37 +88,37 @@ class Estimator(ABC, BaseEstimator):
             return scores
 
 
-    def mae_score(self, X, y, labels):
-        predicted = self.predict(X, y, labels)
-        flatten_y = y.values.flatten()
-        flatten_predicted = predicted.values.flatten()
-        weights = np.ones_like(predicted.values).astype(bool)
-        weights[labels] = False
-        weights = weights.flatten()
-        score_ = sm.mean_absolute_error(flatten_y[weights], flatten_predicted[weights])
-        return score_
-
-
-    def full_rmse(self, X, y, labels):
-        predicted = self.predict(X, y, labels)
-        flatten_y = y.values.flatten()
-        flatten_predicted = predicted.values.flatten()
-        weights = np.ones_like(predicted.values).astype(bool)
-        weights[labels] = False
-        weights = weights.flatten()
-        score_ = sm.mean_squared_error(flatten_y[weights], flatten_predicted[weights], squared=False)
-        return score_
-
-
-    def partial_rmse(self, X, y, labels):
-        predicted = self.predict(X, y, labels)
-        flatten_y = y.values.flatten()
-        flatten_predicted = predicted.values.flatten()
-        weights = np.invert(np.isclose(X.values, y.values))
-        weights[labels] = False
-        weights = weights.flatten()
-        score_ = sm.mean_squared_error(flatten_y[weights], flatten_predicted[weights], squared=False)
-        return score_
+    # def mae_score(self, X, y, labels):
+    #     predicted = self.predict(X, y, labels)
+    #     flatten_y = y.values.flatten()
+    #     flatten_predicted = predicted.values.flatten()
+    #     weights = np.ones_like(predicted.values).astype(bool)
+    #     weights[labels] = False
+    #     weights = weights.flatten()
+    #     score_ = sm.mean_absolute_error(flatten_y[weights], flatten_predicted[weights])
+    #     return score_
+    #
+    #
+    # def full_rmse(self, X, y, labels):
+    #     predicted = self.predict(X, y, labels)
+    #     flatten_y = y.values.flatten()
+    #     flatten_predicted = predicted.values.flatten()
+    #     weights = np.ones_like(predicted.values).astype(bool)
+    #     weights[labels] = False
+    #     weights = weights.flatten()
+    #     score_ = sm.mean_squared_error(flatten_y[weights], flatten_predicted[weights], squared=False)
+    #     return score_
+    #
+    #
+    # def partial_rmse(self, X, y, labels):
+    #     predicted = self.predict(X, y, labels)
+    #     flatten_y = y.values.flatten()
+    #     flatten_predicted = predicted.values.flatten()
+    #     weights = np.invert(np.isclose(X.values, y.values))
+    #     weights[labels] = False
+    #     weights = weights.flatten()
+    #     score_ = sm.mean_squared_error(flatten_y[weights], flatten_predicted[weights], squared=False)
+    #     return score_
 
 
     def repair(self, injected, truth, columns_to_repair, labels=None):

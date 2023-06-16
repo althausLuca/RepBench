@@ -102,8 +102,10 @@ var RoundSliders = function () {
             }
         },
 
-        updateValue: function (id, value) {
+        updateValue: function (id, value , max) {
+            $(id).data("roundSlider").options.max = max;
             $(id).data("roundSlider").setValue(value);
+
         }
     };
 }();
