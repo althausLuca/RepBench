@@ -16,7 +16,7 @@ This benchmark implements four different anomaly repair techniques in time serie
 ___
 
 ## Prerequisites
-- Ubuntu 22 or Ubuntu 22 (including Ubuntu derivatives, e.g., Xubuntu).
+- Ubuntu 22 (including Ubuntu derivatives, e.g., Xubuntu).
 - Clone this repository.
 
 ___
