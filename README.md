@@ -160,11 +160,14 @@ We show the conventional metrics for anomaly repair: root mean square error (RMS
 
 <img align="center" width="1100"  height="400" src="plots/inject_and_repair.png">
 
-## Optimization
-Run an experiment using Bayesian optimization on a set of synthetic data by defining the range of parameters to test and the optimization algorithm. Visualize the results by plotting the error being minimized and the specific parameter values used in each step of the optimization process.
+[//]: # (## Optimization)
 
-<img align="center" width="600"  height="400" src="screenshots/optimization.png">
+[//]: # (Run an experiment using Bayesian optimization on a set of synthetic data by defining the range of parameters to test and the optimization algorithm. Visualize the results by plotting the error being minimized and the specific parameter values used in each step of the optimization process.)
 
+[//]: # ()
+[//]: # (<img align="center" width="600"  height="400" src="screenshots/optimization.png">)
+
+[//]: # ()
 
 
 
