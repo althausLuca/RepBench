@@ -110,7 +110,6 @@ for columns, a_percentage, factor, a_type, dataset in itertools.product([ [0], [
         append_to_file(results, output_filename)
 
     except Exception as e:
-        raise e
         import traceback
 
         print("Exception", e)
