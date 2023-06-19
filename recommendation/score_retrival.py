@@ -8,14 +8,16 @@ import sys
 parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(parent_dir)
 
-from recommendation.feature_extraction.load_features import get_injection_parameter_hashes_checker, load_data, \
-    read_file_to_pandas
+from recommendation.feature_extraction.load_features import get_injection_parameter_hashes_checker, read_file_to_pandas
+
+
 from repair.param_loader import get_algorithm_params
 from RepBenchWeb.BenchmarkMaps.repairCreation import create_injected_container
 import  injection.injection_config as inject_conf
 from repair.algorithm_mapper import algo_mapper
 import  repair.algorithms_config as alg_conf
 from datetime import datetime
+from injection.injection import load_injected_data
 
 
 mode = "train"
@@ -83,7 +85,7 @@ for columns, a_percentage, factor, a_type, dataset in itertools.product([ [0], [
         if already_computed_checker(injection_parameters):
             print("Already computed")
             continue
-        injected_df, truth_df = load_data(injection_parameters,data_folder=data_folder)
+        injected_df, truth_df = load_injected_data(injection_parameters,data_folder=data_folder)
 
         print("file", dataset, "a_type", a_type, "factor", factor, "a_percentage", a_percentage, "columns", columns)
 
