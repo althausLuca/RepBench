@@ -1,6 +1,6 @@
 from django import forms
 
-from algorithms import algo_mapper
+from repair import algo_mapper
 
 error_choices = [("rmse", "RMSE"), ("mae", "MAE"), ("partial_rmse", "RMSE on anomaly")]
 

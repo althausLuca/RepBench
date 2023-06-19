@@ -6,11 +6,11 @@ import pandas as pd
 sys.path.append(os.path.abspath(
     os.path.join(os.path.dirname(__file__), '..')))  # run from top dir with  python3 recommendation/reccomendation.py
 
-from algorithms import algo_mapper
-from algorithms.param_loader import get_algorithm_params
+from repair import algo_mapper
+from repair.param_loader import get_algorithm_params
 from injection.injected_data_container import InjectedDataContainer
 
-from algorithms.algorithms_config import CDREC, RPCA, IMR, SCREEN
+from repair.algorithms_config import CDREC, RPCA, IMR, SCREEN
 from recommendation.feature_extraction.feature_extraction import extract_features
 from recommendation.utils.file_parsers import load_estimator
 

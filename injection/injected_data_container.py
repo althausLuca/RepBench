@@ -140,7 +140,7 @@ class InjectedDataContainer:
 
     @property
     def original_scores(self):
-        from algorithms.estimator import Estimator
+        from repair.estimator import Estimator
         return Estimator().scores(self.injected, self.truth, self.injected_columns, self.labels,
                                   predicted=self.injected)
 

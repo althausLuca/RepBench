@@ -3,8 +3,8 @@ import numpy as np
 from django import forms
 from django.forms import NumberInput
 
-from algorithms import algo_mapper
-from algorithms.estimator import Estimator
+from repair import algo_mapper
+from repair.estimator import Estimator
 
 type_form_mapper = {
     float: forms.FloatField,

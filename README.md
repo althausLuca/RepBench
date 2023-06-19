@@ -39,16 +39,9 @@ $ source venv/bin/activate
 
 install the requirements for the Benchmark
 ```bash
-    $ sh install.sh
+    $ pip3 install -r testing_frame_work/testing_framework_requierements.txt
 ```
 
-To use the WebApp, you need to install additional requirements
-
-```bash
-    $ cd RepBenchWeb
-    $ pip3 install -r requirements.txt
-    $ cd ..
-```
 ___
 ## Execution
 ```bash
@@ -138,6 +131,14 @@ python3 inject.py -d humidity -a outlier -f 3 -r 0.25 -ts 1,2,3
 
 # Web Tool
 
+To use the WebApp, you need to install additional requirements
+
+```bash
+    $ cd RepBenchWeb
+    $ pip3 install -r requirements.txt
+    $ cd ..
+```
+
 ## Execution
 
 ### First time
@@ -151,17 +152,13 @@ python3 manage.py runserver
 ```
 
 
-## Repair 
-Directly repair a synthetic data set with anomalies and compare the repaired time series together with the original and injected series.
+## Injection and Repair 
+Inject real-world data with anomalies. Select the time series and anomaly type to inject. Multiple injections are possible allowing for different anomaly types in a time series.  After contamination, it is possible to switch to the repair view to try out the a repair technique on the affected data, similar to the process used for synthetic data.
+Directly repair the data set with anomalies and compare the repaired time series together with the original and injected series.
 We show the conventional metrics for anomaly repair: root mean square error (RMSE) and mean absolute error (MAE).
 
-<img align="center" width="600" height="400" src="screenshots/repair.png" >
 
-## Injection 
-Inject real-world data with anomalies. Select the time series and anomaly type to inject. Multiple injections are possible allowing for different anomaly types in a time series.  After contamination, it is possible to switch to the repair view to try out the a repair technique on the affected data, similar to the process used for synthetic data.
-
-
-<img align="center" width="600"  height="400" src="screenshots/injection.png">
+<img align="center" width="1100"  height="400" src="plots/inject_and_repair.png">
 
 ## Optimization
 Run an experiment using Bayesian optimization on a set of synthetic data by defining the range of parameters to test and the optimization algorithm. Visualize the results by plotting the error being minimized and the specific parameter values used in each step of the optimization process.

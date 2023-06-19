@@ -1,6 +1,6 @@
 from RepBenchWeb.ts_manager.HighchartsMapper import map_repair_data
-from algorithms.parameterization import BayesianOptimizer
-from algorithms.algorithm_mapper import algo_mapper
+from repair.parameterization import BayesianOptimizer
+from repair.algorithm_mapper import algo_mapper
 from testing_frame_work.repair import AnomalyRepairer
 import multiprocessing
 

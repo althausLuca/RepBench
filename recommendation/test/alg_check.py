@@ -9,8 +9,8 @@ sys.path.append(os.path.abspath(
     os.path.join(os.path.dirname(__file__), '..','..')))  # run from top dir with  python3 recommendation/score_retrival.py
 
 from recommendation.feature_extraction.load_features import load_data
-from algorithms import Robust_PCA_estimator
-from algorithms.parameterization import BayesianOptimizer
+from repair import Robust_PCA_estimator
+from repair.parameterization import BayesianOptimizer
 
 filename = "recommendation/test/scores.txt"
 load_string = "injection_parameters"

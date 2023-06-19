@@ -13,9 +13,15 @@ def create_injected_container(* , injected_df, truth_df,container_does_rmse_chec
     # plt.plot(injected_df.iloc[:,:3])
     # plt.title("loaded injected")
     # plt.show()
+    for injected_col in range(injected_df.shape[1]):
+        print(np.isclose(injected_df.iloc[:, injected_col].values, truth_df.iloc[:, injected_col].values))
+        # plt.plot(injected_df.iloc[:,0])
+        # plt.plot(truth_df.iloc[:,0])
+        # plt.show()
 
     class_df = pd.DataFrame(np.invert(np.isclose(truth_df.values, injected_df.values))
                             , index=injected_df.index, columns=injected_df.columns)
+
 
     assert class_df.isnull().sum().sum() == 0, (truth_df,)
 

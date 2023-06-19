@@ -3,7 +3,7 @@ from RepBenchWeb.models import InjectedContainer
 from RepBenchWeb.utils.encoder import RepBenchJsonRespone
 from RepBenchWeb.views.config import DISPLAY_REPAIR_DATASETS_TEMPLATE
 from RepBenchWeb.views.synthetic_dataset_view import SyntheticDatasetView
-from algorithms import algo_mapper
+from repair import algo_mapper
 from injection.injected_data_container import InjectedDataContainer
 from testing_frame_work.data_methods.data_class import DataContainer
 from testing_frame_work.repair import AnomalyRepairer

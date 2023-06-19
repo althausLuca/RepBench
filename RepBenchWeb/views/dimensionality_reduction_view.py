@@ -6,7 +6,7 @@ from RepBenchWeb.models import InjectedContainer
 from RepBenchWeb.utils.encoder import RepBenchJsonRespone
 from RepBenchWeb.views.config import *
 from injection.injected_data_container import InjectedDataContainer
-from algorithms.Dimensionality_Reduction.dimensionality_reduction_estimator import DimensionalityReductionEstimator
+from repair.Dimensionality_Reduction.dimensionality_reduction_estimator import DimensionalityReductionEstimator
 from testing_frame_work.repair import AnomalyRepairer
 from RepBenchWeb.BenchmarkMaps.repairCreation import injected_container_None_Series
 from RepBenchWeb.forms.alg_param_forms import RPCAparamForm, CDparamForm

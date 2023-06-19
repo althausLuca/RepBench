@@ -10,11 +10,11 @@ sys.path.append(parent_dir)
 
 from recommendation.feature_extraction.load_features import get_injection_parameter_hashes_checker, load_data, \
     read_file_to_pandas
-from algorithms.param_loader import get_algorithm_params
+from repair.param_loader import get_algorithm_params
 from RepBenchWeb.BenchmarkMaps.repairCreation import create_injected_container
-from injection.injection_config import AMPLITUDE_SHIFT, DISTORTION, POINT_OUTLIER
-from algorithms.algorithm_mapper import algo_mapper
-from algorithms.algorithms_config import CDREC, RPCA, IMR, SCREEN
+import  injection.injection_config as inject_conf
+from repair.algorithm_mapper import algo_mapper
+import  repair.algorithms_config as alg_conf
 from datetime import datetime
 
 
@@ -29,11 +29,12 @@ data_folder = f"data/recommendation/{mode}"
 datasets = os.listdir(data_folder)
 
 factors = [2, 5, 10]
-a_percentages = [4, 7, 11, 11]
-col_n_cap = 4
-score = "rmse"
-alg_names = [CDREC, RPCA, IMR, SCREEN]
-a_types = [AMPLITUDE_SHIFT, DISTORTION, POINT_OUTLIER]
+a_percentages = [4,5, 7, 11, 20]
+col_n_cap = 8
+
+score = alg_conf.RMSE
+alg_names = alg_conf.ALGORITHM_TYPES
+a_types = inject_conf.ANOMALY_TYPES
 
 
 def append_to_file(data, filename):
@@ -107,6 +108,7 @@ for columns, a_percentage, factor, a_type, dataset in itertools.product([ [0], [
         append_to_file(results, output_filename)
 
     except Exception as e:
+        raise e
         import traceback
 
         print("Exception", e)

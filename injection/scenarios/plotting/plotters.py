@@ -1,7 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib.ticker import MaxNLocator
-from algorithms import algorithms_config as ac
+from repair import algorithms_config as ac
 from injection.injected_data_container import InjectedDataContainer
 
 

@@ -6,10 +6,10 @@ from flaml.tune.analysis import ExperimentAnalysis
 # load injected Dataset
 from injection import inject_data_df
 from injection.injection_config import AMPLITUDE_SHIFT, POINT_OUTLIER, DISTORTION
-from algorithms.Dimensionality_Reduction.RobustPCA.Robust_pca_estimator import Robust_PCA_estimator
-from algorithms.Dimensionality_Reduction.CD.CDRecEstimator import CDRecEstimator
-from algorithms.algorithms_config import IMR, SCREEN, RPCA, CDREC
-from algorithms.algorithm_mapper import algo_mapper
+from repair.Dimensionality_Reduction.RobustPCA.Robust_pca_estimator import Robust_PCA_estimator
+from repair.Dimensionality_Reduction.CD.CDRecEstimator import CDRecEstimator
+from repair.algorithms_config import IMR, SCREEN, RPCA, CDREC
+from repair.algorithm_mapper import algo_mapper
 
 # load injected Dataset
 

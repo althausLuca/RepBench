@@ -38,9 +38,9 @@ def generate_column_labels(class_column, seed=None):
     np.random.seed(ic.label_seed + (seed if seed is not None else 0))
     labels = None
 
+
     max_iter = 10000
     for i in range(max_iter):
-        #starts = [min(r) for r in get_anomaly_ranges(class_column) if len(r) > 1]
         m = len(class_column)
         r_number = np.random.uniform(size=m)
         r_number = r_number < label_rate

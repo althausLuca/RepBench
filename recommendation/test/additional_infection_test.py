@@ -6,8 +6,8 @@ from flaml.tune.analysis import ExperimentAnalysis
 # load injected Dataset
 from injection import inject_data_df
 from injection.injection_config import AMPLITUDE_SHIFT, POINT_OUTLIER , DISTORTION
-from algorithms.Dimensionality_Reduction.RobustPCA.Robust_pca_estimator import Robust_PCA_estimator
-from algorithms.Dimensionality_Reduction.CD.CDRecEstimator import CDRecEstimator
+from repair.Dimensionality_Reduction.RobustPCA.Robust_pca_estimator import Robust_PCA_estimator
+from repair.Dimensionality_Reduction.CD.CDRecEstimator import CDRecEstimator
 
 # load injected Dataset
 factors = [2, 5]

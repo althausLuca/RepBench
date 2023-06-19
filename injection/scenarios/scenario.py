@@ -7,7 +7,7 @@ from matplotlib.ticker import MaxNLocator
 import injection.injection_config as ac
 from injection.scenarios.plotting.plotters import plot_data_part
 from injection.injected_data_container import InjectedDataContainer
-from algorithms.algorithms_config import ALGORITHM_COLORS
+from repair.algorithms_config import ALGORITHM_COLORS
 import matplotlib.pyplot as plt
 
 
