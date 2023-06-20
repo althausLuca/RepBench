@@ -4,15 +4,12 @@ from django.db.utils import IntegrityError
 
 from django.utils import timezone
 from datetime import timedelta
-from RepBenchWeb.celery import revoke_task
 from picklefield.fields import PickledObjectField
 from django.db import models
 
 from RepBenchWeb.models import InjectedContainer
+from RepBenchWeb.tasks.utils import revoke_task
 from RepBenchWeb.views.recommendation.utils import get_relevant_parameters
-
-
-
 
 
 class TaskData(models.Model):

@@ -16,16 +16,8 @@ class RecommendationView(SyntheticDatasetView):
     recommender_file_name = ""
 
     def get(self, request, type="FLAML"):
-        # data_object = InjectedContainer.objects.get(title=setname)
-        # injected_data_container: InjectedDataContainer = data_object.injected_container
-        # data_container = DataContainer(injected_data_container.truth)
-        # df = data_container.original_data
         context = {}
-        # context["data_info"] =  InjectedContainer.objects.get(title=setname).get_info()
         context["RepBenchWeb"] = int(request.GET.get("RepBenchWeb", self.default_nbr_of_ts_to_display))
-        # context["data_fetch_url_name"] = self.data_fetch_url_name
-        # context["injected_data_set_info"] = self.data_set_info_context(setname)
-
         context["flaml_settings_form"] = FLAMLSettingsForm()
         context["ray_tune_settings_form"] = RayTuneSettingsForm()
         context["injected_datasets_form"] = InjectedDataSetForm()

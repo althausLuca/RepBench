@@ -15,8 +15,13 @@ services:
 
   celery:
     build: .
-    shm_size: 4294967296
-    command: celery -A RepBenchWeb worker --loglevel=info -c 4
+#    shm_size: 4294967296
+#    deploy:
+#      resources:
+#        limits:
+##          cpus: "10"
+#          memory: "10G"
+    command: celery -A RepBenchWeb worker --loglevel=info -c 4 --concurrency=6
     volumes:
       - .:/code
     depends_on:

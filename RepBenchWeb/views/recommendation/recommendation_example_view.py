@@ -75,6 +75,11 @@ def start_raytunes(request):
         "estimator_list": ['lgbm', 'rf', 'xgboost', 'extra_tree', 'lrl1']
     }
 
+
+    from RepBenchWeb.tasks import remove_ray_files
+    remove_ray_files.delay(0)
+
+
     task_id = request.POST.get("task_id")
     from RepBenchWeb.models import TaskData
     try:  # clear older task running with same id
