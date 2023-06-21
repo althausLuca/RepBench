@@ -14,7 +14,6 @@ metrics = {
 
 
 
-# logger = logging.getLogger(__name__)
 
 
 @shared_task(bind=True)
@@ -27,8 +26,8 @@ def flaml_search_task(self, settings, X_train, y_train, X_test, y_test, my_task_
     task_data = TaskData.objects.get(task_id=my_task_id)
     task_data.set_celery_task_id(self.request.id)
 
-    for p_ in y_train:
-        print(p_)
+    # for p_ in y_train:
+    #     print(p_)
     def custom_metric(
             X_val, y_val, estimator, labels,
             X_train, y_train, weight_val=None, weight_train=None,
@@ -60,10 +59,9 @@ def flaml_search_task(self, settings, X_train, y_train, X_test, y_test, my_task_
 
     with warnings.catch_warnings():
         # warnings.simplefilter("ignore")
-        automl.fit(X_train=X_train, y_train=y_train, **settings, n_jobs=3, verbose=-3)
+        automl.fit(X_train=X_train, y_train=y_train, X_val=X_test,y_val=y_test, **settings, n_jobs=3, verbose=-3)
 
     automl._state.metric = setting_metric  # reset metric to original (we cant picke local objects)
-    automl.best_estimator.fit(X_train=X_train, y_train=y_train)
 
     task_data.set_classifier(automl)
     task_data.set_done()
