@@ -67,10 +67,7 @@ def flaml_search_task(self, settings, X_train, y_train, X_test, y_test, my_task_
 
     task_data.set_classifier(automl)
     task_data.set_done()
-
-
-    # remove_files()
-    # print("DONE")
+    print("DONE")
 
     # classifier = automl.model
     # try:

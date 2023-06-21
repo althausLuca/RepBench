@@ -1,24 +1,15 @@
 import json
 
-import numpy as np
-import pandas as pd
+
 import os
 
-from injection import inject_data_df
 from recommendation.feature_extraction.feature_extraction import extract_features
-import csv
-
-from recommendation.utils.file_parsers import read_file_to_pandas
+from injection import load_injected_data
 
 default_data_folder = "recommendation/datasets/train"
 
 
-
-
-
-
-
-def load_features(injection_parameters,data_folder,use_rawdata=False):
+def load_features(injection_parameters,data_folder):
     """
     param: injection_parameters: dict
        injection_parameters = {
@@ -32,7 +23,7 @@ def load_features(injection_parameters,data_folder,use_rawdata=False):
 
     return: features: dict of features for the selected column
     """
-    injected_df, _ = load_data(injection_parameters, data_folder=data_folder, normalize= not use_rawdata)
+    injected_df, _ = load_injected_data(injection_parameters, data_folder=data_folder)
     features = extract_features(injected_df, column=injection_parameters["cols"][0])
     return features
 

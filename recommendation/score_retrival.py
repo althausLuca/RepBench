@@ -5,10 +5,12 @@ import json
 import os
 import sys
 
+from recommendation.utils.file_parsers import read_file_to_pandas
+
 parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(parent_dir)
 
-from recommendation.feature_extraction.load_features import get_injection_parameter_hashes_checker, read_file_to_pandas
+from recommendation.feature_extraction.load_features import get_injection_parameter_hashes_checker
 
 
 from repair.param_loader import get_algorithm_params

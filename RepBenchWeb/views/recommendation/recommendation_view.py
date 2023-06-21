@@ -7,7 +7,7 @@ from RepBenchWeb.forms.recommendation_forms import FLAMLSettingsForm, RayTuneSet
 from RepBenchWeb.models import InjectedContainer
 from RepBenchWeb.utils.encoder import RepBenchJsonRespone
 from RepBenchWeb.views.synthetic_dataset_view import SyntheticDatasetView
-from injection.injected_data_container import InjectedDataContainer
+from injection.injectedDataContainer import InjectedDataContainer
 from testing_frame_work.data_methods.data_class import DataContainer
 
 

@@ -1,15 +1,9 @@
-from matplotlib import pyplot as plt
-
-from injection.scenarios.scen_gen import build_scenario
-from injection.injected_data_container import InjectedDataContainer
+from testing_frame_work.scenarios.scen_generator import build_scenario
+from injection.injectedDataContainer import InjectedDataContainer
 from repair.IMR.IMR_estimator import IMR_estimator
 import matplotlib
 
-from repair import CDRecEstimator
-
 matplotlib.use('TKAgg')
-
-import ast
 
 scen_name = "a_factor"
 anomaly_type = "shift"

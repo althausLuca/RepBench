@@ -1,9 +1,8 @@
 import numpy as np
 import pandas as pd
-from matplotlib import pyplot as plt
 
-from injection.injected_data_container import InjectedDataContainer
-from injection.label_generator import generate_df_labels
+from injection.injectedDataContainer import InjectedDataContainer
+from injection.utils.label_generator import generate_df_labels
 
 
 def create_injected_container(* , injected_df, truth_df,container_does_rmse_checks=True):

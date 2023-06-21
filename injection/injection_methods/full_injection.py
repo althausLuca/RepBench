@@ -4,10 +4,10 @@ import numpy as np
 import pandas as pd
 from pandas import DataFrame
 
-from injection.injected_data_container import InjectedDataContainer
+from injection.injectedDataContainer import InjectedDataContainer
 from injection.injection_config import BASE_FACTORS, POINT_OUTLIER, BASE_PERCENTAGES, DEFAULT_LENGTH
 from injection.injection_methods.basic_injections import add_anomalies
-from injection.label_generator import generate_df_labels
+from injection.utils.label_generator import generate_df_labels
 from testing_frame_work.data_methods.data_class import DataContainer
 
 

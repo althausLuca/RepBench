@@ -157,7 +157,7 @@ selected_ts_fresh_features = {
         ],
         "fft_coefficient": [
             {"coeff": k, "attr": a}
-            for a, k in product(["real", "imag", "abs", "angle"], [1,10,20,50,99])## range(100))
+            for a, k in product(["real", "imag", "abs", "angle"], [1,10,20,50])## range(100))
         ],
         "fft_aggregated": [
             {"aggtype": s} for s in ["centroid", "variance", "skew", "kurtosis"]

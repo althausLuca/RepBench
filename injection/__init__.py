@@ -1,2 +1,1 @@
-from injection.injection_methods.injection_error import InjectionError
-from injection.injection_methods.full_injection import get_injected_container_example, create_injected_DataContainer, inject_data_df
+from injection.injection import load_injected_data

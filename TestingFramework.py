@@ -1,17 +1,25 @@
 import itertools
 
-from injection.scenarios.scen_gen import build_scenario
-from injection.scenarios.scenario import Scenario
+from testing_frame_work.parser_init import init_parser
+from testing_frame_work.scenarios.scen_generator import build_scenario
+from testing_frame_work.scenarios.scenario import Scenario
 import testing_frame_work.argument_parsers as arg_parser
 import testing_frame_work.repair as alg_runner
-from injection.scenarios.scenario_saver.Scenario_saver import save_scenario
 from testing_frame_work.parameterization import load_params_from_toml
 from testing_frame_work.data_methods.data_class import infer_data_file
 import injection.injection_config as ic
+import testing_frame_work.scenarios.scenario_config as sc
+from repair import algorithms_config as algc
 
+estimator_choices = list(algc.ALGORITHM_TYPES) + ["all"]
+scenario_choices = list(sc.SCENARIO_TYPES) + ["all"]
+anomaly_choices = list(ic.ANOMALY_TYPES) + ["all"]
 
 def main(input=None):
-    args = arg_parser.init_checked_parser(input)
+    args = init_parser(input=input,
+                       estimator_choices=estimator_choices,
+                       scenario_choices=scenario_choices,
+                       anomaly_choices=anomaly_choices)
 
     if args.alg is not None:
         algorithms: str = arg_parser.parse_repair_algorithms(args)
@@ -40,7 +48,7 @@ def main(input=None):
     anomaly_types = arg_parser.parse_anomaly_types(args)
     cols = args.cols
     for (scen_name, data_name, anomaly_type) in itertools.product(scen_names, data_set_names, anomaly_types):
-        if scen_name == ic.ANOMALY_SIZE and anomaly_type == ic.POINT_OUTLIER:
+        if scen_name == sc.ANOMALY_SIZE and anomaly_type == ic.POINT_OUTLIER:
             print("skipping anomaly_lenght outlier scenario")
             continue
         try:
@@ -56,7 +64,7 @@ def main(input=None):
                 params = load_params_from_toml(repair_type)
                 repair_info = repairer.repair_data_part(repair_type, test_part, params)
             test_part.save(folder=f"Results/DataSets/{scen_name}_{anomaly_type}_{name}")
-        save_scenario(scenario, repair_plot=False, res_name=args.rn)
+        scenario.save(plot_repairs=True, res_name=args.rn)
 
 
 if __name__ == '__main__':

@@ -12,6 +12,23 @@ feature_endings = {"catch22": "__ct",
                    "tsfresh_selected": "__tsf_s"
                    }
 
+def extract_features(dataset : pd.DataFrame, column):
+    """
+    Extracts features from a dataset and returns them as a dictionary.
+    Args:
+        dataset: dataset to extract features from
+        column: for which to extract features
+
+    Returns:
+        dictionary of features
+    """
+    dataset = (dataset - dataset.mean())/dataset.std()  #normalize
+    single_features = single_ts_feature_extraction(dataset.iloc[:, column].values)
+    multi_features = multi_ts_feature_extraction(dataset, column)
+    single_features.update(multi_features)
+    return single_features
+
+
 
 def clean_feature_name(name):
     # replace any non-alphanumeric characters with an underscore
@@ -74,12 +91,7 @@ def multi_ts_feature_extraction(dataset: pd.DataFrame, column):
     return multi_dim_features
 
 
-def extract_features(dataset : pd.DataFrame, column):  # for one columns only
-    dataset = (dataset - dataset.mean())/dataset.std()
-    single_features = single_ts_feature_extraction(dataset.iloc[:, column].values)
-    multi_features = multi_ts_feature_extraction(dataset, column)
-    single_features.update(multi_features)
-    return single_features
+
 
 
 def extract_catch22_features(data: np.ndarray):

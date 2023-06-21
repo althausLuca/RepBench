@@ -1,11 +1,6 @@
-import itertools
 import os
-import sys
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-import pypandoc as pypandoc
-from matplotlib.backends.backend_pdf import PdfPages
 import json
 from json2html import *
 

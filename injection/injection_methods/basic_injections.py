@@ -36,10 +36,10 @@ def inject_distortion(data, index_range, factor):
         raise InjectionError("No change in data after injection", data=data[index_range], anomaly_type=DISTORTION)
     return data
 
-
 injection_mapper = {AMPLITUDE_SHIFT: inject_amplitude_shift,
                     DISTORTION: inject_distortion,
                     POINT_OUTLIER: inject_point_outlier}
+
 
 
 def add_anomalies(original_column, a_type, *, n_anomalies, a_factor, a_len, offset=0, index_ranges=None, fill_na=False,

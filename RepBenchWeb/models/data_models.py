@@ -3,7 +3,7 @@ import pickle
 from django.db import models
 import pandas as pd
 from RepBenchWeb.ts_manager.HighchartsMapper import map_repair_data
-from injection.injected_data_container import InjectedDataContainer
+from injection.injectedDataContainer import InjectedDataContainer
 from recommendation.recommend import get_recommendation, alg_names, get_recommendation_and_repair
 from picklefield.fields import PickledObjectField
 from RepBenchWeb.models.utils import *

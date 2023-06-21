@@ -44,7 +44,6 @@ class TaskFilter(logging.Filter):
 
 @shared_task(bind=True)
 def ray_tune_search_task(self, settings, X_train, y_train, X_test, y_text, my_task_id):
-    ray.init()
 
     from RepBenchWeb.models import TaskData
 

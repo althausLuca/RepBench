@@ -9,7 +9,7 @@ import numpy as np
 
 class SCREENEstimator(Estimator):
 
-    def __init__(self, t:int=3, smax: float = 0.1, smin :float =-0.2, ci=None ,**kwargs):
+    def __init__(self, t:int=3, smax: float = 0.1, smin :float =-0.1, ci=None ,**kwargs):
         """
         param ci need to be a tuple e.g (0.1,0.9)
         """
@@ -17,6 +17,8 @@ class SCREENEstimator(Estimator):
         self.smax = smax
         self.t = t
         self.ci = ci
+        assert self.smin < 0
+        assert self.smax > 0
 
     def get_fitted_params(self, **args):
         return {"t": self.t,

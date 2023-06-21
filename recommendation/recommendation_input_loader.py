@@ -12,7 +12,7 @@ class RecommendationInputLoader:
     all_features = list(feature_endings.values())
 
     def __init__(self,
-                 feature_file_name="results_features_non_normalized",
+                 feature_file_name,
                  train_split_r=0.8,
                  features="all",
                  nan_safe=True,

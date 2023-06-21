@@ -8,7 +8,7 @@ sys.path.append(os.path.abspath(
 
 from repair import algo_mapper
 from repair.param_loader import get_algorithm_params
-from injection.injected_data_container import InjectedDataContainer
+from injection.injectedDataContainer import InjectedDataContainer
 
 from repair.algorithms_config import CDREC, RPCA, IMR, SCREEN
 from recommendation.feature_extraction.feature_extraction import extract_features

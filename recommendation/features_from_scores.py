@@ -5,8 +5,6 @@ sys.path.append(os.path.abspath(
 
 from recommendation.feature_extraction.load_features import compute_features
 
-load_non_normalized_truth_features = True
-
 load_path = "recommendation/results/scores"
 store_path = "recommendation/results/features"
 data_folder = "recommendation/datasets/train"

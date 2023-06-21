@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import os
 
-from  injection.injection_methods.full_injection import inject_data_df
+from injection.injection_methods import inject_data_df
 from testing_frame_work.data_methods.data_class import DataContainer
 from injection.injection_config import ANOMALY_TYPES
 

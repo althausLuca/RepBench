@@ -3,12 +3,12 @@ import random
 
 from django.shortcuts import render
 from RepBenchWeb.utils.encoder import RepBenchJsonRespone
-from injection.injected_data_container import InjectedDataContainer
+from injection.injectedDataContainer import InjectedDataContainer
 from RepBenchWeb.forms.alg_param_forms import SCREENparamForm, RPCAparamForm, CDparamForm, IMRparamField
 from RepBenchWeb.forms.injection_form import store_injection_form, InjectionForm
 from RepBenchWeb.models import InjectedContainer, DataSet
 from RepBenchWeb.views.config import *
-from injection.injection_methods.basic_injections import add_anomalies
+from injection.injection_methods import add_anomalies
 from RepBenchWeb.BenchmarkMaps.repairCreation import injected_container_None_Series
 from RepBenchWeb.ts_manager.HighchartsMapper import map_injected_series
 from RepBenchWeb.views.repair_view import RepairView

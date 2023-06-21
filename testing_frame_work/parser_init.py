@@ -48,11 +48,11 @@ def add_repair_arguments_to_parser(parser,estimator_choices):
     #parser.add_argument("-saverepair",  action='store_true')
 
 
-def init_injection_parser(scenario_choises = None):
-    parser = argparse.ArgumentParser()
-    add_data_arguments_to_parser(parser)
-    add_injection_arguments_to_parser(parser , scenario_choises =scenario_choises)
-    return parser.parse_args()
+# def init_injection_parser(scenario_choises = None):
+#     parser = argparse.ArgumentParser()
+#     add_data_arguments_to_parser(parser)
+#     add_injection_arguments_to_parser(parser , scenario_choises =scenario_choises)
+#     return parser.parse_args()
 
 
 def init_repair_parser():
@@ -70,7 +70,7 @@ def init_parser(input = None , estimator_choices = None ,scenario_choices = None
     add_repair_arguments_to_parser(parser,estimator_choices = estimator_choices)
 
     if input is not None:
-        "For testing outside of the terminal"
+        "For running/profiling with an IDE"
         args = parser.parse_args(input.split())
     else:
         args = parser.parse_args()

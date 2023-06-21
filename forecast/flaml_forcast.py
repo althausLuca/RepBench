@@ -1,9 +1,6 @@
 import numpy as np
 import pandas as pd
-from flaml import AutoML
 import matplotlib.pyplot as plt
-
-from injection import inject_data_df
 
 
 def forecast(data, col_name, plot_name):
