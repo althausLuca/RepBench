@@ -8,10 +8,10 @@ from RepBenchWeb.forms.alg_param_forms import SCREENparamForm, RPCAparamForm, CD
 from RepBenchWeb.forms.injection_form import store_injection_form, InjectionForm
 from RepBenchWeb.models import InjectedContainer, DataSet
 from RepBenchWeb.views.config import *
-from injection.injection_methods import add_anomalies
 from RepBenchWeb.BenchmarkMaps.repairCreation import injected_container_None_Series
 from RepBenchWeb.ts_manager.HighchartsMapper import map_injected_series
 from RepBenchWeb.views.repair_view import RepairView
+from injection.injection_methods.basic_injections import add_anomalies
 from testing_frame_work.data_methods.data_class import DataContainer
 
 class InjectionView(RepairView):

@@ -29,7 +29,7 @@ RAYTUNES_OPTIMIZER_CHOICES = [("hyperopt", "HyperOpt"), ("nevergrad", "NeverGrad
 FEATURE_CHOICES = [("catch22", "Catch22"), ("tsfresh_minimal", "TSFreshMinimal"), ("tsfresh_selected", "TSFresh")]
 METRIC_CHOICES = [('accuracy', 'Accuracy'), ('micro_f1', 'Micro F1'), ('macro_f1', 'Macro F1')]
 TASK_CHOICES = [('classification', 'classification')]  # add more if needed
-
+DATA_FRACTION_CHOICES = [('20', '20%'), ('40', '40%'), ('60', '60%'), ('80', '80%'), ('100', '100%')]
 
 class FLAMLSettingsForm(forms.Form):
     time_budget = forms.IntegerField(label='Time Budget (seconds)', initial=60, widget=forms.NumberInput(
@@ -50,6 +50,10 @@ class FLAMLSettingsForm(forms.Form):
                                              attrs={'class': 'kt-checkbox', "name": 'estimator_list[]'}),
                                          choices=FEATURE_CHOICES
                                          )
+
+    data_fraction = forms.CharField(label='Train Data Fraction', initial='100', widget=forms.Select(
+        choices=DATA_FRACTION_CHOICES, attrs={"class": 'form-control'}))
+
 
     def __init__(self, *args, **kwargs):
         super(FLAMLSettingsForm, self).__init__(*args, **kwargs)
@@ -80,6 +84,8 @@ class RayTuneSettingsForm(forms.Form):
                                                attrs={'class': 'kt-checkbox', "name": 'estimator_list[]'}),
                                            choices=FEATURE_CHOICES
                                            )
+    ray_tunes_data_fraction = forms.CharField(label='Train Data Fraction', initial='100', widget=forms.Select(
+        choices=DATA_FRACTION_CHOICES, attrs={"class": 'form-control'}))
 
     def __init__(self, *args, **kwargs):
         super(RayTuneSettingsForm, self).__init__(*args, **kwargs)

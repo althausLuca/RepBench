@@ -47,7 +47,7 @@ def get_injection_parameter_hashes_checker(file_name):
     return checker
 
 
-def compute_features(load_filename,  store_filename, data_folder, use_rawdata=True):
+def compute_features(load_filename,  store_filename, data_folder):
     """
     Args:
         load_filename (str): The path to the file containing the injection parameters.
@@ -71,7 +71,7 @@ def compute_features(load_filename,  store_filename, data_folder, use_rawdata=Tr
     for i,line in enumerate(lines):
         results_line = json.loads(line)
         injection_parameters = results_line["injection_parameters"]
-        features = load_features(injection_parameters,data_folder=data_folder , use_rawdata=use_rawdata)
+        features = load_features(injection_parameters,data_folder=data_folder)
         results_line["features"] = features
         results.append(results_line)
         # store result to file

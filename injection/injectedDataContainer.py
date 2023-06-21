@@ -1,13 +1,13 @@
 import numpy as np
 
 from injection.utils.injection_checks import anomaly_check, anomaly_label_check, index_check
-from injection.utils.label_generator import  generate_df_labels
+from injection.utils.label_generator import generate_df_labels
 import hashlib
 import pandas as pd
 
 
 class InjectedDataContainer:
-    def __init__(self, injected, truth, *, class_df=None, labels, name = "injected_container"):
+    def __init__(self, injected, truth, *, class_df=None, labels, name="injected_container"):
         assert injected.shape == truth.shape
 
         self.truth_ = truth  # contains the Original Series
@@ -33,7 +33,6 @@ class InjectedDataContainer:
                 "labels": self.labels,
                 "columns_to_repair": self.injected_columns.copy(),
                 }
-
 
     def check(self):
         index_check(self.klass, self.injected, self.truth, self.labels_)
@@ -90,7 +89,7 @@ class InjectedDataContainer:
 
         repair = repair_results["repair"]
         assert repair.shape == self.labels.shape, (
-        repair_name, repair.shape, self.labels.shape, self.truth.shape, self.injected.shape)
+            repair_name, repair.shape, self.labels.shape, self.truth.shape, self.injected.shape)
 
         repair_dict = {
             "repair": repair_results["repair"],
@@ -105,7 +104,6 @@ class InjectedDataContainer:
         repair_metrics["runtime"] = repair_results["runtime"]
         self.repair_metrics[(repair_name, repair_type)] = repair_metrics
 
-
     def hash(self, additional_input=""):
         m = hashlib.md5(self.injected.values.flatten())
         m.update(self.labels.values.flatten())
@@ -119,11 +117,11 @@ class InjectedDataContainer:
         return Estimator().scores(self.injected, self.truth, self.injected_columns, self.labels,
                                   predicted=self.injected)
 
-    def get_a_rate_per_col(self,rounding=3):
+    def get_a_rate_per_col(self, rounding=3):
         result = {}
         cols = self.injected.columns
         for col in cols:
-            result[col] = round(np.mean(self.class_df[col].values),rounding)
+            result[col] = round(np.mean(self.class_df[col].values), rounding)
         return result
 
     @property
@@ -134,14 +132,11 @@ class InjectedDataContainer:
     def injected_corr(self):
         return self.injected_.corr()
 
-
-
     def randomize_labels(self):
         self.check()
         self.relabeled += 1
         self.labels_ = generate_df_labels(self.class_, seed=self.relabeled)
         self.check()
-
 
     def set_to_original_scale(self, mean, std):
         self.injected_ = self.injected_ * std + mean
@@ -191,8 +186,14 @@ class InjectedDataContainer:
             w = csv.writer(f)
             w.writerows(self.repairs.items())
 
+    def plot(self, injected_ts_only=True, show=True):
+        return plot_injected_container(self, injected_ts_only, show)
 
 
+def plot_injected_container(injected_container: InjectedDataContainer, injected_ts_only=True, show=True):
+    import matplotlib.pyplot as plt
+    plt.plot(injected_container.injected.iloc[:500, injected_container.injected_columns].values, color="red")
+    plt.plot(injected_container.truth.iloc[:500, injected_container.injected_columns].values)
+    plt.title(f"{injected_container.name} injected { { ts: rate for ts,rate in injected_container.get_a_rate_per_col().items() if rate > 0.0 }}")
 
-
-
+    plt.show()

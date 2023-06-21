@@ -1,1 +1,2 @@
 from injection.injection import load_injected_data
+from injection.injection import load_injected_container

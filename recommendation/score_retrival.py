@@ -14,12 +14,11 @@ from recommendation.feature_extraction.load_features import get_injection_parame
 
 
 from repair.param_loader import get_algorithm_params
-from RepBenchWeb.BenchmarkMaps.repairCreation import create_injected_container
 import  injection.injection_config as inject_conf
 from repair.algorithm_mapper import algo_mapper
 import  repair.algorithms_config as alg_conf
 from datetime import datetime
-from injection.injection import load_injected_data
+from injection.injection import load_injected_data , create_injected_container
 
 
 mode = "train"
@@ -93,7 +92,7 @@ for columns, a_percentage, factor, a_type, dataset in itertools.product([ [0], [
 
         injected_data_container = create_injected_container(injected_df=injected_df, truth_df=truth_df)
         injected_dfs.append(injected_df)
-
+        injected_data_container.plot()
         alg_results = {}
         for alg_name in alg_names:
             alg_constructor = algo_mapper[alg_name]
@@ -112,6 +111,7 @@ for columns, a_percentage, factor, a_type, dataset in itertools.product([ [0], [
         append_to_file(results, output_filename)
 
     except Exception as e:
+        raise e
         import traceback
 
         print("Exception", e)
