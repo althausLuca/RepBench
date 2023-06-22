@@ -78,12 +78,13 @@ class RayTuneSettingsForm(forms.Form):
                                        widget=forms.Select(choices=METRIC_CHOICES, attrs={
                                            "class": 'form-control'}))
 
-    ray_tunes_features = forms.ChoiceField(label='Features',
-                                           initial=[choice[0] for choice in FEATURE_CHOICES],
-                                           widget=forms.CheckboxSelectMultiple(
-                                               attrs={'class': 'kt-checkbox', "name": 'estimator_list[]'}),
-                                           choices=FEATURE_CHOICES
-                                           )
+    # ray_tunes_features = forms.ChoiceField(label='Features',
+    #                                        initial=[choice[0] for choice in FEATURE_CHOICES],
+    #                                        widget=forms.CheckboxSelectMultiple(
+    #                                            attrs={'class': 'kt-checkbox', "name": 'estimator_list[]'}),
+    #                                        choices=FEATURE_CHOICES
+    #                                        )
+    ray_tunes_features = forms.IntegerField(widget=forms.NumberInput(attrs={'type': 'range', 'min': '0', 'max': '100', 'step': '1'}))
     ray_tunes_data_fraction = forms.CharField(label='Train Data Fraction', initial='100', widget=forms.Select(
         choices=DATA_FRACTION_CHOICES, attrs={"class": 'form-control'}))
 

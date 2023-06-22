@@ -88,7 +88,7 @@ def gen_ts_len_data(df, a_type, cols):
 
 
 def gen_ts_nbr_data(df, a_type, cols):
-    n_ts = sc.scenario_specifications["cts_nbrs"]
+    n_ts = sc.scenario_specifications["ts_nbrs"]
     injected_df = df.copy()
     injected_df, col_range_mapper = inject_data_df(injected_df, cols=[0], a_type=a_type)
     ret_val = []

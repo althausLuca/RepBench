@@ -65,8 +65,8 @@ class EstimatorOptimizer():
         n = len(param_combinations)
 
         def f(params):
-            self.counter += 1
-            sys.stdout.write(f"\rgrid search {self.counter /n * 100:.1f} %", )
+            # self.counter += 1
+            # sys.stdout.write(f"\rgrid search {self.counter /n * 100:.1f} %", )
             estim = self.estim_change_copy(params)
             score_ = estim.scores(**repair_inputs)[self.error_score]
             return score_

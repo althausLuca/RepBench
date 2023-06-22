@@ -5,11 +5,13 @@ from tsfresh.feature_extraction import EfficientFCParameters, MinimalFCParameter
 from tsfresh import extract_features as tsfresh_extract_features
 import re
 from recommendation.feature_extraction.ts_fresh_features import selected_feature_names
+import tsfel
 
 feature_endings = {"catch22": "__ct",
                    "tsfresh_minimal": "__tsf_m",
                    "multi_dim": "__md",
-                   "tsfresh_selected": "__tsf_s"
+                   "tsfresh_selected": "__tsf_s",
+                   "tsfel": "__tsfel"
                    }
 
 def extract_features(dataset : pd.DataFrame, column):
@@ -48,7 +50,7 @@ def single_ts_feature_extraction(input_data):
     selected_tsfresh_features = extract_selected_ts_fresh_features(np_data)
     tsfresh_features_minimal = extract_ts_fresh_features(np_data)
     catch22_features = extract_catch22_features(np_data)
-
+    extract_tsfel_features(np_data)
     features.update(catch22_features)
     features.update(selected_tsfresh_features)
     features.update(tsfresh_features_minimal)
@@ -91,7 +93,16 @@ def multi_ts_feature_extraction(dataset: pd.DataFrame, column):
     return multi_dim_features
 
 
+def extract_tsfel_features(data: np.ndarray):
+    data = data.flatten()
+    data= pd.DataFrame(data)
+    cfg_file = tsfel.get_features_by_domain()
+    tsfel_features = tsfel.time_series_features_extractor(cfg_file,data)
+    tsfel_features = dict(zip(tsfel_features.columns, tsfel_features.values.flatten()))
+    tsfel_features = {name + feature_endings["tsfel"]: round(val, 5) for name, val in tsfel_features.items()}
+    print("TSFELL FEATURES" , tsfel_features)
 
+    return tsfel_features
 
 
 def extract_catch22_features(data: np.ndarray):

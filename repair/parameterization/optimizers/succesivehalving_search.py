@@ -6,7 +6,7 @@ from repair.parameterization.optimizers.estimator_optimizer import EstimatorOpti
 
 class SuccessiveHalvingOptimizer(EstimatorOptimizer):
 
-    def __init__(self, repair_estimator, error_score: str, *, n_jobs=6, start_size=200, n_splits=1, callback=None):
+    def __init__(self, repair_estimator, error_score: str, *, n_jobs=6, start_size=100, n_splits=1, callback=None):
         self.start_size = start_size
         self.n_splits = n_splits
         super().__init__(repair_estimator, error_score, n_jobs=n_jobs)
@@ -28,6 +28,9 @@ class SuccessiveHalvingOptimizer(EstimatorOptimizer):
         counter = 0
         while True:
             size = start_size
+            print(f"iter_{counter} {len(param_combinations)} parameter combinations, data_size:{size}")
+
+
             start_index = first_anomaly_index - size / 2
             non_used_start = 0
             if start_index < 0:
@@ -50,15 +53,18 @@ class SuccessiveHalvingOptimizer(EstimatorOptimizer):
             plt.title(f"iter_{counter} {len(param_combinations)} combinations")
             plt.show()
             params_error = self.param_map(reduced_repair_indputs, param_combinations)
-            print(params_error)
-
+            print("avg error:" , np.mean([error for _, error in params_error]), "Parameters:" ,params_error  )
             # reduce param combinations
             param_combinations = [params for i, (params, _) in enumerate(params_error) if i < len(params_error) / 2]
-            print(param_combinations)
+            print("Kept parameters: " , param_combinations)
 
             #increase size
             start_size = start_size*2
+            counter = counter + 1
             if len(param_combinations) < 5 or start_size > n:
                 break
 
-        return self.grid(repair_inputs, None, param_combinations)
+        # print(f"iter_{counter} {len(param_combinations)} parameter combinations data_size {size}")
+        end_results =  self.param_map(reduced_repair_indputs,param_combinations)[0][0]
+        print("Final parameters: " , end_results)
+        return end_results
