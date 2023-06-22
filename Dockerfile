@@ -19,7 +19,7 @@ RUN pip install -r requirements.txt
 RUN pip install -U hyperopt
 RUN pip install nevergrad
 RUN pip install -U zoopt
-
+RUN pip install tsfel
 
 # Copy project
 COPY . /code/

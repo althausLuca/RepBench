@@ -88,7 +88,7 @@ with its repair will be added to the folder `Results/.../precision/repair/`.
 #### Parameters
 
 The Parameters of the algorithms can be modified
-in [here](https://github.com/althausLuca/RepairBenchmark/blob/master/algorithms/parameters.toml)
+in [here](https://github.com/althausLuca/RepBench/blob/master/repair/parameters.toml)
 
 ### Examples
 
