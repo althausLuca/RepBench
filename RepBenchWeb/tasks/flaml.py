@@ -11,11 +11,6 @@ metrics = {
     "macro_f1": lambda y_true, y_pred: f1_score(y_true, y_pred, average='macro')
 }
 
-
-
-
-
-
 @shared_task(bind=True)
 def flaml_search_task(self, settings, X_train, y_train, X_test, y_test, my_task_id):
     from RepBenchWeb.models import TaskData
@@ -37,7 +32,6 @@ def flaml_search_task(self, settings, X_train, y_train, X_test, y_test, my_task_
         start = time.time()
         pred_time = (time.time() - start) / len(X_val)
         estimator.fit(X_train, y_train)
-        # print(X_train.shape, y_train.shape, X_val.shape, y_val.shape)
         y_pred = estimator.predict(X_val)
         score = metrics[setting_metric](y_pred, y_val)
         print(y_pred,score)

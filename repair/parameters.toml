@@ -7,7 +7,7 @@
     delta = 1
 
 
-[cdrec]
+[cdrep]
     classification_truncation = 2
     repair_truncation = 3
     threshold = 1.2

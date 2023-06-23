@@ -8,7 +8,7 @@ from injection import inject_data_df
 from injection.injection_config import AMPLITUDE_SHIFT, POINT_OUTLIER, DISTORTION
 from repair.Dimensionality_Reduction.RobustPCA.Robust_pca_estimator import Robust_PCA_estimator
 from repair.Dimensionality_Reduction.CD.CDRecEstimator import CDRecEstimator
-from repair.algorithms_config import IMR, SCREEN, RPCA, CDREC
+from repair.algorithms_config import IMR, SCREEN, RPCA, CDREP
 from repair.algorithm_mapper import algo_mapper
 
 # load injected Dataset
@@ -35,7 +35,7 @@ imr_search_space = {
 config_map = {IMR: imr_search_space,
               SCREEN: screen_search_space,
               RPCA: dimensionality_decomposition_search_space,
-              CDREC: dimensionality_decomposition_search_space
+              CDREP: dimensionality_decomposition_search_space
               }
 
 
@@ -68,8 +68,8 @@ def flaml_search(data_set, a_type, factor=2):
         },
         {
             "task_id": "CDREC",
-            "custom_fun": lambda config: algo_mapper[CDREC](**config).score(injected_df, truth_df, [0], None)["rnse"],
-            "search_space": config_map[CDREC],
+            "custom_fun": lambda config: algo_mapper[CDREP](**config).score(injected_df, truth_df, [0], None)["rnse"],
+            "search_space": config_map[CDREP],
             'time_budget': 60,  # in seconds
             'early_stop': 10,
         },

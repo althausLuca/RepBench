@@ -6,7 +6,7 @@ algo_mapper = {
     ac.RPCA: algs.Robust_PCA_estimator,
     ac.SCREEN: algs.SCREENEstimator,
     ac.IMR: algs.IMR_estimator,
-    ac.CDREC: algs.CDRecEstimator,
+    ac.CDREP: algs.CDRecEstimator,
 }
 
 

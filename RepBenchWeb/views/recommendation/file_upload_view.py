@@ -1,16 +1,10 @@
 import csv
-import io
-import json
 
 import pandas as pd
 from django.core.files.uploadedfile import UploadedFile
-from django.shortcuts import render, redirect
 from RepBenchWeb.forms.file_upload import UploadFilesForm
-from RepBenchWeb.ts_manager.HighchartsMapper import map_truth_data, map_repair_data
-from recommendation.recommend import get_recommendation_non_containerized
-from RepBenchWeb.utils.encoder import RepBenchJsonRespone
 from RepBenchWeb.models import DataSet
-from RepBenchWeb.utils.encoder import RepBenchJsonEncoder
+
 
 
 def django_file_to_pandas(uploaded_file: UploadedFile) -> pd.DataFrame:
@@ -40,18 +34,11 @@ def upload_files(request):
     upload_form = UploadFilesForm()
     if request.method == 'POST':
         form = UploadFilesForm(request.POST, request.FILES)
-        if True: #form.is_valid():
+        if True:
             file1 = request.FILES['file1']
             print(request.FILES)
             print(dict(request.POST))
-            data_name = request.POST.get('file_name')
-            # file2 = request.FILES.get('file2', None)
-            # file3 = request.FILES.get('file3', None)
-            # column_for_recommendation = int(request.POST.get('column-id', -1))
-            # column_name = request.POST.get('column-name')
-
-            # Process the files as needed
-            # df = handle_uploaded_file(file1)
+            data_name = request.POST.get('title')
             df = django_file_to_pandas(file1)
 
 
@@ -59,41 +46,6 @@ def upload_files(request):
             #                                                       column_for_recommendation=column_for_recommendation)
             print(df)
             DataSet.objects.create(title=data_name, dataframe=df.to_json() , ref_url="-", description="-",url_text="-",granularity="1s")
-    #         n, m = df.shape
-    #         uploaded_file_name = file1.name.split(".")[0]
-    #         data_info = {
-    #             'column_name': column_name,
-    #             'column_id': column_for_recommendation,
-    #             'values': n * m,
-    #             'file_name': uploaded_file_name,
-    #             "ts_nbr": m,
-    #             "ts_len": n,
-    #         }
-    #
-    #         highcharts_series = map_truth_data(df)
-    #         highcharts_series[column_for_recommendation]['name'] = str(
-    #             highcharts_series[column_for_recommendation]['name']) + "(reccomended)"
-    #
-    #         repaired_series = [
-    #             {
-    #                 "id": "repair" + alg_name,
-    #                 "name": alg_name,
-    #                 "data": repaired_df.iloc[:, column_for_recommendation].tolist(),
-    #                 "norm_data": repaired_df.iloc[:, column_for_recommendation].tolist(),
-    #                 "series_type" : "repair",
-    #                 "legendIndex": -1
-    #             } for alg_name, repaired_df in recommendation["alg_repairs"].items()
-    #         ]
-    #         recommendation.pop("alg_repairs")
-    #         highcharts_series += repaired_series
-    #         highcharts_series = json.dumps(highcharts_series, cls=RepBenchJsonEncoder)
-    #         recommendation_data = json.dumps(recommendation, cls=RepBenchJsonEncoder)
-    #         return render(request, 'recommendation/user_recommendation.html',
-    #                       {'data_info': data_info, "highcharts_series": highcharts_series,
-    #                        "recommendation_data": recommendation_data})
-    #
-    #     else:
-    #         print("form is not valid")
-    #
+
     import RepBenchWeb.views.injection_view as injection_view
     return injection_view.InjectionView().get(request,setname =data_name )

@@ -10,11 +10,11 @@ from repair import algo_mapper
 from repair.param_loader import get_algorithm_params
 from injection.injectedDataContainer import InjectedDataContainer
 
-from repair.algorithms_config import CDREC, RPCA, IMR, SCREEN
+from repair.algorithms_config import CDREP, RPCA, IMR, SCREEN
 from recommendation.feature_extraction.feature_extraction import extract_features
 from recommendation.utils.file_parsers import load_estimator
 
-alg_names = [CDREC, RPCA, IMR, SCREEN]
+alg_names = [CDREP, RPCA, IMR, SCREEN]
 autoML_file_name_default = "flaml_classifier_accuracy_time_6_non_normalized"
 
 

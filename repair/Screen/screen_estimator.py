@@ -2,7 +2,7 @@ import pandas as pd
 
 from repair.Screen.globallp import LPconstrainedAE
 from repair.Screen.screen import screen
-from repair.algorithms_config import SCREEN, SCREEN_GLOBAL
+from repair.algorithms_config import SCREEN
 from repair.estimator import Estimator
 import numpy as np
 

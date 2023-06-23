@@ -153,7 +153,7 @@
         </div>
     </div>
 
-    <div class="row" id="store-and-save-content" style="display:none;">
+    <div class="row" id="store-and-save-content" style="display:block;">
         <script>
             const showStoreAndSaveContent = () => {
                 document.getElementById('store-and-save-content').style.display = 'block';
@@ -164,16 +164,8 @@
         </div>
         <div>
             <form method="post" enctype="multipart/form-data" action="{% url 'upload_files' %}">
-
                 {% csrf_token %}
-
-                <label for="id_file1">Dataset File:</label>
-                <input type="file" name="file1" required="" id="id_file1">
-
-                <label for="file_name">Dataset name:</label>
-                <input type="text" name="file_name" required="" id="file_name">
-
-
+                {{ upload_form }}
                 <button id="upload-button" type="submit" style="display: block">Upload</button>
             </form>
         </div>

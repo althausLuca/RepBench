@@ -6,6 +6,7 @@ from pandas import DataFrame
 from injection.injectedDataContainer import InjectedDataContainer
 from repair.algorithm_mapper import algo_mapper
 from repair.estimator import Estimator
+from repair.param_loader import get_algorithm_params
 
 
 def shuffle_labels(labels: DataFrame):
@@ -34,7 +35,7 @@ class AnomalyRepairer():
             """
 
         if params == "default":
-            params = {}
+            params = get_algorithm_params(alg_type)
         assert isinstance(params, dict), f"params must be a dictionary or 'default', was {params}"
 
         estimator: Estimator = algo_mapper[alg_type](**params)

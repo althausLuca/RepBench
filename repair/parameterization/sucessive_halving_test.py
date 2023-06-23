@@ -1,6 +1,6 @@
 from injection.injection import  load_injected_container
 from repair.algorithm_mapper import algo_mapper
-from repair.algorithms_config import CDREC, SCREEN ,RPCA
+from repair.algorithms_config import CDREP, SCREEN ,RPCA
 from repair.parameterization import (
     BayesianOptimizer,
     SuccessiveHalvingOptimizer,

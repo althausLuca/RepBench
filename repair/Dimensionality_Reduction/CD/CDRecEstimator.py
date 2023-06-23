@@ -1,7 +1,7 @@
 import time
 
 from repair.Dimensionality_Reduction.CD.sign_vector_computations import *
-from repair.algorithms_config import CDREC
+from repair.algorithms_config import CDREP
 from repair.Dimensionality_Reduction.dimensionality_reduction_estimator import DimensionalityReductionEstimator
 import numpy as np
 
@@ -13,7 +13,7 @@ class CDRecEstimator(DimensionalityReductionEstimator):
 
     @property
     def alg_type(self):
-        return CDREC
+        return CDREP
 
     def __str__(self):
         if self.n_max_iter < 2:

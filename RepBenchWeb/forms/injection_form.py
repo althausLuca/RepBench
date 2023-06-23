@@ -36,16 +36,26 @@ class RangeSliderInput(forms.TextInput):
         return html
 
 
+
+ratio_choices = [( 0.05,"low") , ( 0.1,"medium"), (0.2,"large")]
+factor_choices = [(2,"small"), (3.5,"medium"), (6,"large")]
 class InjectionForm(forms.Form):
     anomaly = forms.CharField(label='Anomaly Type', widget=forms.Select(choices=ANOMALY_CHOICES, attrs={
         "class": 'form-control', "id": "anomaly_id",
         "myInfo": "Anomaly Type to infect the data with."}))
-    ratio = forms.FloatField(label='Ratio', initial=0.1, widget=NumberInput(
-        attrs={'id': "ratio_id", 'min': 0, 'max': 1, "class": 'form-control',
+
+    ratio = forms.FloatField(label='Contamination', initial=0.1, widget=forms.Select(choices=ratio_choices,
+        attrs={'id': "ratio_id", "class": 'form-control',
                "myInfo": "Ratio of the Time Series to be injected."}))
-    factor = forms.FloatField(initial=3, widget=NumberInput(
-        attrs={'id': "ratio_id", 'min': 0, 'max': 30, "class": 'form-control',
-               "myInfo": "Standard deviation factor of the anomaly."}))
+    # ratio = forms.FloatField(label='Contamination', initial=0.1, widget=NumberInput(
+    #     attrs={'id': "ratio_id", 'min': 0, 'max': 1, "class": 'form-control',
+    #            "myInfo": "Ratio of the Time Series to be injected."}))
+    factor = forms.FloatField(label='Anomaly Scale', initial=3.5, widget=forms.Select(choices=factor_choices,
+        attrs={ "class": 'form-control',
+                "myInfo": "Standard deviation factor of the anomaly."}))
+    # factor = forms.FloatField(initial=3, widget=NumberInput(
+    #     attrs={'id': "ratio_id", 'min': 0, 'max': 30, "class": 'form-control',
+    #            "myInfo": "Standard deviation factor of the anomaly."}))
 
     def __init__(self, data_columns, ts_name="bafu", *args, **kwargs):
         super(InjectionForm, self).__init__(*args, **kwargs)

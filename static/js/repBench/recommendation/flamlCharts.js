@@ -16,7 +16,8 @@ const RecommendationChart = {
                     width: 3,
                     value: 0.5,
                     dashStyle: "dot"
-                }]
+                }],
+
             },
             yAxis: {
                 min: 0,

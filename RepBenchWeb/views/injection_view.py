@@ -2,6 +2,8 @@ import json
 import random
 
 from django.shortcuts import render
+
+from RepBenchWeb.forms.file_upload import UploadFilesForm
 from RepBenchWeb.utils.encoder import RepBenchJsonRespone
 from injection.injectedDataContainer import InjectedDataContainer
 from RepBenchWeb.forms.alg_param_forms import SCREENparamForm, RPCAparamForm, CDparamForm, IMRparamField
@@ -33,7 +35,7 @@ class InjectionView(RepairView):
         context["store_form"] = store_injection_form
         context["injection_form"] = InjectionForm(list(df.columns))
         context["alg_forms"] = self.ParamForms
-        # context["upload_form"] = self.error_map
+        context["upload_form"] = UploadFilesForm()
 
         return render(request, self.template, context=context)
 

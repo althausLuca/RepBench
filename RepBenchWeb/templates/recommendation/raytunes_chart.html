@@ -12,8 +12,7 @@
                 title: {
                     text: ''
                 },
-                xAxis: {
-                },
+                xAxis: {},
                 yAxis: {
                     {#min: 0,#}
                     {#max: 1,#}
@@ -33,7 +32,7 @@
 
             });
 
-            this.parameterChart =  Highcharts.chart('raytunes-parameter-chart', {
+            this.parameterChart = Highcharts.chart('raytunes-parameter-chart', {
                 chart: {
                     {#type: 'column',#}
                     height: 250,
@@ -42,6 +41,9 @@
                     text: ''
                 },
                 xAxis: {
+                    title: {
+                        text: 'Iteration'
+                    }
                 },
                 yAxis: {
                     title: {
@@ -71,15 +73,14 @@
 
             let parameter_names = Object.keys(parameters)
             parameter_names.forEach(name => {
-                let param_series = this.parameterChart.series.filter(s => s.name === name)
-                if(param_series.length === 0){
-                    this.parameterChart.addSeries({name: name , data: [parameters[name]]})
+                    let param_series = this.parameterChart.series.filter(s => s.name === name)
+                    if (param_series.length === 0) {
+                        this.parameterChart.addSeries({name: name, data: [parameters[name]]})
+                    } else {
+                        param_series[0].addPoint(parameters[name])
+                    }
                 }
-                else{
-                    param_series[0].addPoint(parameters[name])
-                }
-            }
-        )
+            )
 
 
             {# } else {#}

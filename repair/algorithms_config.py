@@ -6,16 +6,15 @@ IMR = "imr"
 SCREEN = "screen"
 RPCA = "rpca"
 Robust_PCA = RPCA
-CDREC = "cdrec"
+CDREP = "cdrep"
 WindowRPCA = "wrpca"
-SCREEN_GLOBAL = "screen_global"
 SCREEN_l = "screen_5_95"
 SCREEN_l2 = "screen_10_90"
 
-ALGORITHM_TYPES = (IMR,SCREEN,RPCA,CDREC)
+ALGORITHM_TYPES = (IMR,SCREEN,RPCA,CDREP)
 
 #black is used for the truth, and red for anomalies
-ALGORITHM_COLORS = {IMR : "blue" , SCREEN : "purple" , RPCA : "green" , CDREC : "orange",}
+ALGORITHM_COLORS = {IMR : "blue" , SCREEN : "purple" , RPCA : "green" , CDREP : "orange",}
 ALGORITHM_COLORS = defaultdict(lambda: 'cyan', ALGORITHM_COLORS )
 
 

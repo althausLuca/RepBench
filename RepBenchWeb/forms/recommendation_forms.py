@@ -44,15 +44,16 @@ class FLAMLSettingsForm(forms.Form):
                                                choices=ESTIMATOR_CHOICES
                                                )
 
-    features = forms.MultipleChoiceField(label='Features',
+    # todo make selection of features work
+    features = forms.MultipleChoiceField(label='Feature Extrators',
                                          initial=[choice[0] for choice in FEATURE_CHOICES],
                                          widget=forms.CheckboxSelectMultiple(
                                              attrs={'class': 'kt-checkbox', "name": 'estimator_list[]'}),
                                          choices=FEATURE_CHOICES
                                          )
 
-    data_fraction = forms.CharField(label='Train Data Fraction', initial='100', widget=forms.Select(
-        choices=DATA_FRACTION_CHOICES, attrs={"class": 'form-control'}))
+    # data_fraction = forms.CharField(label='Train Data Fraction', initial='100', widget=forms.Select(
+    #     choices=DATA_FRACTION_CHOICES, attrs={"class": 'form-control'}))
 
 
     def __init__(self, *args, **kwargs):
@@ -84,9 +85,9 @@ class RayTuneSettingsForm(forms.Form):
     #                                            attrs={'class': 'kt-checkbox', "name": 'estimator_list[]'}),
     #                                        choices=FEATURE_CHOICES
     #                                        )
-    ray_tunes_features = forms.IntegerField(widget=forms.NumberInput(attrs={'type': 'range', 'min': '0', 'max': '100', 'step': '1'}))
-    ray_tunes_data_fraction = forms.CharField(label='Train Data Fraction', initial='100', widget=forms.Select(
-        choices=DATA_FRACTION_CHOICES, attrs={"class": 'form-control'}))
+    # ray_tunes_features = forms.IntegerField(widget=forms.NumberInput(attrs={'type': 'range', 'min': '0', 'max': '100', 'step': '1'}))
+    # ray_tunes_data_fraction = forms.CharField(label='Train Data Fraction', initial='100', widget=forms.Select(
+    #     choices=DATA_FRACTION_CHOICES, attrs={"class": 'form-control'}))
 
     def __init__(self, *args, **kwargs):
         super(RayTuneSettingsForm, self).__init__(*args, **kwargs)

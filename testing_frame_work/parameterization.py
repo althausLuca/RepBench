@@ -5,17 +5,6 @@ from repair.parameterization.optimizers.bayesian_optimization import BayesianOpt
 import toml
 
 
-### Parameters from toml file
-file_name = "repair/parameters.toml"
-def load_params_from_toml(alg_type):
-    param_dict = toml.load(file_name)
-    assert alg_type in param_dict or alg_type.split("_")[0] in param_dict , f"{alg_type} not in {param_dict.keys()}"
-    if alg_type in param_dict:
-        return param_dict[alg_type]
-    return param_dict[alg_type.split("_")[0]]
-
-
-
 optim_methods = {"grid": EstimatorOptimizer,
                 "halving": SuccessiveHalvingOptimizer,
                 "bayesian": BayesianOptimizer}

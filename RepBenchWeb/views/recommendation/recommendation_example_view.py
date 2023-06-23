@@ -113,7 +113,7 @@ def start_flaml(request):
     selected_features = selected_features if selected_features else []  ## if empty selection use an empty set and only multi dim
     valid_endings = [feature_endings[sel_] for sel_ in selected_features] + [feature_endings["multi_dim"]]
     features_in_X = [col_name for col_name in  X_train.columns if any([col_name.endswith(end_) for end_ in valid_endings])]
-
+    train_size = int(int(request.POST.get("train-size"))/(100) * len(X_train))
     estimator_list = request.POST.get("estimator_list")
     estimator_list = estimator_list if isinstance(estimator_list, list) else estimator_list.split(",")
     print(dict(request.POST))
@@ -122,7 +122,7 @@ def start_flaml(request):
 
     task_data = TaskData(task_id=task_id, data_type="flaml")
     task_data.save()
-    flaml_search_task.delay(automl_settings, X_train[features_in_X], y_train, X_test[features_in_X], y_test,
+    flaml_search_task.delay(automl_settings, X_train[features_in_X].iloc[:train_size,:], y_train[:train_size], X_test[features_in_X], y_test,
                             my_task_id=task_id)
 
     print("sarch task initialized")

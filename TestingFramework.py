@@ -5,7 +5,6 @@ from testing_frame_work.scenarios.scen_generator import build_scenario
 from testing_frame_work.scenarios.scenario import Scenario
 import testing_frame_work.argument_parsers as arg_parser
 import testing_frame_work.repair as alg_runner
-from testing_frame_work.parameterization import load_params_from_toml
 from testing_frame_work.data_methods.data_class import infer_data_file
 import injection.injection_config as ic
 import testing_frame_work.scenarios.scenario_config as sc
@@ -61,8 +60,7 @@ def main(input=None):
         for name, test_part in scenario.name_container_iter:
             for repair_type in algorithms:
                 print(f"running repair on {data_name}  {scen_name} with {repair_type} on {anomaly_type} anomalies")
-                params = load_params_from_toml(repair_type)
-                repair_info = repairer.repair_data_part(repair_type, test_part, params)
+                repair_info = repairer.repair_data_part(repair_type, test_part)
             test_part.save(folder=f"Results/DataSets/{scen_name}_{anomaly_type}_{name}")
         scenario.save(plot_repairs=True, res_name=args.rn)
 
