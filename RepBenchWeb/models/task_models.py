@@ -71,7 +71,7 @@ class TaskData(models.Model):
                 if i > 0:
                     data_iteration["runtime"] = round(data_iteration["time"] - self.data[i - 1]["time"], 3)
                 else:
-                    data_iteration["runtime"] = 0.3
+                    data_iteration["runtime"] = round(data_iteration["time"] - self.created_at.timestamp(), 3)
         try:
             self.save()
 
