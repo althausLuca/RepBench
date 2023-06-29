@@ -55,4 +55,5 @@ def succesive_halving_task(self, alg_name, injected, truth, labels, injected_col
                  "threshold": [0.1, 0.2, 0.3, 0.4, 0.5],
                  }
     optimizer.search(repair_inputs,paramgrid)
+    task_data.set_done()
     return "Done"

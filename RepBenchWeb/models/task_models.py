@@ -1,3 +1,4 @@
+import json
 import pickle
 import sqlite3
 from django.db.utils import IntegrityError
@@ -9,6 +10,7 @@ from django.db import models
 
 from RepBenchWeb.models import InjectedContainer
 from RepBenchWeb.tasks.utils import revoke_task
+from RepBenchWeb.utils.encoder import RepBenchJsonEncoder
 from RepBenchWeb.views.recommendation.utils import get_relevant_parameters
 
 
@@ -50,12 +52,12 @@ class TaskData(models.Model):
         self.clean()
         super().__init__(*args, **kwargs)
 
-    def add_data(self, data):
+    def add_data(self, data: dict):
         import time
         time = time.time()
         data["processed"] = False
         data["time"] = time
-        self.data.append(data)
+        self.data.append(json.loads(json.dumps(data,cls=RepBenchJsonEncoder)))
         self.save()
 
     def get_data(self):

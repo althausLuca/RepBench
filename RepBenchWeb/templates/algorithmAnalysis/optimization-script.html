@@ -17,31 +17,18 @@
         init: function (option, start_url, retrieve_url) {
             this.data = []
             this.iteration = 0;
-            {#this.flaml_series = [];#}
             this.task_id = '{{csrf_token}}'
             this.playing = false
             this.computing = false
             this.intervalTimer = 800
-            {#this.option = option//flaml or ray#}
+            this.option = option //successive_halving or bayesian_optimization
             this.start_url = start_url
             this.retrieve_url = retrieve_url
-            {#RecommendationChart.init()#}
-
         },
         startOptimizing: function () {
             this.playing = false
             this.iteration = 0;
             this.data = [];
-
-            {#let queryString = $('#recommendation_settings_form').serialize();#}
-            {#const params = new URLSearchParams(queryString);#}
-            {#const estimatorList = params.getAll("estimator_list");#}
-            {#console.log(estimatorList)#}
-            {#queryString += '&estimator_list=' + estimatorList;#}
-
-            {#document.getElementById("start-button-right-text").innerHTML = "Starting " + this.option;#}
-            {#initFlamlChart([]);#}
-            {#RecommendationChart.chart.showLoading()#}
 
             $.ajax({
                 type: 'POST',
@@ -60,12 +47,12 @@
                     optimData = response
                     console.log("OPTIM DATA", optimData)
                     //textract error_loss from formdata
-                    let error_loss = optimData.error_loss.toUpperCase();
-                    let params = Object.keys(optimData.param_ranges);
-                    let n_initial_points = optimData.n_initial_points;
-                    let n_calls = optimData.n_calls;
-                    let job_id = optimData.job_id;
-                    initOptChart(params, error_loss, n_initial_points, n_calls)
+                    {#let error_loss = optimData.error_loss.toUpperCase();#}
+                    {#let params = Object.keys(optimData.param_ranges);#}
+                    {#let n_initial_points = optimData.n_initial_points;#}
+                    {#let n_calls = optimData.n_calls;#}
+                    {#let job_id = optimData.job_id;#}
+                    {#initOptChart(params, error_loss, n_initial_points, n_calls)#}
                 },
                 error: function (response) {
                     console.log(response);
@@ -90,32 +77,8 @@
                     } else if (response.status === 'done') {
                         console.log("DONE");
                         this.playing = false
-
                     }
-
-                    if (response.data.length > 0) {
-                        let params = response.data[response.data.length - 1].param_combinations
-
-                        console.log("PARAMS", response.data)
-                        console.log(params)
-                        let param_names = Object.keys(params[0])
-                        SuccessiveHalvingChart.setParamNames(param_names[0], param_names[1])
-                        SuccessiveHalvingChart.update(params)
-                        ErrorChart.update(response.data.map(d => d.avg_error))
-                        {#const elements = document.querySelectorAll('.disable-mouse-events');#}
-                        {#console.log("ELEMENTS TO DISABLE")#}
-                        {#elements.forEach(function (element) {#}
-                        {#    element.classList.remove('disable-mouse-events');#}
-                        {#    element.classList.add('disable-mouse-events-removed')#}
-                        {# });#}
-
-                        {#showRecommendationBelow()#}
-
-                        // Display message that Flaml is finished
-                        // ...
-                        {#getPrediction()#}
-
-                    }
+                    {#this.data = response.data;#}
                 },
                 error: function (response) {
                     console.log(response);
@@ -126,30 +89,38 @@
 
         iterateData: function () {
             console.log("iterate")
-            {#if (this.iteration < this.data.length && this.playing) {#}
-            {#    let currentData = this.data[this.iteration];#}
-            {#    console.log(currentData, "CURRENT DATA")#}
-            {##}
-            {#    let score = currentData.score;#}
-            {#    let roundedScore = Math.round(score * 1000) / 1000;#}
-            {#    let estimator = currentData.estimator#}
-            {#    let parameters = currentData.parameters#}
-            {#    let runtime = currentData.runtime#}
-            {#    document.getElementById("start-button-right-text").innerHTML = "Iter:" + this.flaml_response_iter +#}
-            {#        "| Estimator: " + estimator +#}
-            {#        " | " + runtime + "s" +#}
-            {#        " | Score: " + roundedScore;#}
-            {##}
-            {#    this.flaml_response_iter = this.flaml_response_iter + 1;#}
-            {#    this.flaml_series.push({y: score, x: this.flaml_response_iter, name: estimator})#}
-            {#RecommendationChart.addData(score, estimator, this.flaml_response_iter, parameters);#}
-            {#    parameterTable.addData(roundedScore, estimator, parameters);#}
-            {#addDataToFlamlChart(score, currentData.estimator , 1);#}
-            {# } else {#}
-            {#    if (this.playing) {#}
-            {#        console.log("Waiting for more data..." + this.flaml_response_iter);#}
-            {#    }#}
-            {# }#}
+            if (this.iteration < this.data.length && this.playing) {
+                let currentData = this.data[this.iteration];
+                console.log(currentData, "CURRENT DATA")
+                document.getElementById("start-button-right-text").innerHTML = "Iter:" + this.iteration +
+                    {#"| Estimator: " + estimator +#}
+                    " | " + currentData.time + "s"
+                    {#" | Score: " + currentData;#}
+
+
+                if (this.option === 'successive_halving') {
+                    let params = currentData.param_combinations
+                    let param_names = Object.keys(params[0])
+                    SuccessiveHalvingChart.setParamNames(param_names[0], param_names[1])
+                    SuccessiveHalvingChart.update(params)
+                    ErrorChart.add(currentData.avg_error)
+
+                } else {
+                    ErrorChart.add(currentData.score)
+                    let params = currentData.params
+                    let param_names = Object.keys(params)
+                    SuccessiveHalvingChart.setParamNames(param_names[0], param_names[1])
+                    console.log("IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII",Object.values(params))
+                    SuccessiveHalvingChart.add(params)
+
+                }
+
+                this.iteration += 1;
+            } else {
+                if (this.playing) {
+                    console.log("Waiting for more data..." + this.iteration);
+                }
+            }
 
             setTimeout(this.iterateData.bind(this), this.intervalTimer);
         }

@@ -41,6 +41,10 @@
             this.chart.series[0].setData(dataTuples);
         },
 
+        add: function (dataPoint) {
+            this.chart.series[0].addPoint([ dataPoint[this.param_1] , dataPoint[this.param_2] ]);
+        },
+
         setParamNames: function (param_1, param_2) {
             this.chart.xAxis[0].setTitle({text: param_1});
             this.chart.yAxis[0].setTitle({text: param_2});
@@ -81,8 +85,8 @@
             }]
         }),
 
-        update: function (data) {
-            data.forEach(d=> this.chart.series[0].addPoint(d));
+        add: function (dataPoint) {
+            this.chart.series[0].addPoint(dataPoint);
         },
 
         {#setParamNames: function (param_1, param_2) {#}

@@ -36,7 +36,6 @@ class RepBenchJsonEncoder(json.JSONEncoder):
             return round(obj, 3)
         if np.isnan(obj):
             return None
-        print("UNKNOWN TYPE")
         return super().default(obj)
 
 

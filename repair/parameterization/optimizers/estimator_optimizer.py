@@ -13,9 +13,9 @@ class EstimatorOptimizer():
         self.n_jobs = n_jobs
 
     def estim_change_copy(self, param_dict):
-        estim_copy = type(self.estim)()
-        estim_copy.__dict__.update(self.estim.__dict__)
-        estim_copy.__dict__.update(param_dict)
+        estim_copy = type(self.estim)(**param_dict)
+        # estim_copy.__dict__.update(self.estim.__dict__)
+        # estim_copy.__dict__.update(param_dict)
         return estim_copy
 
 

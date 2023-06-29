@@ -5,7 +5,7 @@ from repair.parameterization.optimizers.estimator_optimizer import EstimatorOpti
 
 
 class BayesianOptimizer(EstimatorOptimizer):
-    def __init__(self, repair_estimator, error_score : str , *, n_jobs=6, n_calls=20, n_initial_points=10, n_restarts_optimizer=0,
+    def __init__(self, repair_estimator, error_score : str , *, n_jobs=6, n_calls=40, n_initial_points=20, n_restarts_optimizer=0,
                  callback=None):
         self.n_calls = n_calls
         self.n_initial_points = n_initial_points

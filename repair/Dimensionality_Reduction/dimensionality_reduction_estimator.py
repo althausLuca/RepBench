@@ -18,10 +18,11 @@ class DimensionalityReductionEstimator(Estimator):
                  , threshold = None #alias for t
                  , **kwargs
                  ):
+
         self.threshold = threshold if threshold is not None else t
         self.delta = delta
         self.k = k if k is not None else classification_truncation
-        self.classification_truncation = classification_truncation if k  is None else k
+        self.classification_truncation = classification_truncation if k is None else k
         self.repair_truncation = repair_truncation if repair_truncation is not None else self.classification_truncation+1
         self.eps = eps
         self.n_max_iter = n_max_iter

@@ -17,6 +17,7 @@ from RepBenchWeb.views import (
 
 from RepBenchWeb.views import dimensionality_reduction_view, synthetic_dataset_view, data_loader
 from RepBenchWeb.views.recommendation.recommendation_tasks import FlamlTask
+from RepBenchWeb.views.optimization.optimization_tasks import SuccesiveHalvingTask, BayesianOptimisationTask
 
 app_name = 'RepBenchWeb'
 
@@ -50,12 +51,18 @@ urlpatterns = [
     ##  repair data
     path('repair_data/<str:setname>', repair_view.RepairView.repair_data, name='repair_data'),
 
+
+
     # optimization
     path('optimization_datasets',datasets_display.display_optimization_datasets,name="optimization_datasets"),
     path('opt', optimizationview.OptimizationView.as_view(), name="opt"),
     path('opt/<str:setname>', optimizationview.OptimizationView.as_view(), name="opt"),
-    path('optimize_data', optimizationview.start_optimization, name='optimize_data'),
-    path('fetch_optresults', optimizationview.fetch_opt_results, name='fetch_optresults'),
+
+
+    path('start_bayesian_opt', BayesianOptimisationTask.init_task, name='start_bayesian_opt'),
+    path('start_succesive_halving', SuccesiveHalvingTask.init_task, name='start_successive_halving'),
+
+    path('fetch_optresults', SuccesiveHalvingTask.fetch_data, name='fetch_optresults'),
 
 
     # alg inspection
