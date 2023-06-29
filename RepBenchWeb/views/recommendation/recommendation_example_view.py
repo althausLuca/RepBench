@@ -1,29 +1,18 @@
-# from django.core.cache import cache
-from ray.tune.search.skopt import SkOptSearch
-from sklearn.metrics import f1_score, accuracy_score
 
 from RepBenchWeb.models import TaskData
 from RepBenchWeb.celery import flaml_search_task, ray_tune_search_task
 
 from RepBenchWeb.utils.encoder import RepBenchJsonRespone
-import sys
-import os
-import numpy as np
 import time
 from recommendation.ray_tune.ray_tune_config import config as ray_tune_config, RAYTUNE_ESTIMATORS
 from recommendation.feature_extraction.feature_extraction import feature_endings
-from recommendation.recommend import get_recommendation_and_repair
 from recommendation.recommendation_input_loader import RecommendationInputLoader
-# sys.path.append(os.path.abspath(
-#     os.path.join(os.path.dirname(__file__), '..')))  # run from top dir with  python3 recommendation/score_retrival.py
 
 from recommendation.utils import *
 
 multiclass_metrics = ['accuracy', 'macro_f1', 'micro_f1']
-
 feature_file_name = "features_train"
 recommendation_input_loader : RecommendationInputLoader = RecommendationInputLoader("features_train")
-
 X_train , y_train = recommendation_input_loader.get_train_data()
 X_test , y_test = recommendation_input_loader.get_test_data()
 
@@ -36,7 +25,6 @@ def start_raytunes(request):
     automl_settings = {
         "metric": "accuracy",  # choice from  accuracy , micro_f1, macro_f1
         "task": 'classification',
-        "log_file_name": "recommendation/logs/flaml.log",
         "estimator_list": ['lgbm', 'rf', 'xgboost', 'extra_tree', 'lrl1']
     }
 
@@ -116,8 +104,6 @@ def start_flaml(request):
     train_size = int(int(request.POST.get("train-size"))/(100) * len(X_train))
     estimator_list = request.POST.get("estimator_list")
     estimator_list = estimator_list if isinstance(estimator_list, list) else estimator_list.split(",")
-    print(dict(request.POST))
-    print("ESTIMATOR LIST", estimator_list)
     automl_settings["estimator_list"] = estimator_list
 
     task_data = TaskData(task_id=task_id, data_type="flaml")
@@ -125,15 +111,11 @@ def start_flaml(request):
     flaml_search_task.delay(automl_settings, X_train[features_in_X].iloc[:train_size,:], y_train[:train_size], X_test[features_in_X], y_test,
                             my_task_id=task_id)
 
-    print("sarch task initialized")
     return RepBenchJsonRespone({"status": "ok", "automl_settings": automl_settings, "task_id": task_id})
 
 
 def retrieve_flaml_results(request):
-    token = request.POST.get("csrfmiddlewaretoken")
-
     task_id = request.POST.get("task_id")
-    # print("task_id retrive", task_id)
 
     for i in range(25):
         if TaskData.objects.filter(task_id=task_id).exists():
@@ -141,7 +123,6 @@ def retrieve_flaml_results(request):
         else:
             time.sleep(0.3)
 
-    # print(TaskData.objects.filter(task_id=task_id))
 
     task_data = TaskData.objects.filter(task_id=task_id).last()
     data = task_data.get_data()

@@ -7,273 +7,197 @@
 {% block content %}
     <h2>Parameterization</h2>
     <div style="display:None">
-
         {% include 'parts/MainChart.html' %}
         <!--end: Highcharts -->
     </div>
-
     <div class="row">
         <div class="col-lg-7 col-md-7 col-sm-9 col-xs-9">
             <div class="kt-portlet">
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label">
-
-                        {#                         <a href="#" class="btn btn-outline-brand btn-icon btn-sm" data-toggle="dropdown"#}
-                        {#                                   aria-haspopup="true" aria-expanded="false">#}
-                        {#                                    <i class="mdi mdi-18px mdi-dots-horizontal"></i>#}
-                        {#                                </a>#}
-
-                        <a href="#" onclick="optimizeCurrentData('{{ alg }}form')" class="play-btn"
-                           data-toggle="dropdown"
-                           aria-haspopup="true" aria-expanded="false">
-                            <i class="mdi mdi-24px mdi-play"></i>
-                        </a>
-
-                        {#                        <input type="submit" class="btn btn-primary" onclick="optimizeCurrentData('{{ alg }}form')"#}
-                        {#                               value="">#}
-                        {#                        <h3 class="kt-portlet__head-title"> Optimization </h3>#}
+                        <form id="start-form">
+                            {% csrf_token %}
+                            <button id="play-optimization" type="submit" class="play-btn"
+                            >
+                                <i class="mdi mdi-24px mdi-play"></i>
+                                <i style="display:none" class="mdi mdi-24px mdi-pause"></i>
+                            </button>
+                            <button id="reload" type="submit" class="reload-btn"
+                            >
+                                <i class="mdi mdi-24px mdi-reload"></i>
+                                <i style="display:none" class="mdi mdi-24px mdi-pause"></i>
+                            </button>
+                            <div id="start-button-right" style="display: inline;">
+                                <h6 id="start-button-right-text" style="display: inline;"></h6>
+                            </div>
+                        </form>
                     </div>
-                    {#                <div class="kt-portlet__head-toolbar">#}
-                    {#                </div>#}
-
-                    {#                <div class="kt-portlet__body kt-portlet__body--fit">#}
-                    {#                </div>#}
                 </div>
-                {#             <div class="kt-portlet__body kt-portlet__body--fit">#}
-                {##}
-                {#             </div>#}
                 <div class="kt-portlet__body">
-                    <div id="optChartContainer"></div>
+                    <div id="ErrorChart"></div>
                 </div>
 
             </div>
         </div>
 
-        {#        <table id="myTable">#}
-        {#            <thead>#}
-        {#            </thead>#}
-        {#            <tbody id="testBody"></tbody>#}
-        {#        </table>#}
-
         <div class="col-lg-4">
-            {#            <div class="kt-portlet">#}
-            {#                <div class="kt-portlet__head">#}
-            {#                    <div class="kt-portlet__head-label">#}
-            {#                        <h3 class="kt-portlet__head-title"> Optimization </h3>#}
-            {#                    </div>#}
-            {#                    <div class="kt-portlet__head-toolbar">#}
-            {#                    </div>#}
-            {#                </div>#}
             {% include 'parts/bayesianOptForm.html' %}
-            {#            </div>#}
         </div>
     </div>
     {% block blowChartContent %}
 
-        {#        <div class="kt-portlet">#}
-        {#            <div class="kt-portlet__head">#}
-        {#                <div class="kt-portlet__head-label">#}
-        {#                    <h3 class="kt-portlet__head-title"> Optimization </h3>#}
-        {#                </div>#}
-        {#                <div class="kt-portlet__head-toolbar">#}
-        {#                </div>#}
-        {#            </div>#}
-        {#            <div class="kt-portlet__body kt-portlet__body--fit">#}
-        {#                <h3>Dataset: {{ data_info.title }}</h3>#}
-        {#                <a href="{{ data_info.ref_url }}"> {{ data_info.url_text }}</a>#}
-        {#                <p>{{ data_info.description }}</p>#}
-        {#                <p>Number of Values: {{ data_info.values }}</p>#}
-        {#                <p>Number of Time Series: {{ data_info.ts_nbr }}</p>#}
-        {#                <!-- pretty table displaying anomaly rates per time series -->#}
-        {##}
-        {#                {% if data_info.original_data_set is  not None %}#}
-        {#                    Original Dataset:#}
-        {#                    <a href="{% url 'display_dataset' setname=data_info.original_data_set %}">{{ data_info.original_data_set }}#}
-        {#                    </a>#}
-        {#                {% endif %}#}
-        {#            </div>#}
-        {#        </div>#}
-        {#                <div class="kt-portlet__head-toolbar">#}
-        {#                </div>#}
+        <div id="SucessiveHalvingChart">
+        </div>
 
-        {#                <div class="kt-portlet__body kt-portlet__body--fit">#}
-        {#                </div>#}
-
-        <!-- repair button that goes to repair page with this dataset -->
-        <!-- style href> -->
-        {#        <style>#}
-        {#            .grey {#}
-        {#                background: #5c5c62;#}
-        {#            }#}
-        {#        </style>#}
-
+        {% include "algorithmAnalysis/optimization_charts.html" %}
     {% endblock %}
-
-
-
     <script>
         // Javascript needed for all graph pages
         const dataTitle = '{{ data_info.title }}'
     </script>
-
-    {#    {% block js %}#}
-    {#        <script src='{% static "js/repBench/display/corr-table.js" %}'></script>#}
-    {#        <script>#}
-    {#            const categories = {{ columns | safe }};#}
-    {#            const corr_data = {{ corr_data | safe }};#}
-    {#            console.log('{{ setname | safe }}')#}
-    {##}
-    {#            initCorrTable(categories, corr_data, 'corr_container')#}
-    {##}
-    {#            /// add the sliders After the rest of the page has loaded#}
-    {#        </script>#}
-    {#    {% endblock %}#}
 {% endblock %}
 
 
 {% block additional_bottom_js %}
     <script type="text/javascript">
-        let injection_url = "{% url 'inject_data' setname=setname %}"
-        let repair_url = "{% url 'repair_data' setname=setname %}"
-        let optimization_url = "{% url 'optimize_data' setname=setname %}"
+        {#let injection_url = "{% url 'inject_data' setname=setname %}"#}
+        {#let repair_url = "{% url 'repair_data' setname=setname %}"#}
+        let optimization_url = "{% url 'optimize_data' %}"
+        let setname = "{{ setname }}"
         let fetch_opt_result = "{% url 'fetch_optresults' %}"
     </script>
     <script src="{% static 'js/repBench/repair/repair.js' %}" type="text/javascript"></script>
-{#    <script src="{% static 'js/repBench/optimization/optchart.js' %}" type="text/javascript"></script>#}
+{#        <script src="{% static 'js/repBench/optimization/optchart.js' %}" type="text/javascript"></script>#}
 
     <script>
-    let optChart = null
-let initOptChart = function (params, error, n_init, n_sample) {
-    optChart = Highcharts.chart('optChartContainer', {
-            tooltip: {
-                shared: true,
-                crosshairs: true
-            },
-            xAxis: {
-                // label: {
-                //     text: 'Iteration',
-                //     style: {
-                //         "font-size": "15px",
-                //         transform: "translate(0, -37px)"
-                //     },
-                // },
-                // plotBands: [{
-                //     color: 'rgba(3, 11, 12, 0.2)',// Color value
-                //     from: -0.2, // Start of the plot band
-                //     to: n_init + 0.5, // End of the plot band
-                //     label: {
-                //         text: 'Initial Sampling',
-                //         verticalAlign: 'middle',
-                //         style: {
-                //             "font-size": "15px"
-                //         }
-                //
-                //     }, // Content of the label
-                // }, {
-                //     color: 'rgba(30, 11, 102, 0.2)',// Color value
-                //     from: n_init + 0.5, // Start of the plot band
-                //     to: n_init + n_sample, // End of the plot band
-                //     y: 20,
-                //     label: {
-                //         text: 'Maximum Expectation Sampling',
-                //         verticalAlign: 'middle',
-                //         style: {
-                //             "font-size": "15px",
-                //         }
-                //
-                //     }, // Content of the label
-                // }],
-                labels: {
-                    tickInterval: 1,
-                    start: 1
-
-                },
-                max: n_init + n_sample,
-            },
-            title: {
-                text: '',
-            },
-            yAxis: [{
-                title: {
-                    text: 'Parameters'
-                },
-                height: '43%',
-                lineWidth: 2,
-                decimalValues: 2,
-            }, {
-                title: {
-                    text: error
-                },
-                top: '57%',
-                height: '43%',
-                offset: 0,
-                lineWidth: 2,
-                labels: {
-                    formatter: function () {
-                        return this.value.toFixed(2);
-                    },
-                },
-            }],
-            series: params.map(param => {
-                return {
-                    type: 'line',
-                    name: param,
-                    yAxis: 0,
-                    data: []
-                }
-            }).concat([{
-                //error chart
-                showInLegend: false,
-                type: 'line',
-                // name: error,
-                color: 'red',
-                data: [],
-                yAxis: 1,
-
-            }])
-
-        }
-    );
-
-    optChart.addParamError = function (params, error) {
-        params.forEach((param, i) => {
-
-            optChart.series[i].addPoint(param);
-        })
-        optChart.series[optChart.series.length - 1].addPoint(error)
-    }
-}
-
-initOptChart([], 'RMSE', 20, 20)
+        {#let optChart = null#}
+        {#let initOptChart = function (params, error, n_init, n_sample) {#}
+        {#    optChart = Highcharts.chart('optChartContainer', {#}
+        {#            tooltip: {#}
+        {#                shared: true,#}
+        {#                crosshairs: true#}
+        {#            },#}
+        {#            xAxis: {#}
+        {#                labels: {#}
+        {#                    tickInterval: 1,#}
+        {#                    start: 1#}
+        {##}
+        {#                },#}
+        {#                max: n_init + n_sample,#}
+        {#            },#}
+        {#            title: {#}
+        {#                text: '',#}
+        {#            },#}
+        {#            yAxis: [{#}
+        {#                title: {#}
+        {#                    text: 'Parameters'#}
+        {#                },#}
+        {#                height: '43%',#}
+        {#                lineWidth: 2,#}
+        {#                decimalValues: 2,#}
+        {#            }, {#}
+        {#                title: {#}
+        {#                    text: error#}
+        {#                },#}
+        {#                top: '57%',#}
+        {#                height: '43%',#}
+        {#                offset: 0,#}
+        {#                lineWidth: 2,#}
+        {#                labels: {#}
+        {#                    formatter: function () {#}
+        {#                        return this.value.toFixed(2);#}
+        {#                    },#}
+        {#                },#}
+        {#            }],#}
+        {#            series: params.map(param => {#}
+        {#                return {#}
+        {#                    type: 'line',#}
+        {#                    name: param,#}
+        {#                    yAxis: 0,#}
+        {#                    data: []#}
+        {#                }#}
+        {#            }).concat([{#}
+        {#                //error chart#}
+        {#                showInLegend: false,#}
+        {#                type: 'line',#}
+        {#                // name: error,#}
+        {#                color: 'red',#}
+        {#                data: [],#}
+        {#                yAxis: 1,#}
+        {##}
+        {#            }])#}
+        {##}
+        {#        }#}
+        {#    );#}
+        {##}
+        {#    optChart.addParamError = function (params, error) {#}
+        {#        params.forEach((param, i) => {#}
+        {##}
+        {#            optChart.series[i].addPoint(param);#}
+        {#        })#}
+        {#        optChart.series[optChart.series.length - 1].addPoint(error)#}
+        {#    }#}
+        {# }#}
+        {##}
+        {#initOptChart([], 'RMSE', 20, 20)#}
     </script>
-    <script src="{% static 'js/repBench/optimization/optimization.js' %}" type="text/javascript"></script>
-
-    {#          {% include 'parts/score-board.html' %}#}
+    {#    <script src="{% static 'js/repBench/optimization/optimization.js' %}" type="text/javascript"></script>#}
+    {% include "algorithmAnalysis/optimization-script.html" %}
+    <script>
+        optimizationHandler.init("option", optimization_url, fetch_opt_result)
+    </script>
+    {#let optimization_data = null#}
+    {##}
+    {#let OptFormData = function () {#}
+    {#    var e = document.getElementById("optimization-form");#}
+    {#    const bayesienOptFormData = new FormData(e)#}
+    {#    bayesienOptFormData.append("injected_series", JSON.stringify(chartManager.get_injected_norm_data()))#}
+    {#    bayesienOptFormData.append("setname", setname)#}
+    {#    return bayesienOptFormData#}
+    {# }#}
+    {#// form submit#}
+    {#let start_optimization = () => {#}
+    {#    fetch(optimization_url, {#}
+    {#        method: 'POST',#}
+    {#        body: OptFormData(),#}
+    {#    }).then(response => response.json()).then(responseJson => {#}
+    {#        optimData = responseJson#}
+    {#        console.log("OPTIM DATA", optimData)#}
+    {#        //textract error_loss from formdata#}
+    {#        let error_loss = optimData.error_loss.toUpperCase();#}
+    {#        let params = Object.keys(optimData.param_ranges);#}
+    {#        let n_initial_points = optimData.n_initial_points;#}
+    {#        let n_calls = optimData.n_calls;#}
+    {#        let job_id = optimData.job_id;#}
+    {#        initOptChart(params, error_loss, n_initial_points, n_calls)#}
+    {#        fetch_loop(n_initial_points, job_id)#}
+    {#    })#}
+    {# }#}
+    {##}
+    {#let fetch_loop = function (n_initial_points, job_id) {#}
+    {#    console.log("START FETCH")#}
+    {#    // Get the CSRF token value from the cookie#}
+    {#    fetch(fetch_opt_result, {#}
+    {#        method: 'POST', // or 'PUT'#}
+    {#        body: JSON.stringify({#}
+    {#            job_id: job_id,#}
+    {#        }),#}
+    {#    }).then(response => response.json()).then(#}
+{#            response => {#}
+{#                if (response.data.length > 0) {#}
+{#                    let params = response.data[response.data.length - 1].param_combinations#}
+{##}
+{#                    console.log("PARAMS", response.data)#}
+{#                    console.log(params)#}
+{#                    let param_names = Object.keys(params[0])#}
+{#                    SuccessiveHalvingChart.setParamNames(param_names[0], param_names[1])#}
+{#                    SuccessiveHalvingChart.update(params)#}
+{#                }#}
+{#                setTimeout(function () {#}
+{#                    fetch_loop(n_initial_points, job_id)#}
+{#                }, 1000)#}
+{#            })#}
+    {# }#}
+    </script>
 {% endblock %}
 
-
-{##}
-{#{% block content %}#}
-{#    <div class="row " style="display: none">#}
-{#        <div class="col-md-9" style="position:relative;">#}
-{#                {% include 'parts/MainChart.html' %}#}
-{#                {% include 'parts/score-board.html' %}#}
-{##}
-{#        </div>#}
-{#        <div id="chart-right" class="col-md-3">#}
-{#            {% block first_form %}#}
-{#                {% include 'parts/repairForm.html' %}#}
-{#            {% endblock %}#}
-{#        </div>#}
-{#    </div>#}
-{#    <script type="text/javascript">#}
-{#        let injection_url = "{% url 'inject_data' setname=setname %}"#}
-{#        let repair_url = "{% url 'repair_data' setname=setname %}"#}
-{#        let store_url = "{% url 'store_data' setname=setname %}"#}
-{#    </script>#}
-{#    <script src="{% static 'js/repair.js' %}" type="text/javascript"></script>#}
-{#    </div>#}
-{##}
-{#    <script>#}
-{##}
-{#{% endblock %}#}

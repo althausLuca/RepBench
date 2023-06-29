@@ -1,0 +1,58 @@
+from celery import shared_task
+
+from repair import Estimator, algo_mapper
+
+
+@shared_task(bind=True)
+def succesive_halving_task(self, alg_name, injected, truth, labels, injected_columns,my_task_id):
+    from RepBenchWeb.models import TaskData
+    task_data = TaskData.objects.get(task_id=my_task_id)
+    task_data.set_celery_task_id(self.request.id)
+    from repair.parameterization.optimizers import SuccessiveHalvingOptimizer
+
+    def sucessive_halving_call_back(counter,
+                                    param_combinations,
+                                    data_size,
+                                    params_error,
+                                    avg_error,
+                                    kept_param_combinations,
+                                    end_results=None,
+                                    end_score=None):
+        print(f"iter_{counter} {len(param_combinations)} parameter combinations data_size {data_size}")
+        print("avg error:", avg_error, "Parameters:", params_error)
+        print("Kept parameters: ", kept_param_combinations)
+        if end_results is not None:
+            print("Final parameters: ", end_results)
+            print("Final score: ", end_score)
+
+        print("---------------------------------------------------")
+        # store everything inside a dict:
+        results = {
+            "iter": counter,
+            "param_combinations": param_combinations,
+            "data_size": data_size,
+            "params_error": params_error,
+            "avg_error": avg_error,
+            "kept_param_combinations": kept_param_combinations,
+            "end_results": end_results,
+            "end_score": end_score
+        }
+        task_data.add_data(results)
+        return results
+
+    alg_name = "rpca"
+    alg: Estimator = algo_mapper[alg_name]()
+
+    optimizer = SuccessiveHalvingOptimizer(alg, "rmse", callback=sucessive_halving_call_back)
+
+    repair_inputs = {"injected": injected,
+                     "truth": truth,
+                     "labels": labels,
+                     "columns_to_repair": injected_columns
+                     }
+
+    paramgrid = {"classification_truncation": [1, 2, 3, 4, 5],
+                 "threshold": [0.1, 0.2, 0.3, 0.4, 0.5],
+                 }
+    optimizer.search(repair_inputs,paramgrid)
+    return "Done"

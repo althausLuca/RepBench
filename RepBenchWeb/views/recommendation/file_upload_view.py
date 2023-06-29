@@ -1,5 +1,6 @@
 import csv
 
+import numpy as np
 import pandas as pd
 from django.core.files.uploadedfile import UploadedFile
 from RepBenchWeb.forms.file_upload import UploadFilesForm
@@ -24,6 +25,10 @@ def django_file_to_pandas(uploaded_file: UploadedFile) -> pd.DataFrame:
     # Read the file into a pandas DataFrame
     if has_header:
         df = pd.read_csv(uploaded_file, delimiter=delimiter)
+        for first_row_element in df.iloc[0,:]:
+            if isinstance(first_row_element,float) or isinstance(first_row_element, np.float):
+                df = pd.read_csv(uploaded_file, delimiter=delimiter, header=None)
+                break
     else:
         df = pd.read_csv(uploaded_file, delimiter=delimiter, header=None)
 

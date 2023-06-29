@@ -12,9 +12,11 @@ from RepBenchWeb.views import (
     repair_view,
     injection_view,
     datasets_display,
+    data_upload_view,
 )
 
 from RepBenchWeb.views import dimensionality_reduction_view, synthetic_dataset_view, data_loader
+from RepBenchWeb.views.recommendation.recommendation_tasks import FlamlTask
 
 app_name = 'RepBenchWeb'
 
@@ -52,7 +54,7 @@ urlpatterns = [
     path('optimization_datasets',datasets_display.display_optimization_datasets,name="optimization_datasets"),
     path('opt', optimizationview.OptimizationView.as_view(), name="opt"),
     path('opt/<str:setname>', optimizationview.OptimizationView.as_view(), name="opt"),
-    path('optimize_data/<str:setname>', optimizationview.start_optimization, name='optimize_data'),
+    path('optimize_data', optimizationview.start_optimization, name='optimize_data'),
     path('fetch_optresults', optimizationview.fetch_opt_results, name='fetch_optresults'),
 
 
@@ -86,10 +88,10 @@ urlpatterns = [
     #      name="get_recommendation"),
 
     # path('user_recommendation', file_upload_view.upload_files, name="user_recommendation"),
-    path('upload/', file_upload_view.upload_files, name='upload_files'),
+    path('userData/', file_upload_view.upload_files, name='upload_files'),
+    path('upload', data_upload_view.UploadView.as_view(), name='data_upload'),
 
-
-    path('flaml_example', recommendation_example_view.start_flaml, name='start_flaml'),
+    path('flaml_example',FlamlTask.init_task, name='start_flaml'),
     path('raytunes_example',recommendation_example_view.start_raytunes, name='start_raytunes'),
 
 

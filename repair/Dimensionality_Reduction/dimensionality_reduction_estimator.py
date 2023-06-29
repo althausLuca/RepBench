@@ -8,18 +8,21 @@ from testing_frame_work.data_methods.data_class import normalize_f
 
 class DimensionalityReductionEstimator(Estimator):
     def __init__(self, classification_truncation=2
-                 , repair_truncation=4
+                 , repair_truncation=None
                  , delta=1.5
-                 , threshold=1
+                 , t=1
                  , eps=1e-6
                  , n_max_iter=10
                  , repair_iter=10
+                 , k = None #alias for classicication_truncation
+                 , threshold = None #alias for t
                  , **kwargs
                  ):
-        self.threshold = threshold
+        self.threshold = threshold if threshold is not None else t
         self.delta = delta
-        self.classification_truncation = classification_truncation
-        self.repair_truncation = repair_truncation
+        self.k = k if k is not None else classification_truncation
+        self.classification_truncation = classification_truncation if k  is None else k
+        self.repair_truncation = repair_truncation if repair_truncation is not None else self.classification_truncation+1
         self.eps = eps
         self.n_max_iter = n_max_iter
         self.repair_iter = repair_iter
@@ -47,11 +50,10 @@ class DimensionalityReductionEstimator(Estimator):
 
     def suggest_param_range(self, X=None):
         n_cols = X.shape[1] if X is not None else 10
-        return {"classification_truncation": [i for i in [1, 2, 3, 4, 5] if i < n_cols - 1],
-                "repair_truncation": [i for i in [2, 3, 4, 5] if i < n_cols - 1],
-                "threshold": [1.0, 1.2, 1.5, 2.0, 2.5, 3.0],
-                "repair_iter": [1, 10],
-                "n_max_iter": [1, 20],  # reweighting
+        return {"k": [i for i in [1, 2, 3, 4, 5] if i < n_cols - 1],
+                "t": [1.0, 1.2, 1.5, 2.0, 2.5, 3.0],
+                # "repair_iter": [1, 10],
+                # "n_max_iter": [1, 20],  # reweighting
                 }
 
     def reduce(self, matrix, truncation):

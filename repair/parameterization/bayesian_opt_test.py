@@ -11,7 +11,7 @@ from repair import Estimator
 injection_parameters = {"seed": 100,
                         "factor": 2,
                         "cols": [0],
-                        "dataset": "bafu5k.csv",
+                        "dataset": "bafu200.csv",
                         "a_type": "shift",
                         "a_percent": 14}
 

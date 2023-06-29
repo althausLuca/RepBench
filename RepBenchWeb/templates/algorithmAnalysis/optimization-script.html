@@ -1,60 +1,71 @@
 <script>
-    const recommendationHandler = {
+
+    let OptFormData = function (task_id) {
+        var e = document.getElementById("optimization-form");
+
+        console.log("EEEEEEEEEEEEEEEEEEEEEEEEEEEEE", e)
+        console.log(setname, task_id)
+        const bayesienOptFormData = new FormData(e)
+        bayesienOptFormData.append("injected_series", JSON.stringify(chartManager.get_injected_norm_data()))
+        bayesienOptFormData.append("setname", JSON.stringify(setname))
+        bayesienOptFormData.append("task_id", task_id)
+        bayesienOptFormData.append("csrfmiddlewaretoken", '{{csrf_token}}')
+        return bayesienOptFormData
+    }
+
+    const optimizationHandler = {
         init: function (option, start_url, retrieve_url) {
-            this.flaml_response_data = []
-            this.flaml_response_iter = 0;
-            this.flaml_series = [];
+            this.data = []
+            this.iteration = 0;
+            {#this.flaml_series = [];#}
             this.task_id = '{{csrf_token}}'
             this.playing = false
             this.computing = false
             this.intervalTimer = 800
-            this.option = option//flaml or ray
+            {#this.option = option//flaml or ray#}
             this.start_url = start_url
             this.retrieve_url = retrieve_url
-            RecommendationChart.init()
+            {#RecommendationChart.init()#}
 
         },
-        startTuning: function () {
-            RecommendationChart.init()
+        startOptimizing: function () {
             this.playing = false
-            this.flaml_response_iter = 0;
-            this.flaml_response_data = [];
-            this.flaml_series = []
+            this.iteration = 0;
+            this.data = [];
 
-            let queryString = $('#recommendation_settings_form').serialize();
-            const params = new URLSearchParams(queryString);
-            const estimatorList = params.getAll("estimator_list");
-            console.log(estimatorList)
-            queryString += '&estimator_list=' + estimatorList;
+            {#let queryString = $('#recommendation_settings_form').serialize();#}
+            {#const params = new URLSearchParams(queryString);#}
+            {#const estimatorList = params.getAll("estimator_list");#}
+            {#console.log(estimatorList)#}
+            {#queryString += '&estimator_list=' + estimatorList;#}
 
-            document.getElementById("start-button-right-text").innerHTML = "Starting " + this.option;
+            {#document.getElementById("start-button-right-text").innerHTML = "Starting " + this.option;#}
             {#initFlamlChart([]);#}
-            RecommendationChart.chart.showLoading()
+            {#RecommendationChart.chart.showLoading()#}
 
             $.ajax({
                 type: 'POST',
                 url: this.start_url,
-                data: $('#start-form').serialize() + '&' + $('#ray_tune_settings_form').serialize() + '&' + queryString + '&tuner=' + this.option + '&task_id=' + this.task_id,
+                data: $("#optimization-form").serialize() + '&task_id=' + this.task_id +
+                    '&setname=' + setname +
+                    '&injected_series=' + JSON.stringify(chartManager.get_injected_norm_data()),
                 success: (response) => {
-                    {#console.log(response);#}
-                    let estimators = response.automl_settings.estimator_list;
-                    // Display message that Flaml is running
-                    // Call function to retrieve Flaml results periodically
-                    // Create chart
-                    document.getElementById("start-button-right-text").innerHTML = "Starting " + this.option + "..."
-                    this.getRecommendationResults();
+                    {#document.getElementById("start-button-right-text").innerHTML = "Starting " + this.option + "..."#}
+                    this.getOptimizationResults();
                     this.iterateData();
-                    RecommendationChart.chart.hideLoading()
+                    {#RecommendationChart.chart.hideLoading()#}
                     this.playing = true
 
-                    const parameterNames = {
-                        "RandomForest": ["n_estimators", "max_features", "max_leaf_nodes"],
-                        "ExtraTrees": ["n_estimators", "max_features", "max_leaf_nodes"],
-                        "LogisticRegression": ["C"],
-                        "LGBM": ["n_estimators", "num_leaves", "learning_rate", "min_child_samples"],
-                        "XGBoostSklearn": ["n_estimators", "max_depth", "learning_rate", "min_child_weight", "reg_alpha", "reg_lambda"]
-                    };
-                    parameterTable.init(parameterNames);
+
+                    optimData = response
+                    console.log("OPTIM DATA", optimData)
+                    //textract error_loss from formdata
+                    let error_loss = optimData.error_loss.toUpperCase();
+                    let params = Object.keys(optimData.param_ranges);
+                    let n_initial_points = optimData.n_initial_points;
+                    let n_calls = optimData.n_calls;
+                    let job_id = optimData.job_id;
+                    initOptChart(params, error_loss, n_initial_points, n_calls)
                 },
                 error: function (response) {
                     console.log(response);
@@ -63,31 +74,42 @@
 
         },
 
-        getRecommendationResults: function () {
+        getOptimizationResults: function () {
             $.ajax({
                 type: 'POST',
                 url: this.retrieve_url,
                 data: $('#start-form').serialize() + '&task_id=' + this.task_id,
                 success: response => {
-                    {#console.log("EYYY", response);#}
+                    console.log("EYYY", response);
                     if (response.status === 'running') {
-                        this.flaml_response_data = response.data;
-                        RecommendationChart.chart.redraw();
+                        this.data = response.data;
+                        {#RecommendationChart.chart.redraw();#}
                         setTimeout(() => {
-                            this.getRecommendationResults();  // Pass the task_id again in the recursive call
+                            this.getOptimizationResults();  // Pass the task_id again in the recursive call
                         }, 1000);
                     } else if (response.status === 'done') {
                         console.log("DONE");
                         this.playing = false
 
-                        const elements = document.querySelectorAll('.disable-mouse-events');
-                        console.log("ELEMENTS TO DISABLE")
-                        elements.forEach(function (element) {
-                            element.classList.remove('disable-mouse-events');
-                            element.classList.add('disable-mouse-events-removed')
-                        });
+                    }
 
-                        showRecommendationBelow()
+                    if (response.data.length > 0) {
+                        let params = response.data[response.data.length - 1].param_combinations
+
+                        console.log("PARAMS", response.data)
+                        console.log(params)
+                        let param_names = Object.keys(params[0])
+                        SuccessiveHalvingChart.setParamNames(param_names[0], param_names[1])
+                        SuccessiveHalvingChart.update(params)
+                        ErrorChart.update(response.data.map(d => d.avg_error))
+                        {#const elements = document.querySelectorAll('.disable-mouse-events');#}
+                        {#console.log("ELEMENTS TO DISABLE")#}
+                        {#elements.forEach(function (element) {#}
+                        {#    element.classList.remove('disable-mouse-events');#}
+                        {#    element.classList.add('disable-mouse-events-removed')#}
+                        {# });#}
+
+                        {#showRecommendationBelow()#}
 
                         // Display message that Flaml is finished
                         // ...
@@ -97,37 +119,37 @@
                 },
                 error: function (response) {
                     console.log(response);
-                    alert('Error retrieving Flaml results');
+                    alert('Error retrieving optimization results');
                 }
             });
         },
 
         iterateData: function () {
             console.log("iterate")
-            if (this.flaml_response_iter < this.flaml_response_data.length && this.playing) {
-                let currentData = this.flaml_response_data[this.flaml_response_iter];
-                console.log(currentData, "CURRENT DATA")
-
-                let score = currentData.score;
-                let roundedScore = Math.round(score * 1000) / 1000;
-                let estimator = currentData.estimator
-                let parameters = currentData.parameters
-                let runtime = currentData.runtime
-                document.getElementById("start-button-right-text").innerHTML = "Iter:" + this.flaml_response_iter +
-                    "| Estimator: " + estimator +
-                    " | " + runtime + "s" +
-                    " | Score: " + roundedScore;
-
-                this.flaml_response_iter = this.flaml_response_iter + 1;
-                this.flaml_series.push({y: score, x: this.flaml_response_iter, name: estimator})
-                RecommendationChart.addData(score, estimator, this.flaml_response_iter, parameters);
-                parameterTable.addData(roundedScore, estimator, parameters);
-                {#addDataToFlamlChart(score, currentData.estimator , 1);#}
-            } else {
-                if (this.playing) {
-                    console.log("Waiting for more data..." + this.flaml_response_iter);
-                }
-            }
+            {#if (this.iteration < this.data.length && this.playing) {#}
+            {#    let currentData = this.data[this.iteration];#}
+            {#    console.log(currentData, "CURRENT DATA")#}
+            {##}
+            {#    let score = currentData.score;#}
+            {#    let roundedScore = Math.round(score * 1000) / 1000;#}
+            {#    let estimator = currentData.estimator#}
+            {#    let parameters = currentData.parameters#}
+            {#    let runtime = currentData.runtime#}
+            {#    document.getElementById("start-button-right-text").innerHTML = "Iter:" + this.flaml_response_iter +#}
+            {#        "| Estimator: " + estimator +#}
+            {#        " | " + runtime + "s" +#}
+            {#        " | Score: " + roundedScore;#}
+            {##}
+            {#    this.flaml_response_iter = this.flaml_response_iter + 1;#}
+            {#    this.flaml_series.push({y: score, x: this.flaml_response_iter, name: estimator})#}
+            {#RecommendationChart.addData(score, estimator, this.flaml_response_iter, parameters);#}
+            {#    parameterTable.addData(roundedScore, estimator, parameters);#}
+            {#addDataToFlamlChart(score, currentData.estimator , 1);#}
+            {# } else {#}
+            {#    if (this.playing) {#}
+            {#        console.log("Waiting for more data..." + this.flaml_response_iter);#}
+            {#    }#}
+            {# }#}
 
             setTimeout(this.iterateData.bind(this), this.intervalTimer);
         }
@@ -318,21 +340,21 @@
 
 
     $(document).ready(function () {
-        $('#play-recommendation').on('click', function (event) {
+        $('#play-optimization').on('click', function (event) {
             // Prevent form submission if it's a submit button
             {#event.preventDefault();#}
             $(this).find('i').toggle();
-            recommendationHandler.playing = !recommendationHandler.playing
+            optimizationHandler.playing = !optimizationHandler.playing
         });
 
 
         $('#start-form').on('submit', function (event) {
             event.preventDefault();
-            if (recommendationHandler.computing) {
+            if (optimizationHandler.computing) {
                 return;
             } else {
-                recommendationHandler.computing = true;
-                recommendationHandler.startTuning()
+                optimizationHandler.computing = true;
+                optimizationHandler.startOptimizing()
             }
         });
 
@@ -341,13 +363,13 @@
             // Prevent form submission if it's a submit button
             event.preventDefault();
 
-            if (!recommendationHandler.playing && recommendationHandler.computing) {
-                recommendationHandler.playing = true
+            if (!optimizationHandler.playing && optimizationHandler.computing) {
+                optimizationHandler.playing = true
                 $('#play-recommendation').find('i').toggle();
             }
 
-            if (recommendationHandler.computing) {
-                recommendationHandler.startTuning()
+            if (optimizationHandler.computing) {
+                optimizationHandler.startOptimizing()
             }
 
 

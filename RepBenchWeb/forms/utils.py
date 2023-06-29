@@ -1,4 +1,5 @@
 from  django.db.utils import OperationalError
+from django import forms
 
 
 
@@ -13,6 +14,7 @@ def get_data_set_choices():
     return DATASET_CHOICES
 
 def get_injected_data_set_choices():
+    "Return a list of tuples (dataset_title,dataset_title)"
     INJECTED_DATASET_CHOICES = []
     try:
         from RepBenchWeb.models import InjectedContainer
@@ -22,3 +24,15 @@ def get_injected_data_set_choices():
 
     return INJECTED_DATASET_CHOICES
 
+def hiddenField(value):
+    return forms.CharField(widget=forms.HiddenInput(), required=False, initial=value)
+
+
+def parse_param_input(p: str):
+    "convert string to int or float if possible"
+    if p.isdigit():
+        return int(p)
+    try:
+        return float(p)
+    except:
+        return p

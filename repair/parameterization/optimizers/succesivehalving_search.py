@@ -4,11 +4,14 @@ import matplotlib.pyplot as plt
 from repair.parameterization.optimizers.estimator_optimizer import EstimatorOptimizer
 
 
+
+
 class SuccessiveHalvingOptimizer(EstimatorOptimizer):
 
     def __init__(self, repair_estimator, error_score: str, *, n_jobs=6, start_size=100, n_splits=1, callback=None):
         self.start_size = start_size
         self.n_splits = n_splits
+        self.callback = callback
         super().__init__(repair_estimator, error_score, n_jobs=n_jobs)
 
     def search(self, repair_inputs, param_grid):
@@ -39,7 +42,7 @@ class SuccessiveHalvingOptimizer(EstimatorOptimizer):
 
             start_index = int(max(0, first_anomaly_index - size / 2))
             end_index = int(min(n, first_anomaly_index + size / 2 + non_used_start))
-            assert end_index - start_index == start_size , (start_index,end_index,start_size , first_anomaly_index)
+            # assert end_index - start_index == start_size , (start_index,end_index,start_size , first_anomaly_index)
 
             reduced_repair_indputs = {
                 "injected": injected_full.iloc[start_index:end_index, :].copy(),
@@ -53,6 +56,7 @@ class SuccessiveHalvingOptimizer(EstimatorOptimizer):
             plt.title(f"iter_{counter} {len(param_combinations)} combinations")
             plt.show()
             params_error = self.param_map(reduced_repair_indputs, param_combinations)
+            avg_error = np.mean([error for _, error in params_error])
             print("avg error:" , np.mean([error for _, error in params_error]), "Parameters:" ,params_error  )
             # reduce param combinations
             param_combinations = [params for i, (params, _) in enumerate(params_error) if i < len(params_error) / 2]
@@ -61,10 +65,13 @@ class SuccessiveHalvingOptimizer(EstimatorOptimizer):
             #increase size
             start_size = start_size*2
             counter = counter + 1
+            self.callback(counter, param_combinations, size , params_error , avg_error , param_combinations)
             if len(param_combinations) < 5 or start_size > n:
                 break
 
         # print(f"iter_{counter} {len(param_combinations)} parameter combinations data_size {size}")
-        end_results =  self.param_map(reduced_repair_indputs,param_combinations)[0][0]
+        end_results, time, score  =  self.param_map(reduced_repair_indputs,param_combinations)[0][0]
         print("Final parameters: " , end_results)
+        self.callback(counter, param_combinations, size, params_error, avg_error, param_combinations, end_results, score)
+
         return end_results

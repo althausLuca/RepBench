@@ -1,18 +1,10 @@
 from __future__ import absolute_import, unicode_literals
 import os
-import logging
 
-import numpy as np
-from ray.tune.search.hyperopt import HyperOptSearch
-from ray.tune.search.nevergrad import NevergradSearch
-from ray.tune.search.skopt import SkOptSearch
 
 from celery import Celery, shared_task
 #
-from sklearn.ensemble import RandomForestClassifier
-from lightgbm import LGBMClassifier
-from sklearn.ensemble import ExtraTreesClassifier
-from sklearn.linear_model import LogisticRegression
+
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'RepBenchWeb.settings')
 app = Celery('RepBenchWeb')

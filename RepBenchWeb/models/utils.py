@@ -28,18 +28,25 @@ def granularity_to_time_interval(granularity):
     d = 24 * h
     w = 7 * d
 
+
+
     try:
         unit = granularity[-1]  # s,m,h,d,w
         amount = granularity[:-1]
     except:
         return h
 
+    if granularity.endswith("ms"):
+        unit = "ms"
+        amount = granularity[:-2]
+
     gran_dict = {
         "s": s,
         "m": m,
         "h": h,
         "d": d,
-        "w": w
+        "w": w,
+        "ms" : s/1000
     }
 
     if amount == "":

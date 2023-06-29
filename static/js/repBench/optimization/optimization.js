@@ -12,9 +12,9 @@ let createBayesianOptFormData = function (form_id) {
     console.log("token creation", csrftoken)
     bayesienOptFormData.append('csrfmiddlewaretoken', csrftoken)
     bayesienOptFormData.append("injected_series", JSON.stringify(chartManager.get_injected_norm_data()))
+    bayesienOptFormData.append("setname", setname)
     return bayesienOptFormData
 }
-
 
 let optimData = null
 let optimizeCurrentData = (form_id) => {
@@ -43,40 +43,26 @@ let create_job_id_form = function () {
     return empty_form
 }
 
-function objToString(obj, round) {
-    var str = '';
-    for (var p in obj) {
-        if (Object.prototype.hasOwnProperty.call(obj, p)) {
-            str += '<b>' + p + ':</b>  ' + Number(obj[p].toFixed(3)) + '     ';
-        }
-    }
-    return str;
-}
-
 let fetch_loop = function (n_initial_points, job_id) {
     console.log("START FETCH")
     // Get the CSRF token value from the cookie
     fetch(fetch_opt_result, {
-        method: 'POST',
-        // headers: {
-        //   'Content-Type': 'application/json',
-        //   'X-CSRFToken': getCookie('csrftoken')
-        // },
+        method: 'POST', // or 'PUT'
         body: create_job_id_form(),
     }).then(response => response.json()).then(
-        responseJson => {
-            console.log(responseJson)
-            let response_status = responseJson.status
-            if (response_status !== "DONE") {
-                console.log("NOT DONE")
-                console.log(response_status)
-                if (response_status === "running") {
-                    optChart.addParamError(Object.values(responseJson.params), responseJson.score)
-                }
-                setTimeout(function () {
-                    fetch_loop(n_initial_points, job_id)
-                }, 1000)
+        response => {
+            if (response.data.length > 0) {
+                let params = response.data[response.data.length -1].param_combinations
+
+                console.log("PARAMS", response.data)
+                console.log(params)
+                let param_names = Object.keys(params[0])
+                SuccessiveHalvingChart.setParamNames(param_names[0], param_names[1])
+                SuccessiveHalvingChart.update(params)
             }
+            setTimeout(function () {
+                fetch_loop(n_initial_points, job_id)
+            }, 1000)
         })
 }
 

@@ -1,0 +1,131 @@
+{% load filters %}
+
+{#<style>#}
+{##}
+{#    .input-group input {#}
+{#        display: inline-block;#}
+{#        width: 45%;#}
+{#        margin-right: 5%;#}
+{#    }#}
+{#</style>#}
+
+<div class="form-group">
+    <div class="kt-portlet">
+        <div class="kt-portlet__body" style="padding-bottom: 0px;padding-top: 10px">
+            <label><h4>Algorithm
+            </h4></label>
+            <select class="form-control" id="optFormAlgSelect" name="algorithm" onchange="displayfuncOpt(value)"
+                    style="margin-bottom: 15px">
+                {% for alg_name, _ in b_opt_param_forms.items %}
+                    <option value={{ alg_name }}> {{ alg_name|parse_alg_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="kt-portlet kt-portlet--collapsed" data-ktportlet="true">
+        <div class="kt-portlet__head">
+            <div class="kt-portlet__head-label">
+                <h3 class="kt-portlet__head-title">Parameter Search Space</h3>
+            </div>
+            <div class="kt-portlet__head-toolbar">
+                <div class="kt-portlet__head-group">
+                    <a href="#" data-ktportlet-tool="toggle"
+                       class="btn btn-sm btn-icon btn-default btn-icon-md"><i
+                            class="mdi mdi-chevron-down mdi-18px"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="kt-portlet__body">
+
+            <div>
+                {% for alg,params in b_opt_param_forms.items %}
+                    <form class="form-group alg-param-forms" enctype="multipart/form-data" id='{{ alg }}'
+                          onchange="return false"
+                          onsubmit="return false"
+                            {% if forloop.first %}
+                          style="display:block;"
+                            {% else %}
+                          style="display:none;"
+                            {% endif %}
+                    >
+
+                        {% for param in params %}
+                            <div class="form-group">
+                                {#                                    <tr>#}
+                                {#                                        <td>#}
+                                <label for="{{ param.param_name }}">{{ param.param_name }}</label>
+                                {#                                        </td>#}
+                                {#                                        <td>#}
+                                {#                                    <input class=form-control" id="{{ param.param_name }}"#}
+                                {#                                           name="{{ param.param_name }}-min"#}
+                                {#                                           pattern="[+-]?([0-9]*[.])?[0-9]+"#}
+                                {#                                           title="Must be a float value"#}
+                                {#                                           value={{ param.min }}#}
+                                {#                                    >#}
+
+                                <div class="input-group">
+                                    <input
+                                            value="{{ param.min }}" type="number" pattern="[+-]?([0-9]*[.])?[0-9]+"
+                                            name="{{ param.param_name }}-min" title="Enter numbers Only"
+                                            class="form-control" id="{{ param.param_name }}">
+                                    <input value="{{ param.max }}" type="number" pattern="[+-]?([0-9]*[.])?[0-9]+"
+                                           name="{{ param.param_name }}-max" title="Enter numbers Only"
+                                           class="form-control" id="{{ param.param_name }}"
+                                    >
+                                </div>
+
+
+                            </div>
+
+
+                        {% endfor %}
+                        {#                            </table>#}
+
+
+                        <input type="hidden" name="alg_type" value="{{ alg }}">
+                    </form>
+                {% endfor %}
+            </div>
+            {#                <div id="form_append_container"></div>#}
+        </div>
+    </div>
+    <div class="kt-portlet kt-portlet--collapsed" data-ktportlet="true">
+        <div class="kt-portlet__head">
+            <div class="kt-portlet__head-label">
+                <h3 class="kt-portlet__head-title">Optimization Parameters</h3>
+            </div>
+            <div class="kt-portlet__head-toolbar">
+                <div class="kt-portlet__head-group">
+                    <a href="#" data-ktportlet-tool="toggle"
+                       class="btn btn-sm btn-icon btn-default btn-icon-md"><i
+                            class="mdi mdi-chevron-down mdi-18px"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="kt-portlet__body">
+            <form class="form-group" id="bayesian_opt_form_params" enctype="multipart/form-data">
+                {% for field in bayesian_opt_form %}
+                    <div class="form-group">
+                        {{ field.label_tag }}
+                        {{ field }}
+                    </div>
+                {% endfor %}
+            </form>
+            <div id="form_append_container"></div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    let displayfuncOpt = function (key) {
+        let forms = document.getElementsByClassName("alg-param-forms");
+        for (let i = 0; i < forms.length; i++) {
+            if (forms[i].id === key) {
+                forms[i].style.display = "block";
+            } else {
+                forms[i].style.display = "none";
+            }
+        }
+    }
+</script>

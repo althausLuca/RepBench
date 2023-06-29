@@ -6,39 +6,6 @@ let initOptChart = function (params, error, n_init, n_sample) {
                 crosshairs: true
             },
             xAxis: {
-                // label: {
-                //     text: 'Iteration',
-                //     style: {
-                //         "font-size": "15px",
-                //         transform: "translate(0, -37px)"
-                //     },
-                // },
-                // plotBands: [{
-                //     color: 'rgba(3, 11, 12, 0.2)',// Color value
-                //     from: -0.2, // Start of the plot band
-                //     to: n_init + 0.5, // End of the plot band
-                //     label: {
-                //         text: 'Initial Sampling',
-                //         verticalAlign: 'middle',
-                //         style: {
-                //             "font-size": "15px"
-                //         }
-                //
-                //     }, // Content of the label
-                // }, {
-                //     color: 'rgba(30, 11, 102, 0.2)',// Color value
-                //     from: n_init + 0.5, // Start of the plot band
-                //     to: n_init + n_sample, // End of the plot band
-                //     y: 20,
-                //     label: {
-                //         text: 'Maximum Expectation Sampling',
-                //         verticalAlign: 'middle',
-                //         style: {
-                //             "font-size": "15px",
-                //         }
-                //
-                //     }, // Content of the label
-                // }],
                 labels: {
                     tickInterval: 1,
                     start: 1
