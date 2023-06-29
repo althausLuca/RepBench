@@ -2,9 +2,6 @@
 
     let OptFormData = function (task_id) {
         var e = document.getElementById("optimization-form");
-
-        console.log("EEEEEEEEEEEEEEEEEEEEEEEEEEEEE", e)
-        console.log(setname, task_id)
         const bayesienOptFormData = new FormData(e)
         bayesienOptFormData.append("injected_series", JSON.stringify(chartManager.get_injected_norm_data()))
         bayesienOptFormData.append("setname", JSON.stringify(setname))
@@ -29,6 +26,8 @@
             this.playing = false
             this.iteration = 0;
             this.data = [];
+            SuccessiveHalvingChart.clear()
+            ErrorChart.clear()
 
             $.ajax({
                 type: 'POST',
@@ -94,7 +93,7 @@
                 console.log(currentData, "CURRENT DATA")
                 document.getElementById("start-button-right-text").innerHTML = "Iter:" + this.iteration +
                     {#"| Estimator: " + estimator +#}
-                    " | " + currentData.time + "s"
+                    " | " + currentData.runtime + "s"
                     {#" | Score: " + currentData;#}
 
 

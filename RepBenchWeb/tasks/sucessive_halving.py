@@ -4,7 +4,7 @@ from repair import Estimator, algo_mapper
 
 
 @shared_task(bind=True)
-def succesive_halving_task(self, alg_name, injected, truth, labels, injected_columns,my_task_id):
+def succesive_halving_task(self, alg_name, param_grid , opt_config, * , injected, truth, labels, injected_columns,my_task_id):
     from RepBenchWeb.models import TaskData
     task_data = TaskData.objects.get(task_id=my_task_id)
     task_data.set_celery_task_id(self.request.id)
@@ -40,7 +40,6 @@ def succesive_halving_task(self, alg_name, injected, truth, labels, injected_col
         task_data.add_data(results)
         return results
 
-    alg_name = "rpca"
     alg: Estimator = algo_mapper[alg_name]()
 
     optimizer = SuccessiveHalvingOptimizer(alg, "rmse", callback=sucessive_halving_call_back)
@@ -50,10 +49,6 @@ def succesive_halving_task(self, alg_name, injected, truth, labels, injected_col
                      "labels": labels,
                      "columns_to_repair": injected_columns
                      }
-
-    paramgrid = {"classification_truncation": [1, 2, 3, 4, 5],
-                 "threshold": [0.1, 0.2, 0.3, 0.4, 0.5],
-                 }
-    optimizer.search(repair_inputs,paramgrid)
+    optimizer.search(repair_inputs,param_grid)
     task_data.set_done()
     return "Done"

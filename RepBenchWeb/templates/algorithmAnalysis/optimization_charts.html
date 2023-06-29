@@ -8,7 +8,7 @@
                 type: 'scatter'
             },
             title: {
-                text: 'Sucessive Halving Parameters'
+                text: 'Parameters Values'
             },
             xAxis: {
                 title: {
@@ -28,7 +28,8 @@
             },
             series: [{
                 name: 'Halvings',
-                data: []
+                data: [],
+                showInLegend: false
             }]
         }),
 
@@ -50,6 +51,12 @@
             this.chart.yAxis[0].setTitle({text: param_2});
             this.param_1 = param_1;
             this.param_2 = param_2;
+        },
+
+        clear : function () {
+            this.chart.series[0].setData([]);
+            this.chart.xAxis[0].setTitle({text: ""});
+            this.chart.yAxis[0].setTitle({text: ""});
         }
 
     }
@@ -61,11 +68,11 @@
                 type: 'line'
             },
             title: {
-                text: 'Error'
+                text: ''
             },
             xAxis: {
                 title: {
-                    text: ""
+                    text: "Iteration"
                 },
                 labels: {
                     format: '{value} '
@@ -73,7 +80,7 @@
             },
             yAxis: {
                 title: {
-                    text: ""
+                    text: "RMSE"
                 },
                 labels: {
                     format: '{value}'
@@ -81,7 +88,8 @@
             },
             series: [{
                 name: 'Error',
-                data: []
+                data: [],
+                showInLegend: false
             }]
         }),
 
@@ -89,6 +97,9 @@
             this.chart.series[0].addPoint(dataPoint);
         },
 
+        clear : function () {
+            this.chart.series[0].setData([]);
+        }
         {#setParamNames: function (param_1, param_2) {#}
         {#    this.chart.xAxis[0].setTitle({text: param_1});#}
         {#    this.chart.yAxis[0].setTitle({text: param_2});#}

@@ -23,7 +23,6 @@ class TaskData(models.Model):
     status = models.CharField(max_length=255, default="running")
     autoML = PickledObjectField(null=True, blank=True)
 
-
     def set_done(self):
         self.status = "done"
         self.save()
@@ -57,28 +56,30 @@ class TaskData(models.Model):
         time = time.time()
         data["processed"] = False
         data["time"] = time
-        self.data.append(json.loads(json.dumps(data,cls=RepBenchJsonEncoder)))
+        self.data.append(json.loads(json.dumps(data, cls=RepBenchJsonEncoder)))
         self.save()
 
     def get_data(self):
-        for i,data_iteration in enumerate(self.data):
+        print("OOOOOOOOOOOOOOOOOOOOOII GETTING THE DATA")
+        for i, data_iteration in enumerate(self.data):
             if not data_iteration["processed"]:
-                data_iteration["parameters"] = get_relevant_parameters(data_iteration.pop("config"))
+                try:
+                    data_iteration["parameters"] = get_relevant_parameters(data_iteration.pop("config"))
+                except KeyError:
+                    pass  # no config
                 data_iteration["processed"] = True
-                if i >0:
-                    data_iteration["runtime"] = round(data_iteration["time"] - self.data[i-1]["time"],3)
+                if i > 0:
+                    data_iteration["runtime"] = round(data_iteration["time"] - self.data[i - 1]["time"], 3)
                 else:
                     data_iteration["runtime"] = 0.3
         try:
             self.save()
 
 
-        except (sqlite3.IntegrityError , IntegrityError):
-           pass
+        except (sqlite3.IntegrityError, IntegrityError):
+            pass
 
         return self.data
-
-
 
     def clean(self):
         """ delete all objects older than 10 minutes"""
@@ -89,6 +90,7 @@ class TaskData(models.Model):
         print("SET AUTO ML classifier")
         self.autoML = pickle.dumps(classifier, pickle.HIGHEST_PROTOCOL)
         self.save()
+
     def get_classifier(self):
         return pickle.loads(self.autoML)
 

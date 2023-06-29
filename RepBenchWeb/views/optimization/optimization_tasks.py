@@ -1,3 +1,5 @@
+import numpy as np
+
 from RepBenchWeb.views.task_view import TaskView
 
 import json
@@ -14,6 +16,7 @@ from RepBenchWeb.models import TaskData
 from RepBenchWeb.tasks import succesive_halving_task
 import time
 from RepBenchWeb.tasks import bayesian_optimization_task
+
 
 def parse_param_input(p: str):
     if p.isdigit():
@@ -60,7 +63,7 @@ class SuccesiveHalvingTask(TaskView):
         # Bayesopt inputs
         n_initial_points = int(post["n_initial_points"])
         n_calls = int(post["n_calls"])
-        error_loss = post["error_loss"]
+        error_loss = post.get("error_loss", "rmse")
 
         injected_series = json.loads(post.pop("injected_series"))
 
@@ -81,8 +84,23 @@ class SuccesiveHalvingTask(TaskView):
         task_data = TaskData(task_id=task_id, data_type="ray")
         task_data.save()
 
-        succesive_halving_task.delay(alg_type, injected, truth, labels, injected_columns=columns_to_repair,
-                                     my_task_id=task_id, )
+        paramgrid = {}
+        for k, v in param_ranges.items():
+            if isinstance(v, tuple):
+                if isinstance(v[0], int) and isinstance(v[0], int):
+                    paramgrid[k] = np.arange(v[0], v[1]+1)
+                else:
+                    paramgrid[k] = np.linspace(v[0], v[1], 10)
+            else:
+                paramgrid[k] = [v]
+
+        opt_config = {}
+        succesive_halving_task.delay(alg_type, paramgrid, opt_config,
+                                         injected=injected,
+                                         truth=truth,
+                                         labels=labels,
+                                         injected_columns=columns_to_repair,
+                                         my_task_id=task_id)
         context = {
             "error_loss": error_loss,
             "alg_type": alg_type,
@@ -94,27 +112,6 @@ class SuccesiveHalvingTask(TaskView):
         }
         return RepBenchJsonRespone(context)
 
-    @staticmethod
-    def fetch_data(request):
-        task_id = request.POST.get("task_id", False) or request.POST.get("csrfmiddlewaretoken")
-
-        for i in range(25):  # check that object is already created before directly running into an error
-            if TaskData.objects.filter(task_id=task_id).exists():
-                break
-            else:
-                time.sleep(0.3)
-
-        task_data = TaskData.objects.filter(task_id=task_id).last()
-        data = task_data.data
-        status = task_data.status
-        print("DAAAAAAAAATA", data, status)
-        print("TAAAASK ID" , task_id)
-        if task_data.is_running():
-            return RepBenchJsonRespone({"data": data, "status": status})
-        if task_data.is_done():
-            # task_data.get_recommendation("test")
-            return RepBenchJsonRespone({"data": data, "status": status})
-
 
 class BayesianOptimisationTask(SuccesiveHalvingTask):
     @classmethod
@@ -125,7 +122,13 @@ class BayesianOptimisationTask(SuccesiveHalvingTask):
         # Bayesopt inputs
         n_initial_points = int(post["n_initial_points"])
         n_calls = int(post["n_calls"])
-        error_loss = post["error_loss"]
+        error_loss = post.get("error_loss", "rmse")
+
+        opt_config = {
+            "n_initial_points": n_initial_points,
+            "n_calls": n_calls,
+            "error_score": error_loss,
+        }
 
         injected_series = json.loads(post.pop("injected_series"))
 
@@ -148,8 +151,12 @@ class BayesianOptimisationTask(SuccesiveHalvingTask):
 
         paramgrid = param_ranges
 
-        bayesian_optimization_task.delay(alg_type,paramgrid, injected, truth, labels, injected_columns=columns_to_repair,
-                                     my_task_id=task_id, )
+        bayesian_optimization_task.delay(alg_type, paramgrid, opt_config,
+                                         injected=injected,
+                                         truth=truth,
+                                         labels=labels,
+                                         injected_columns=columns_to_repair,
+                                         my_task_id=task_id)
         context = {
             "error_loss": error_loss,
             "alg_type": alg_type,
@@ -160,4 +167,3 @@ class BayesianOptimisationTask(SuccesiveHalvingTask):
             "setname": setname,
         }
         return RepBenchJsonRespone(context)
-

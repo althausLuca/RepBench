@@ -9,6 +9,7 @@ class TaskView:
 
     @classmethod
     def specific_task(cls, request,task_id):
+        """ runs asynchrone task and returns JsonResponse with task_id"""
         raise NotImplementedError("This is an abstract class")
 
     @classmethod
@@ -21,8 +22,8 @@ class TaskView:
             pass
         task_data = TaskData(task_id=task_id, data_type=cls.data_type)
         task_data.save()
+        return cls.specific_task(request, task_id)
 
-        return cls.specific_task(request,task_id)
 
 
     @staticmethod

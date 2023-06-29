@@ -4,7 +4,7 @@ from repair import Estimator, algo_mapper
 
 
 @shared_task(bind=True)
-def bayesian_optimization_task(self, alg_name, param_grid, injected, truth, labels, injected_columns, my_task_id):
+def bayesian_optimization_task(self, alg_name, param_grid, opt_config, *, injected, truth, labels, injected_columns, my_task_id):
     from RepBenchWeb.models import TaskData
     task_data = TaskData.objects.get(task_id=my_task_id)
     task_data.set_celery_task_id(self.request.id)
