@@ -75,7 +75,8 @@
                         }, 1000);
                     } else if (response.status === 'done') {
                         console.log("DONE");
-                        this.playing = false
+                        this.data = response.data;
+                        this.computing = false
                     }
                     {#this.data = response.data;#}
                 },
@@ -88,10 +89,11 @@
 
         iterateData: function () {
             console.log("iterate")
+            console.log(this.iteration + " " + this.data.length + " " + this.playing)
             if (this.iteration < this.data.length && this.playing) {
                 let currentData = this.data[this.iteration];
                 console.log(currentData, "CURRENT DATA")
-                document.getElementById("start-button-right-text").innerHTML = "Iter:" + this.iteration +
+                document.getElementById("start-button-right-text").innerHTML = "Iter:" + (this.iteration +1) +
                     {#"| Estimator: " + estimator +#}
                     " | " + currentData.runtime + "s"
                     {#" | Score: " + currentData;#}
@@ -109,7 +111,7 @@
                     let params = currentData.params
                     let param_names = Object.keys(params)
                     SuccessiveHalvingChart.setParamNames(param_names[0], param_names[1])
-                    console.log("IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII",Object.values(params))
+                    {#console.log("IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII",Object.values(params))#}
                     SuccessiveHalvingChart.add(params)
 
                 }
@@ -126,187 +128,6 @@
 
     }
 
-
-    const parameterTable = {
-        tableId: "parameterTable",
-        data: {},
-        dataHistory: [],
-        parameter_names: null,
-        intervalTimer: 1000,
-        hasStarted: false,
-        isPaused: true,
-        breakHistoryFlag: false,
-
-        init: function (parameter_names) {
-            console.log("INIT PARAMETER TABLE")
-            this.data = {};
-            this.dataHistory = [];
-            this.parameter_names = parameter_names;
-            const table = document.getElementById(this.tableId); // Get the table element by its ID
-
-            table.innerHTML = ""; // Clear the table
-
-
-            // Create a new row for the header
-            const headerRow = document.createElement("tr");
-
-            // Create and populate cells for the header row
-            const scoreHeaderCell = document.createElement("th");
-            scoreHeaderCell.textContent = "Score";
-            headerRow.appendChild(scoreHeaderCell);
-
-            const estimatorHeaderCell = document.createElement("th");
-            estimatorHeaderCell.textContent = "Estimator";
-            headerRow.appendChild(estimatorHeaderCell);
-
-            const parametersHeaderCell = document.createElement("th");
-            parametersHeaderCell.textContent = "Parameters";
-            headerRow.appendChild(parametersHeaderCell);
-
-            // Append the header row to the table
-            table.appendChild(headerRow);
-
-            // Iterate through the parameter_names and create rows for each estimator
-            for (const [estimator, parameters] of Object.entries(parameter_names)) {
-                const newRow = document.createElement("tr");
-                newRow.setAttribute("data-estimator", estimator); // Set a custom attribute to identify the row
-
-                // Create and populate cells for the estimator row
-                const scoreCell = document.createElement("td");
-                scoreCell.className = "score-cell";
-                scoreCell.textContent = "-";
-                newRow.appendChild(scoreCell);
-
-                const estimatorCell = document.createElement("td");
-                estimatorCell.textContent = estimator;
-                newRow.appendChild(estimatorCell);
-
-                const parametersCell = document.createElement("td");
-                parametersCell.className = "parameters-cell";
-                {#parametersCell.textContent = "-"; // Set "-" for parameters#}
-                parameters.forEach(function (name) {
-                    const parameterElement = document.createElement("p");
-                    parameterElement.textContent = `${name}: -`;
-                    parametersCell.appendChild(parameterElement);
-                });
-                newRow.appendChild(parametersCell);
-
-                // Append the new row to the table
-                table.appendChild(newRow);
-
-                this.data[estimator] = {
-                    score: "-",
-                    parameters: "-"
-                };
-            }
-        },
-
-        addData: function (score, estimator, parameters) {
-            this.dataHistory.push({
-                score: score,
-                estimator: estimator,
-                parameters: parameters
-            });
-            console.log("ADD DATA", this.dataHistory)
-            {#this.showData(score, estimator, parameters);#}
-        },
-
-        showData: function (score, estimator, parameters) {
-            if (this.data.hasOwnProperty(estimator)) {
-                // If the estimator already exists, update its content
-                this.data[estimator] = {
-                    score: score,
-                    parameters: parameters
-                };
-
-                const table = document.getElementById(this.tableId); // Get the table element by its ID
-                const row = table.querySelector(`tr[data-estimator="${estimator}"]`); // Find the row with the matching estimator
-
-                // Update the score and parameters cells for the existing row
-                const scoreCell = row.querySelector(".score-cell");
-                scoreCell.textContent = score;
-
-                const parametersCell = row.querySelector(".parameters-cell");
-                parametersCell.innerHTML = ""; // Clear the existing content
-
-                // Iterate through the parameters and create a new <p> element for each parameter
-                for (const [key, value] of Object.entries(parameters)) {
-                    const parameterElement = document.createElement("p");
-                    parameterElement.textContent = `${key}: ${value}`;
-                    parametersCell.appendChild(parameterElement);
-                }
-            } else {
-                // If the estimator doesn't exist, create a new entry
-                this.data[estimator] = {
-                    score: score,
-                    parameters: parameters
-                };
-
-                const table = document.getElementById(this.tableId); // Get the table element by its ID
-
-                // Create a new row for the data
-                const newRow = document.createElement("tr");
-                newRow.setAttribute("data-estimator", estimator); // Set a custom attribute to identify the row
-
-                // Create and populate cells for the score, estimator, and parameters
-                const scoreCell = document.createElement("td");
-                scoreCell.className = "score-cell";
-                scoreCell.textContent = score;
-                newRow.appendChild(scoreCell);
-
-                const estimatorCell = document.createElement("td");
-                estimatorCell.textContent = estimator;
-                newRow.appendChild(estimatorCell);
-
-                const parametersCell = document.createElement("td");
-                parametersCell.className = "parameters-cell";
-
-                // Iterate through the parameters and create a new <p> element for each parameter
-                for (const [key, value] of Object.entries(parameters)) {
-                    const parameterElement = document.createElement("p");
-                    parameterElement.textContent = `${key}: ${value}`;
-                    parametersCell.appendChild(parameterElement);
-                }
-
-                newRow.appendChild(parametersCell);
-
-                // Append the new row to the table
-                table.appendChild(newRow);
-            }
-        },
-        {#displayHistory: function (i) {#}
-        {#    this.showData(this.dataHistory[i].score, this.dataHistory[i].estimator, this.dataHistory[i].parameters)#}
-        {# },#}
-
-        replayHistory: async function () {
-            this.breakHistoryFlag = true
-
-            // first stop all other instance of this.replayHistory running
-
-
-            const history_ = [...this.dataHistory]
-            console.log(history_)
-            this.init(this.parameter_names)
-            this.dataHistory = history_
-
-            this.currentHistoryPromise = await new Promise(resolve => setTimeout(resolve, this.intervalTimer));
-
-            this.breakHistoryFlag = false
-            parameterTable.hasStarted = true;
-
-            for (let i = 0; i < history_.length; i++) {
-                if (this.breakHistoryFlag) break;
-                if (!this.isPaused) {
-                    const dataPoint = history_[i];
-                    this.showData(dataPoint.score, dataPoint.estimator, dataPoint.parameters);
-                    console.log("parameter table is updating", this);
-                }
-                await new Promise(resolve => setTimeout(resolve, this.intervalTimer));
-            }
-            this.hasStarted = false
-        }
-
-    }
 
 
     $(document).ready(function () {
@@ -338,7 +159,7 @@
                 $('#play-recommendation').find('i').toggle();
             }
 
-            if (optimizationHandler.computing) {
+            if (optimizationHandler.data.length > 0) {
                 optimizationHandler.startOptimizing()
             }
 

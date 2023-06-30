@@ -8,7 +8,6 @@ from datetime import timedelta
 from picklefield.fields import PickledObjectField
 from django.db import models
 
-from RepBenchWeb.models import InjectedContainer
 from RepBenchWeb.tasks.utils import revoke_task
 from RepBenchWeb.utils.encoder import RepBenchJsonEncoder
 from RepBenchWeb.views.recommendation.utils import get_relevant_parameters

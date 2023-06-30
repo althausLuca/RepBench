@@ -10,7 +10,6 @@ def bayesian_optimization_task(self, alg_name, param_grid, opt_config, *, inject
     task_data.set_celery_task_id(self.request.id)
     from repair.parameterization.optimizers import BayesianOptimizer
 
-    alg: Estimator = algo_mapper[alg_name]()
 
     def bayesian_optimization_call_back(results):
         """
@@ -23,8 +22,8 @@ def bayesian_optimization_task(self, alg_name, param_grid, opt_config, *, inject
         task_data.add_data(results)
         # print("IN TASK ID", task_data.task_id)
         # print("in task data", task_data.data)
-
-    optimizer = BayesianOptimizer(alg, "rmse", callback=bayesian_optimization_call_back)
+    alg: Estimator = algo_mapper[alg_name]()
+    optimizer = BayesianOptimizer(alg, **opt_config ,callback=bayesian_optimization_call_back)
 
     repair_inputs = {"injected": injected,
                      "truth": truth,

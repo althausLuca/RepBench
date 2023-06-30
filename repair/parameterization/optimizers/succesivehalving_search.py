@@ -4,11 +4,9 @@ import matplotlib.pyplot as plt
 from repair.parameterization.optimizers.estimator_optimizer import EstimatorOptimizer
 
 
-
-
 class SuccessiveHalvingOptimizer(EstimatorOptimizer):
 
-    def __init__(self, repair_estimator, error_score: str, *, n_jobs=6, start_size=100, n_splits=1, callback=None):
+    def __init__(self, repair_estimator, error_score: str, *, n_jobs=6, start_size=50, n_splits=1, callback=None):
         self.start_size = start_size
         self.n_splits = n_splits
         self.callback = callback
@@ -65,13 +63,17 @@ class SuccessiveHalvingOptimizer(EstimatorOptimizer):
             #increase size
             start_size = start_size*2
             counter = counter + 1
-            self.callback(counter, param_combinations, size , params_error , avg_error , param_combinations)
+            if self.callback is not None:
+                self.callback(counter, param_combinations, size , params_error , avg_error , param_combinations)
             if len(param_combinations) < 5 or start_size > n:
                 break
 
         # print(f"iter_{counter} {len(param_combinations)} parameter combinations data_size {size}")
-        end_results, time, score  =  self.param_map(reduced_repair_indputs,param_combinations)[0][0]
-        print("Final parameters: " , end_results)
-        self.callback(counter, param_combinations, size, params_error, avg_error, param_combinations, end_results, score)
 
-        return end_results
+        final_map = self.param_map(reduced_repair_indputs, param_combinations)
+        final_parameters, score  =  self.param_map(reduced_repair_indputs,param_combinations)[0]
+        print("Final parameters: " , final_parameters)
+        if self.callback is not None:
+            self.callback(counter, [final_parameters], size, params_error, score, [final_parameters], final_parameters, score)
+
+        return final_parameters

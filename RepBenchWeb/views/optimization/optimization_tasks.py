@@ -4,18 +4,15 @@ from RepBenchWeb.views.task_view import TaskView
 
 import json
 
-from django.http import JsonResponse
-from django.shortcuts import render
 from RepBenchWeb.BenchmarkMaps.repairCreation import injected_container_None_Series
-from RepBenchWeb.forms.injection_form import InjectionForm
 from RepBenchWeb.forms.optimization_forms import BayesianOptForm, optimization_param_forms_inputs
 from RepBenchWeb.utils.encoder import RepBenchJsonRespone
-from RepBenchWeb.views.config import OPTIMIZATION_TEMPLATE
 from RepBenchWeb.views.dataset_views import DatasetView
 from RepBenchWeb.models import TaskData
 from RepBenchWeb.tasks import succesive_halving_task
-import time
 from RepBenchWeb.tasks import bayesian_optimization_task
+from repair import algo_mapper
+from repair.parameterization import BayesianOptimizer
 
 
 def parse_param_input(p: str):
@@ -150,6 +147,9 @@ class BayesianOptimisationTask(SuccesiveHalvingTask):
         task_data.save()
 
         paramgrid = param_ranges
+
+        alg  = algo_mapper[alg_type]()
+        optimizer = BayesianOptimizer(alg, **opt_config) # just a test before running with celery
 
         bayesian_optimization_task.delay(alg_type, paramgrid, opt_config,
                                          injected=injected,
