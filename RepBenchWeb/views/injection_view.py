@@ -6,7 +6,8 @@ from django.shortcuts import render
 from RepBenchWeb.forms.file_upload import UploadFilesForm
 from RepBenchWeb.utils.encoder import RepBenchJsonRespone
 from injection.injectedDataContainer import InjectedDataContainer
-from RepBenchWeb.forms.alg_param_forms import SCREENparamForm, RPCAparamForm, CDparamForm, IMRparamField
+from RepBenchWeb.forms.alg_param_forms import SCREENparamForm, RPCAparamForm, CDparamForm, IMRparamField, \
+    SpeedAndAccelerationField
 from RepBenchWeb.forms.injection_form import store_injection_form, InjectionForm
 from RepBenchWeb.models import InjectedContainer, DataSet
 from RepBenchWeb.views.config import *
@@ -23,7 +24,11 @@ class InjectionView(RepairView):
                  "partial_rmse": "RMSE on Anomaly",
                  "runtime": "runtime"}
 
-    ParamForms = {"SCREEN": SCREENparamForm(), "RPCA": RPCAparamForm(), "CDrec": CDparamForm(), "IMR": IMRparamField()}
+    ParamForms = {"SCREEN": SCREENparamForm(),
+                  "RPCA": RPCAparamForm(),
+                  "CDrec": CDparamForm(),
+                  "IMR": IMRparamField(),
+                  "SPEEDandAcceleration": SpeedAndAccelerationField()}
 
     def get(self, request, setname="BAFU"):
         data_object = DataSet.objects.get(title=setname)

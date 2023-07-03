@@ -1,12 +1,13 @@
 from django import template
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
-from repair.algorithms_config import CDREP, SCREEN, RPCA, IMR
+from repair.algorithms_config import CDREP, SCREEN, RPCA, IMR , SPEEDandAcceleration
 from RepBenchWeb.catch22.features import features
 register = template.Library()
 
 WebAppTitle = "RepBench"
-algo_names = { RPCA : "RPCA", CDREP : "CDrep", SCREEN : "SCREEN", IMR : "IMR" }
+algo_names = { RPCA : "RPCA", CDREP : "CDrep", SCREEN : "SCREEN", IMR : "IMR"  , SPEEDandAcceleration : "Speed+Acceleration"
+}
 
 
 

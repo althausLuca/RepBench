@@ -9,14 +9,15 @@ import numpy as np
 
 class SCREENEstimator(Estimator):
 
-    def __init__(self, t:int=3, smax: float = 0.1, smin :float =-0.1, ci=None ,**kwargs):
+    def __init__(self, t:int=5, smax: float = 0.1, smin :float = None, ci=None ,**kwargs):
         """
         param ci need to be a tuple e.g (0.1,0.9)
         """
-        self.smin = smin
+        self.smin = smin if smin is not None else -smax
         self.smax = smax
         self.t = t
         self.ci = ci
+
         assert self.smin < 0
         assert self.smax > 0
 

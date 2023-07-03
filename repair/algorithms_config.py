@@ -11,7 +11,8 @@ WindowRPCA = "wrpca"
 SCREEN_l = "screen_5_95"
 SCREEN_l2 = "screen_10_90"
 
-ALGORITHM_TYPES = (IMR,SCREEN,RPCA,CDREP)
+SPEEDandAcceleration = "speed_acceleration"
+ALGORITHM_TYPES = (IMR,SCREEN,RPCA,CDREP,SPEEDandAcceleration)
 
 #black is used for the truth, and red for anomalies
 ALGORITHM_COLORS = {IMR : "blue" , SCREEN : "purple" , RPCA : "green" , CDREP : "orange",}
