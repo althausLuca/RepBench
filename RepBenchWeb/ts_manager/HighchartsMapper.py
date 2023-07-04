@@ -3,16 +3,14 @@ import pandas as pd
 from pandas import DataFrame
 
 from injection.injectedDataContainer import InjectedDataContainer
-from testing_frame_work.data_methods.data_class import DataContainer
-
 
 ## mapping to highcharts series
-def map_truth_data(original_data: pd.DataFrame, norm_data: pd.DataFrame = None, RepBenchWeb=5):
+def map_truth_data(original_data: pd.DataFrame, norm_data: pd.DataFrame = None, initial_visible_series=5):
     df, df_norm = original_data, norm_data \
         if norm_data is not None else (original_data - original_data.mean()) / original_data.std()
 
 
-    data =  [{"visible": i < RepBenchWeb, "id": col_name, "name": col_name, "data": list(df[col_name])
+    data =  [{"visible": i < initial_visible_series, "id": col_name, "name": col_name, "data": list(df[col_name])
                        , "norm_data": list(df_norm[col_name])}
              for (i, col_name) in enumerate(df.columns)]
 
@@ -31,7 +29,6 @@ def map_injected_series(injected_series: pd.Series, injected_series_norm: pd.Ser
             "norm_data": injected_series_norm.replace({np.nan: None}).values.tolist(),
             "color": "red",
             "dashStyle": "ShortDot",
-
             }
 
 

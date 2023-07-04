@@ -1,14 +1,10 @@
-from django.http import JsonResponse
 from django.shortcuts import render
 
 from RepBenchWeb.forms.dataset_forms import InjectedDataSetForm
 from RepBenchWeb.views.config import *
 from RepBenchWeb.forms.recommendation_forms import FLAMLSettingsForm, RayTuneSettingsForm
 from RepBenchWeb.models import InjectedContainer
-from RepBenchWeb.utils.encoder import RepBenchJsonRespone
 from RepBenchWeb.views.synthetic_dataset_view import SyntheticDatasetView
-from injection.injectedDataContainer import InjectedDataContainer
-from testing_frame_work.data_methods.data_class import DataContainer
 
 
 class RecommendationView(SyntheticDatasetView):
@@ -35,5 +31,5 @@ class RecommendationView(SyntheticDatasetView):
         context["datasets"] = {dataSet.title: dataSet.get_info()
                                         for dataSet in InjectedContainer.objects.all() if
                                         dataSet.title is not None and dataSet.title != "" }
-        context["type"] = type
+        context["type"] = "recommendation"
         return render(request, 'dataSetOptions/displayRecommendationDatasets.html', context=context)

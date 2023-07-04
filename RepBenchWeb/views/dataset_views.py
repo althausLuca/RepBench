@@ -2,34 +2,32 @@ import json
 import numpy as np
 from django.shortcuts import render
 from django.views import View
-
-from RepBenchWeb.utils.encoder import RepBenchJsonRespone
 from RepBenchWeb.views.config import *
 from RepBenchWeb.views import data_loader
 import RepBenchWeb.models.datasetsConfig as datasetsConfig
 from RepBenchWeb.models import DataSet, InjectedContainer
 
 
-class NpEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, np.integer):
-            return int(obj)
-        if isinstance(obj, np.floating):
-            return round(float(obj), 3)
-        if isinstance(obj, np.ndarray):
-            return obj.tolist()
-        if isinstance(obj, float):
-            return round(obj, 3)
-        if isinstance(obj, np.nan):
-            return None
-
-        return json.JSONEncoder.default(self, obj)
+# class NpEncoder(json.JSONEncoder):
+#     def default(self, obj):
+#         if isinstance(obj, np.integer):
+#             return int(obj)
+#         if isinstance(obj, np.floating):
+#             return round(float(obj), 3)
+#         if isinstance(obj, np.ndarray):
+#             return obj.tolist()
+#         if isinstance(obj, float):
+#             return round(obj, 3)
+#         if isinstance(obj, np.nan):
+#             return None
+#
+#         return json.JSONEncoder.default(self, obj)
 
 
 class DatasetView(View):
     default_nbr_of_ts_to_display = 5
     template = DISPLAY_DATASET_TEMPLATE
-    encoder = NpEncoder
+    # encoder = NpEncoder
     data_fetch_url_name = "get_data"
     load_data_container = data_loader.load_data_container
 
@@ -66,16 +64,16 @@ class DatasetView(View):
         return render(request, self.template, context=context)
 
 
-def sliders_view(request, setname="BAFU"):
-    from RepBenchWeb.catch22.features import features
-    dataSet = DataSet.objects.get(title=setname)
-    context = {} #dataSet.get_catch_22_features()
-    ## add abr and description to the features
-    for ts  , feature_dict  in context["catch22"].items():
-        for feature_name , feature_valued_dict in feature_dict.items():
-            feature_valued_dict['abr'] = features[feature_name]["abr"]
-            feature_valued_dict['description'] = features[feature_name]["description"]
-    return RepBenchJsonRespone(context)
+# def sliders_view(request, setname="BAFU"):
+#     from RepBenchWeb.catch22.features import features
+#     dataSet = DataSet.objects.get(title=setname)
+#     context = {} #dataSet.get_catch_22_features()
+#     ## add abr and description to the features
+#     for ts  , feature_dict  in context["catch22"].items():
+#         for feature_name , feature_valued_dict in feature_dict.items():
+#             feature_valued_dict['abr'] = features[feature_name]["abr"]
+#             feature_valued_dict['description'] = features[feature_name]["description"]
+#     return RepBenchJsonRespone(context)
 
 
 

@@ -13,21 +13,21 @@ class SyntheticDatasetView(DatasetView):
     def data_set_info_context(self, setname):
         return {"data_info": InjectedContainer.objects.get(title=setname).get_info()}
 
-    @staticmethod
-    def get_synthetic_data(request, setname):
-        RepBenchWeb = int(request.GET.get("RepBenchWeb", 5))
-        injected_data_container = SyntheticDatasetView.load_data_container(setname)
-
-        close = np.isclose(injected_data_container.truth, injected_data_container.injected)
-        assert np.allclose(~close == injected_data_container.labels)
-        print("assertion passed")
-        assert False, "stop here"
-
-        df = injected_data_container.truth
-        truth_container = DataContainer(df)
-        result = {"series" : map_truth_data(truth_container, RepBenchWeb) }
-        cols = [i for i in df.columns]
-        injected = injected_data_container.get_none_filled_injected()
-        result["injected"] = [map_injected_series(injected[c],cols[i],truth_container) for i,c in enumerate(injected) if i in
-                              injected_data_container.injected_columns]
-        return RepBenchJsonRespone(result)
+    # @staticmethod
+    # def get_synthetic_data(request, setname):
+    #     initial_visible_series = int(request.GET.get("initial_visible_series", 5))
+    #     injected_data_container = SyntheticDatasetView.load_data_container(setname)
+    #
+    #     close = np.isclose(injected_data_container.truth, injected_data_container.injected)
+    #     assert np.allclose(~close == injected_data_container.labels)
+    #     print("assertion passed")
+    #     assert False, "stop here"
+    #
+    #     df = injected_data_container.truth
+    #     truth_container = DataContainer(df)
+    #     result = {"series" : map_truth_data(truth_container, initial_visible_series=initial_visible_series) }
+    #     cols = [i for i in df.columns]
+    #     injected = injected_data_container.get_none_filled_injected()
+    #     result["injected"] = [map_injected_series(injected[c],cols[i],truth_container) for i,c in enumerate(injected) if i in
+    #                           injected_data_container.injected_columns]
+    #     return RepBenchJsonRespone(result)

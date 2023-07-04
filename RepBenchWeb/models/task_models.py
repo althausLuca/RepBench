@@ -14,6 +14,9 @@ from RepBenchWeb.views.recommendation.utils import get_relevant_parameters
 
 
 class TaskData(models.Model):
+    """
+    This model is used to store data from a running celery task.
+    """
     task_id = models.CharField(max_length=255, unique=True)
     data_type = models.CharField(max_length=255)
     data = models.JSONField(default=list)
@@ -37,6 +40,9 @@ class TaskData(models.Model):
         return self.status == "done"
 
     def delete(self, *args, **kwargs):
+        """
+D       deletes the task and stops the corresponding celery task if it is running.
+        """
         try:
             revoke_task(self.celery_task_id)
             print("old CELERY STOPPED")
@@ -59,7 +65,6 @@ class TaskData(models.Model):
         self.save()
 
     def get_data(self):
-        print("OOOOOOOOOOOOOOOOOOOOOII GETTING THE DATA")
         for i, data_iteration in enumerate(self.data):
             if not data_iteration["processed"]:
                 try:
@@ -81,19 +86,14 @@ class TaskData(models.Model):
         return self.data
 
     def clean(self):
-        """ delete all objects older than 10 minutes"""
+        """ delete all objects older than 30 minutes"""
         time_threshold = timezone.now() - timedelta(minutes=30)
         TaskData.objects.filter(created_at__lt=time_threshold).delete()
 
     def set_classifier(self, classifier):
-        print("SET AUTO ML classifier")
         self.autoML = pickle.dumps(classifier, pickle.HIGHEST_PROTOCOL)
         self.save()
 
     def get_classifier(self):
         return pickle.loads(self.autoML)
 
-    # def get_recommendation(self, setname):
-    #     automl = pickle.loads(self.autoML)
-    #     return InjectedContainer.objects.get(title=setname).recommendation_context(automl)
-    #

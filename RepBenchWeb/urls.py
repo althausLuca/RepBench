@@ -4,7 +4,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from RepBenchWeb.views.recommendation import recommendation_view, file_upload_view , recommendation_example_view
-from RepBenchWeb.views.algorithm_analysis import optimizationview
+from RepBenchWeb.views.optimization import optimizationview
 
 from RepBenchWeb.views import (
     index_view,
@@ -78,7 +78,7 @@ urlpatterns = [
     path('get_data/<str:setname>', data_loader.get_data, name='get_data'),
 
     # catch22 sliders getter
-    path('sliders_view/<str:setname>', dataset_views.sliders_view, name='get_catch22_data'),
+    # path('sliders_view/<str:setname>', dataset_views.sliders_view, name='get_catch22_data'),
 
 
 
@@ -102,7 +102,7 @@ urlpatterns = [
     path('raytunes_example',recommendation_example_view.start_raytunes, name='start_raytunes'),
 
 
-    path('recommendation_retrieve', recommendation_example_view.retrieve_flaml_results,
+    path('recommendation_retrieve', FlamlTask.fetch_data,
          name='retrieve_recommendation_results'),
     path('get_recommendation/<str:setname>' , recommendation_example_view.flaml_prediction , name='get_recommendation'),
     # path('user_recommendation', recommendation_view..as_view(), name='user_recommendation'),

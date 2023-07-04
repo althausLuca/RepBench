@@ -34,8 +34,10 @@ def succesive_halving_task(self, alg_name, param_grid , opt_config, * , injected
             "params_error": params_error,
             "avg_error": avg_error,
             "kept_param_combinations": kept_param_combinations,
-            "end_results": end_results,
-            "end_score": end_score
+            "parameters": end_results,
+            "score": end_score,
+            "algorithm" :  alg_name
+
         }
         task_data.add_data(results)
         return results

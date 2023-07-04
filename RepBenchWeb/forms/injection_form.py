@@ -1,13 +1,6 @@
 from django import forms
-from django.forms import NumberInput
 from django.utils.safestring import mark_safe
-
-ANOMALY_CHOICES = [
-    ("shift", "Shift"),
-    ("outlier", "Outlier"),
-    ("distortion", "Distortion"),
-]
-
+from RepBenchWeb.forms.form_config import ANOMALY_CHOICES
 
 class RangeSliderInput(forms.TextInput):
     input_type = 'range'

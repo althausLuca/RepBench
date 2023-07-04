@@ -34,8 +34,6 @@ def algorithm1(x: np.array, smin=-1, smax=1, amin=-1, amax=1, w=5):
         for i in range(k + 1, len(x)):
             if t[i] - t[k] > w:
                 break
-            print("AAAAA")
-
             """
             compute zmin_k_i_a and zmax_k_i_a with formula 35 and 36
             z_max_k_i_a = (x_prime_k-1*(t_i - t_k) -  (amax*(t_i - t_k)**2 -x_i )*(t_k - t_k-1))/(t_i - t_k-1)
@@ -85,7 +83,7 @@ def algorithm1(x: np.array, smin=-1, smax=1, amin=-1, amax=1, w=5):
 
 
 
-""" 
+"""
 Example 3.9
 """""
 x = np.array([0, 0.5, 2.5, 6.9, 6])

@@ -8,7 +8,7 @@ class OptimizationModel(models.Model):
 
     aquisition_functions = models.JSONField(default=[])
     algorithms = models.JSONField(default=[])
-    metrics = models.JSONField(default=[])
+    metrics = models.JSONField(default=dict)
     initial_points = models.JSONField(default=[])
 
 

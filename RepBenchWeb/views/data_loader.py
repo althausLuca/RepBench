@@ -8,7 +8,7 @@ from RepBenchWeb.ts_manager.HighchartsMapper import map_truth_data, map_injected
 from testing_frame_work.data_methods.data_class import DataContainer
 
 
-def load_data_container(setname,RepBenchWeb=4):
+def load_data_container(setname):
     if DataSet.objects.filter(title=setname).exists():
         data_object = DataSet.objects.get(title=setname)
         df = data_object.df
@@ -21,11 +21,18 @@ def load_data_container(setname,RepBenchWeb=4):
     return DataContainer(injected_data_container.truth)
 
 
-def get_data(request, setname,RepBenchWeb=4):
-    RepBenchWeb = int(request.GET.get("RepBenchWeb", RepBenchWeb))
+def get_data(request, setname,initial_visible_series=4):
+    """
+    Args:
+        request:
+        setname: str
+        initial_visible_series:
+
+    Returns: JsonResponse with data for Highcharts
+    """
     if DataSet.objects.filter(title=setname).exists():
         df = DataSet.objects.get(title=setname).df
-        return JsonResponse({ "series" : map_truth_data(df,RepBenchWeb=RepBenchWeb) })
+        return JsonResponse({ "series" : map_truth_data(df,initial_visible_series=initial_visible_series) })
 
     injected_data_container: InjectedDataContainer = InjectedContainer.objects.get(title=setname).injected_container
 

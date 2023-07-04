@@ -2,11 +2,11 @@ from collections import defaultdict
 
 
 ## algorithms
-IMR = "imr"
-SCREEN = "screen"
-RPCA = "rpca"
+IMR = "IMR"
+SCREEN = "SCREEN"
+RPCA = "RPCA"
 Robust_PCA = RPCA
-CDREP = "cdrep"
+CDREP = "CDREP"
 WindowRPCA = "wrpca"
 SCREEN_l = "screen_5_95"
 SCREEN_l2 = "screen_10_90"

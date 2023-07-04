@@ -2,28 +2,26 @@ from django import template
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from repair.algorithms_config import CDREP, SCREEN, RPCA, IMR , SPEEDandAcceleration
-from RepBenchWeb.catch22.features import features
+# from RepBenchWeb.catch22.features import features
 register = template.Library()
 
 WebAppTitle = "RepBench"
 algo_names = { RPCA : "RPCA", CDREP : "CDrep", SCREEN : "SCREEN", IMR : "IMR"  , SPEEDandAcceleration : "Speed+Acceleration"
 }
 
-
-
 ## catch22 filters
 paper_link = "https://www.biorxiv.org/content/10.1101/532259v1.full.pdf"
-@register.filter()
-def c22_description(feature_name):
-    return features[feature_name]["description"]
+# @register.filter()
+# def c22_description(feature_name):
+#     return features[feature_name]["description"]
 
 @register.filter()
 def cc2_paper_link():
     return paper_link
 
-@register.filter()
-def c22_abr(feature_name):
-    return features[feature_name]["abr"]
+# @register.filter()
+# def c22_abr(feature_name):
+#     return features[feature_name]["abr"]
 
 
 @register.filter()

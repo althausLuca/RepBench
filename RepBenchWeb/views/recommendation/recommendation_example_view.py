@@ -114,24 +114,24 @@ def start_flaml(request):
     return RepBenchJsonRespone({"status": "ok", "automl_settings": automl_settings, "task_id": task_id})
 
 
-def retrieve_flaml_results(request):
-    task_id = request.POST.get("task_id")
-
-    for i in range(25):
-        if TaskData.objects.filter(task_id=task_id).exists():
-            break
-        else:
-            time.sleep(0.3)
-
-
-    task_data = TaskData.objects.filter(task_id=task_id).last()
-    data = task_data.get_data()
-    status = task_data.status
-    if task_data.is_running():
-        return RepBenchJsonRespone({"data": data, "status": status})
-    if task_data.is_done():
-        # task_data.get_recommendation("test")
-        return RepBenchJsonRespone({"data": data, "status": status})
+# def retrieve_flaml_results(request):
+#     task_id = request.POST.get("task_id")
+#
+#     for i in range(25):
+#         if TaskData.objects.filter(task_id=task_id).exists():
+#             break
+#         else:
+#             time.sleep(0.3)
+#
+#
+#     task_data = TaskData.objects.filter(task_id=task_id).last()
+#     data = task_data.get_data()
+#     status = task_data.status
+#     if task_data.is_running():
+#         return RepBenchJsonRespone({"data": data, "status": status})
+#     if task_data.is_done():
+#         # task_data.get_recommendation("test")
+#         return RepBenchJsonRespone({"data": data, "status": status})
 
 
 def flaml_prediction(request, setname):

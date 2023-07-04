@@ -1,5 +1,4 @@
 from celery import shared_task
-
 from repair import Estimator, algo_mapper
 
 
@@ -10,7 +9,6 @@ def bayesian_optimization_task(self, alg_name, param_grid, opt_config, *, inject
     task_data.set_celery_task_id(self.request.id)
     from repair.parameterization.optimizers import BayesianOptimizer
 
-
     def bayesian_optimization_call_back(results):
         """
         Arguments:
@@ -18,10 +16,11 @@ def bayesian_optimization_task(self, alg_name, param_grid, opt_config, *, inject
                 {'params': {'classification_truncation': 1, 'threshold': 0.28}, 'score': 0.52, 'iter': 15}
 
         """
-        print("Bayesian optimization results: ", results)
+        # print("Bayesian optimization results: ", results)
+        print("algname", alg_name)
+        results["algorithm"] = alg_name
         task_data.add_data(results)
-        # print("IN TASK ID", task_data.task_id)
-        # print("in task data", task_data.data)
+
     alg: Estimator = algo_mapper[alg_name]()
     optimizer = BayesianOptimizer(alg, **opt_config ,callback=bayesian_optimization_call_back)
 

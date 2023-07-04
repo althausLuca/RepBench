@@ -1,0 +1,30 @@
+<script>
+    const registerPlayAndReloadBtns = function (name, handler) {
+        $('#play-' + name).on('click', function (event) {
+            event.preventDefault();
+            $(this).find('i').toggle();
+            handler.playing = !handler.playing
+            if (handler.computing) {
+            } else {
+                handler.computing = true;
+                handler.start()
+            }
+        });
+
+        $('#reload-' + name).on('click', function (event) {
+            // Prevent form submission if it's a submit button
+            event.preventDefault();
+
+            if (!handler.playing && handler.computing) {
+                handler.playing = true
+                $('#play-' + name).find('i').toggle();
+            }
+
+            if (handler.data.length > 0) {
+                handler.start()
+            }
+        });
+    }
+
+
+</script>

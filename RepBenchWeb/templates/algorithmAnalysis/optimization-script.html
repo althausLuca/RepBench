@@ -1,9 +1,46 @@
 <script>
+    let repair_opt = (alg_type, parameters) => {
+        let requestBody = {
+            alg_type: alg_type,
+            "csrfmiddlewaretoken": '{{csrf_token}}',
+            ...parameters
+        };
+        const formDataOpt = new FormData();
+
+        for (let key in requestBody) {
+            if (requestBody.hasOwnProperty(key)) {
+                formDataOpt.append(key, requestBody[key]);
+            }
+        }
+
+        {#createScoreBoard();#}
+        chartManager.hideNoneInjectedSeries();
+        mainChart.showLoading();
+        fetch(repair_url, {
+            method: 'POST',
+            body: formDataOpt,
+        }).then(response => response.json()).then(responseJson => {
+            const repSeries = responseJson.repaired_series;
+            {#const scores = responseJson.scores;#}
+            repairResult = repSeries;
+            const chartRepairSeries = Object.keys(repSeries).map(key => {
+                let repair = repSeries[key];
+                console.log(repair);
+                return chartManager.addSeries(repair, true, "repair");
+            });
+
+            {#scores["color"] = mainChart.series[mainChart.series.length - 2].color;#}
+            {#updateScoreBoard(scores);#}
+        }).finally(() => {
+            mainChart.hideLoading();
+        });
+    };
+
 
     let OptFormData = function (task_id) {
         var e = document.getElementById("optimization-form");
         const bayesienOptFormData = new FormData(e)
-        bayesienOptFormData.append("injected_series", JSON.stringify(chartManager.get_injected_norm_data()))
+        {#bayesienOptFormData.append("injected_series", JSON.stringify(chartManager.get_injected_norm_data()))#}
         bayesienOptFormData.append("setname", JSON.stringify(setname))
         bayesienOptFormData.append("task_id", task_id)
         bayesienOptFormData.append("csrfmiddlewaretoken", '{{csrf_token}}')
@@ -22,8 +59,13 @@
             this.start_url = start_url
             this.retrieve_url = retrieve_url
         },
-        startOptimizing: function () {
-            this.playing = false
+        stopIteration: function () {
+            this.playing = false;
+            this.computing = false;
+            clearTimeout(this.timeoutID); // Clear the ongoing timeout
+        },
+
+        start: function () {
             this.iteration = 0;
             this.data = [];
             SuccessiveHalvingChart.clear()
@@ -37,21 +79,13 @@
                     '&injected_series=' + JSON.stringify(chartManager.get_injected_norm_data()),
                 success: (response) => {
                     {#document.getElementById("start-button-right-text").innerHTML = "Starting " + this.option + "..."#}
-                    this.getOptimizationResults();
+                    this.getResults();
                     this.iterateData();
                     {#RecommendationChart.chart.hideLoading()#}
-                    this.playing = true
 
 
                     optimData = response
                     console.log("OPTIM DATA", optimData)
-                    //textract error_loss from formdata
-                    {#let error_loss = optimData.error_loss.toUpperCase();#}
-                    {#let params = Object.keys(optimData.param_ranges);#}
-                    {#let n_initial_points = optimData.n_initial_points;#}
-                    {#let n_calls = optimData.n_calls;#}
-                    {#let job_id = optimData.job_id;#}
-                    {#initOptChart(params, error_loss, n_initial_points, n_calls)#}
                 },
                 error: function (response) {
                     console.log(response);
@@ -60,7 +94,7 @@
 
         },
 
-        getOptimizationResults: function () {
+        getResults: function () {
             $.ajax({
                 type: 'POST',
                 url: this.retrieve_url,
@@ -71,12 +105,14 @@
                         this.data = response.data;
                         {#RecommendationChart.chart.redraw();#}
                         setTimeout(() => {
-                            this.getOptimizationResults();  // Pass the task_id again in the recursive call
+                            this.getResults();  // Pass the task_id again in the recursive call
                         }, 1000);
                     } else if (response.status === 'done') {
                         console.log("DONE");
                         this.data = response.data;
                         this.computing = false
+                        let last_data = this.data[this.data.length - 1]
+                        repair_opt(last_data.algorithm, last_data.params)
                     }
                     {#this.data = response.data;#}
                 },
@@ -88,15 +124,14 @@
         },
 
         iterateData: function () {
-            console.log("iterate")
             console.log(this.iteration + " " + this.data.length + " " + this.playing)
             if (this.iteration < this.data.length && this.playing) {
                 let currentData = this.data[this.iteration];
                 console.log(currentData, "CURRENT DATA")
-                document.getElementById("start-button-right-text").innerHTML = "Iter:" + (this.iteration +1) +
+                document.getElementById("start-button-right-text").innerHTML = "Iter:" + (this.iteration + 1) +
                     {#"| Estimator: " + estimator +#}
                     " | " + currentData.runtime + "s"
-                    {#" | Score: " + currentData;#}
+                {#" | Score: " + currentData;#}
 
 
                 if (this.option === 'successive_halving') {
@@ -111,7 +146,6 @@
                     let params = currentData.params
                     let param_names = Object.keys(params)
                     SuccessiveHalvingChart.setParamNames(param_names[0], param_names[1])
-                    {#console.log("IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII",Object.values(params))#}
                     SuccessiveHalvingChart.add(params)
 
                 }
@@ -123,90 +157,15 @@
                 }
             }
 
-            setTimeout(this.iterateData.bind(this), this.intervalTimer);
+            this.timeoutID = setTimeout(this.iterateData.bind(this), this.intervalTimer);
         }
 
     }
 
 
+</script>
 
-    $(document).ready(function () {
-        $('#play-optimization').on('click', function (event) {
-            // Prevent form submission if it's a submit button
-            {#event.preventDefault();#}
-            $(this).find('i').toggle();
-            optimizationHandler.playing = !optimizationHandler.playing
-        });
-
-
-        $('#start-form').on('submit', function (event) {
-            event.preventDefault();
-            if (optimizationHandler.computing) {
-                return;
-            } else {
-                optimizationHandler.computing = true;
-                optimizationHandler.startOptimizing()
-            }
-        });
-
-
-        $('#reload').on('click', function (event) {
-            // Prevent form submission if it's a submit button
-            event.preventDefault();
-
-            if (!optimizationHandler.playing && optimizationHandler.computing) {
-                optimizationHandler.playing = true
-                $('#play-recommendation').find('i').toggle();
-            }
-
-            if (optimizationHandler.data.length > 0) {
-                optimizationHandler.startOptimizing()
-            }
-
-
-        });
-
-
-        //recommendation table settings
-        // play-recommendation-table
-
-        $('#play-recommendation-table').on('click', function (event) {
-            // Prevent form submission if it's a submit button
-            event.preventDefault();
-
-            console.log("play recommendation table")
-            $(this).find('i').toggle();
-            if (!parameterTable.hasStarted) {
-                parameterTable.replayHistory()
-            }
-            parameterTable.isPaused = !parameterTable.isPaused
-        });
-
-
-        $('#reload-recommendation-table').on('click', function (event) {
-            // Prevent form submission if it's a submit button
-            event.preventDefault();
-
-            if (parameterTable.isPaused) {
-                parameterTable.isPaused = false
-                $('#play-recommendation-table').find('i').toggle();
-            }
-
-            parameterTable.replayHistory()
-
-
-            // show the first <i> tag
-            {#$('#play-recommendation-table').find('i').first().show();#}
-
-
-
-            {#if (recommendationHandler.computing) {#}
-            {#    recommendationHandler.startTuning()#}
-            {# }#}
-
-        });
-
-
-    });
-
+{% include "play-buttons-script.html" %}
+<script>
+    registerPlayAndReloadBtns("optimization", optimizationHandler)
 </script>

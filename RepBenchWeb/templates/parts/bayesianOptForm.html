@@ -44,13 +44,13 @@
                         {% for param in params %}
                             <div style="height: 20px;"></div>
                             <div class="row">
-                                <div class="col-md-2" style="text-align: end;" >
+                                <div class="col-md-2" style="text-align: end;">
                                     <p style="margin-bottom: 3px;margin-top: 23px">{{ param.label }}:</p>
                                 </div>
                                 {#                                <label>AAA</label>#}
                                 <div class="col-md-10">
                                     {% with pa_id=alg|add:"-"|add:param.param_name %}
-                                    {% include "parts/double-range-slider.html" with min=param.min max=param.max step=param.step id=pa_id label=param.param_name %}
+                                        {% include "parts/double-range-slider.html" with min=param.min max=param.max step=param.step id=pa_id label=param.param_name %}
                                     {% endwith %}
                                 </div>
                             </div>
@@ -65,7 +65,31 @@
     <div class="kt-portlet" data-ktportlet="true">
         <div class="kt-portlet__head">
             <div class="kt-portlet__head-label">
-                <h3 class="kt-portlet__head-title">Optimization Parameters</h3>
+                <h3 class="kt-portlet__head-title">
+
+                </h3>
+                <div class="kt-portlet__head-toolbar">
+                    <div class="kt-portlet__head-group">
+                        {#                <h3 class="kt-portlet__head-title">Parameter Search Space</h3>#}
+                        <select class="form-control" id="optimizer-select" name="optimizer"
+                        >
+                            <option value="bayesian"> Bayesian Optimisation</option>
+                            <option value=successive_halving> Successive Halving</option>
+                        </select>
+                        <script>
+                            let changeOptimizer = function () {
+                                optimizationHandler.stopIteration();
+                                let selectElement = document.getElementById("optimizer-select");
+                                let selectedValue = selectElement.value;
+                                if (selectedValue === "bayesian") {
+                                    optimizationHandler.init("bayesian", start_bayesian_optimization_url, fetch_opt_result)
+                                } else {
+                                    optimizationHandler.init("successive_halving", start_successive_halving_url, fetch_opt_result)
+                                }
+                            }
+                        </script>
+                    </div>
+                </div>
             </div>
             <div class="kt-portlet__head-toolbar">
                 <div class="kt-portlet__head-group">
@@ -87,7 +111,6 @@
             <div id="form_append_container"></div>
         </div>
     </div>
-
 </form>
 
 

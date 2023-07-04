@@ -34,6 +34,16 @@ class InjectedDataContainer:
                 "columns_to_repair": self.injected_columns.copy(),
                 }
 
+
+    def get_normalized_version(self):
+        mean , std = self.injected.mean() , self.injected.std()
+        normalized_injected = (self.injected - mean) / std
+        normalized_truth = (self.truth - mean) / std
+
+        return InjectedDataContainer(injected=normalized_injected,truth=normalized_truth,
+                                        class_df=self.class_df,labels=self.labels,name=self.name)
+
+
     def check(self):
         index_check(self.klass, self.injected, self.truth, self.labels_)
         anomaly_check(self.klass, self.injected, self.truth)
