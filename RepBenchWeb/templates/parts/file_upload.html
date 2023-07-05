@@ -6,19 +6,22 @@
 <form method="post" enctype="multipart/form-data" action="{% url 'upload_files' %}">
     {% csrf_token %}
     {{ upload_form.as_p }}
-    <select name= "column-id" id="column-select" style="display:none;"> </select>
-    <input name= "column-name" id="column-name" style="display:none;"> </input>
+    <select name="column-id" id="column-select" style="display:none;"> </select>
+    <input name="column-name" id="column-name" style="display:none;"> </input>
 
     <button id="upload-button" type="submit" style="display: none">Upload</button>
 </form>
 
 <script>
 
+
+
+
     const file_1 = document.getElementById("id_file1")
     file_1.addEventListener('change', handleFileUpload, false)
 
     const columnSelect = document.getElementById('column-select');
-    columnSelect.addEventListener('change', event => document.getElementById("option-text").value = event.target.text , false);
+    columnSelect.addEventListener('change', event => document.getElementById("option-text").value = event.target.text, false);
 
     function handleFileUpload(event) {
         const file = event.target.files[0];

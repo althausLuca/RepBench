@@ -7,7 +7,6 @@ from RepBenchWeb.forms.file_upload import UploadFilesForm
 from RepBenchWeb.models import DataSet
 
 
-
 def django_file_to_pandas(uploaded_file: UploadedFile) -> pd.DataFrame:
     # Check if the file is comma or whitespace-separated
     uploaded_file.open('r')
@@ -15,25 +14,15 @@ def django_file_to_pandas(uploaded_file: UploadedFile) -> pd.DataFrame:
     uploaded_file.seek(0)
     delimiter: str = dialect.delimiter
 
-    # # Read the first few lines to infer if the first row contains column names or data
-    # first_line = uploaded_file.readline().decode('utf-8').strip()
-    # second_line = uploaded_file.readline().decode('utf-8').strip()
-    # uploaded_file.seek(0)
-    #
-    # has_header = csv.Sniffer().has_header(first_line + '\n' + second_line)
+    print(delimiter)
 
-    # Read the file into a pandas DataFrame
-    # if has_header:
-    skip= False
     df = pd.read_csv(uploaded_file, delimiter=delimiter)
-    for first_row_element in df.iloc[0,:]:
-        if isinstance(first_row_element,float) or isinstance(first_row_element, np.float):
-            df = pd.read_csv(uploaded_file, delimiter=delimiter, header=None)
-            skip = True
-            break
 
-    if not skip:
-        df = pd.read_csv(uploaded_file, delimiter=delimiter, header=0)
+    df.columns = [column.strip() for column in df.columns]
+    print(df.columns)
+    print([type(column) for column in df.columns])
+    if any("." in column for column in df.columns):
+        df = pd.read_csv(uploaded_file, delimiter=delimiter,header=None , names=[i for i in range(len(df.columns))])
 
     return df
 
@@ -49,11 +38,11 @@ def upload_files(request):
             data_name = request.POST.get('title')
             df = django_file_to_pandas(file1)
 
-
             # recommendation = get_recommendation_non_containerized(df,
             #                                                       column_for_recommendation=column_for_recommendation)
             print(df)
-            DataSet.objects.create(title=data_name, dataframe=df.to_json() , ref_url="-", description="-",url_text="-",granularity="1s")
+            DataSet.objects.create(title=data_name, dataframe=df.to_json(), ref_url="-", description="-", url_text="-",
+                                   granularity="1s")
 
     import RepBenchWeb.views.injection_view as injection_view
-    return injection_view.InjectionView().get(request,setname =data_name )
+    return injection_view.InjectionView().get(request, setname=data_name)
