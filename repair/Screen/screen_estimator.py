@@ -29,8 +29,8 @@ class SCREENEstimator(Estimator):
                 }
 
     def suggest_param_range(self, X):
-        return {"smax": np.linspace(0.0001, 1, num=20),
-                "smin": -np.linspace(0.0001, 1, num=20)}
+        return {"smax": np.linspace(0, 1, num=20),
+                "smin": -np.linspace(0, 1, num=20)}
 
     def repair(self, injected, truth, columns_to_repair, labels=None):
         truth = None

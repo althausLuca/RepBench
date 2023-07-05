@@ -99,9 +99,19 @@ class BayesianOptimisationTask(SuccesiveHalvingTask):
         repair_inputs: dict = cls.load_optimization_data(set_name, injected_series)
 
         alg = algo_mapper[alg_type]()
+
+        alg_params = alg.get_fitted_params()
+        for key in param_ranges.keys():
+            if key in alg_params.keys():
+                d_type = type(alg_params[key])
+                # cast data types to match alg_params
+                min_ , max_  = param_ranges[key]
+                param_ranges[key] = (d_type(min_), d_type(max_))
+
         optimizer = BayesianOptimizer(alg, **opt_config)  # just a test before running with celery
 
 
+        print("PARAMRANGES", param_ranges)
         bayesian_optimization_task.delay(alg_type, param_ranges, opt_config,
                                          **repair_inputs,
                                          my_task_id=task_id)
@@ -115,4 +125,5 @@ class BayesianOptimisationTask(SuccesiveHalvingTask):
             "setname": set_name,
 
         }
+
         return RepBenchJsonRespone(context)

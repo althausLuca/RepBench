@@ -30,7 +30,9 @@ def bayesian_optimization_task(self, alg_name, param_grid, opt_config, *, inject
                      "columns_to_repair": injected_columns
                      }
 
-    optimizer.search(repair_inputs, param_grid)
+    final_parameters = optimizer.search(repair_inputs, param_grid)
 
+    final_results = { "params": final_parameters , "algorithm" : alg_name }
+    task_data.add_data(final_results)
     task_data.set_done()
     return "Done"

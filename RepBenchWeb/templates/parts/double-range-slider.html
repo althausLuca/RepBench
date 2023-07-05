@@ -25,21 +25,19 @@
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 
 <style>
+    :root {
+        --slider-color: green;
+    }
+
     .ui-slider-tooltip {
         position: absolute;
         padding: 4px 8px;
-        background-color: red;
         color: white;
         font-weight: bold;
         font-size: 10px;
         border-radius: 5px;
         z-index: 2;
         transform: translate(-20%, -120%);
-    }
-
-    .ui-state-active {
-        background-color: red;
-        background: red !important;
     }
 
     .ui-slider-handle {
@@ -49,14 +47,21 @@
 
     }
 
+    .ui-slider-tooltip,
+    .ui-state-active,
     .ui-slider-range {
-        background-color: red;
+        background-color: var(--slider-color);
     }
+    .ui-state-active {
+        background: var(--slider-color) !important;
+    }
+
+
 
     .ui-slider-min-tooltip,
     .ui-slider-max-tooltip {
         position: absolute;
-    {#padding: 4px 8px;#} background-color: transparent;
+        background-color: transparent;
         color: black;
         font-weight: bold;
         font-size: 12px;
@@ -70,14 +75,14 @@
         left: 100%;
     }
 
-   .ui-slider-min-tooltip {
+    .ui-slider-min-tooltip {
         transform: translate(-18px, -124%);
     }
 </style>
 
 <div class="form-group">
     <input type="hidden" name="{{ id }}-min" id="{{ id }}-min" value="{{ min }}">
-<input type="hidden" name="{{ id }}-max" id="{{ id }}-max" value="{{ max }}">
+    <input type="hidden" name="{{ id }}-max" id="{{ id }}-max" value="{{ max }}">
 </div>
 
 
@@ -95,7 +100,6 @@
             min: {{ min }},
             max: {{ max }},
             values: [{{ min }}, {{ max }}],
-
             create: function () {
                 {#$(amountID).val($(sliderID).slider("values", 0) +#}
                 {#    " - " + $(sliderID).slider("values", 1));#}

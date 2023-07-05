@@ -78,9 +78,9 @@
                                                 <td>
                                                     <a href="{% url 'synthetic_dataset_view' setname=name %}"> {{ attr.url_text }}</a>
                                                 </td>
-                                                <td style="text-align: right">{{ attr.ts_nbr }}</td>
-                                                <td style="text-align: right">{{ attr.values }}</td>
-                                                <td style="text-align: right">-</td>
+                                                <td style="text-align: left">{{ attr.ts_nbr }}</td>
+                                                <td style="text-align: left">{{ attr.values }}</td>
+                                                <td style="text-align: left">-</td>
                                                 {#                <td style="text-align: right"><a href="{% url 'injection' setname=attr.title %}">Inject and Repair</a></td>#}
                                                 <td>
                                                     {% if option == "Repair" %}

@@ -1,8 +1,7 @@
 from django import forms
 
-
 class UploadFilesForm(forms.Form):
-    file1 = forms.FileField(label="File 1 (Required)",
+    file1 = forms.FileField(label="DataFile (Required)",
                             widget=forms.ClearableFileInput(
                                 attrs={'placeholder': 'No file selected', "class": "form-control"}))
     title = forms.CharField(label="Data Name (Required)", max_length=100,

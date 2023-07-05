@@ -97,6 +97,18 @@
             const csrftoken = getCookie('csrftoken');
             console.log("Cookie Set" + csrftoken);
             console.log("Cookie Set" + '{{ csrf_token }}');
+
+            Highcharts.setOptions({
+                plotOptions: {
+                    series: {
+                        // animation: false,
+                    }
+                },
+                credits: {
+                    enabled: false
+                },
+            });
+
         </script>
     {% endblock %}
 
@@ -195,10 +207,10 @@
                                                     class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span
                                                     class="kt-menu__link-text">FLAML Recommendation</span></a></li>
                                             <li class="kt-menu__item " aria-haspopup="true"><a
-                                                    href="{% url 'recommendation' type="RayTunes" %}"
+                                                    href="{% url 'recommendation' type="RayTune" %}"
                                                     class="kt-menu__link "><i
                                                     class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span
-                                                    class="kt-menu__link-text">RayTunes Recommendation</span></a></li>
+                                                    class="kt-menu__link-text">RayTune Recommendation</span></a></li>
                                         </ul>
                                     </div>
                                 </li>
@@ -221,9 +233,7 @@
                                         </ul>
                                     </div>
                                 </li>
-                                {#                                <li class="kt-menu__item kt-menu__item--rel"><a href="{% url 'index' %}"#}
-                                {#                                                                                class="kt-menu__link"><span#}
-                                {#                                        class="kt-menu__link-text">FAQ</span></a></li>#}
+
                             </ul>
                         </div>
                     </div>
@@ -279,8 +289,6 @@
                             <div class="kt-subheader__main">
                                 {% block page_title %}{% endblock %}
                                 <span class="kt-subheader__separator kt-hidden"></span>
-                                {#                                {% block breadcrumbs %}{% endblock %}#}
-                                {#                                {% block breadcrumbs_content %}{% render_breadcrumbs %}{% endblock %}#}
                             </div>
                         </div>
                         <!-- end: SubHeader -->
@@ -307,7 +315,7 @@
                                 RepBench - Time Series Anomaly Repair Benchmark
                             </div>
                             <div class="kt-footer__menu">
-{#                                <a href="{% url 'vadetisweb:about' %}" class="kt-link">About</a>#}
+                                {#                                <a href="{% url 'vadetisweb:about' %}" class="kt-link">About</a>#}
                                 <a href="https://exascale.info/" target="_blank" class="kt-link">eXascale Infolab</a>
                             </div>
                         </div>

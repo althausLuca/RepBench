@@ -40,7 +40,6 @@
     let OptFormData = function (task_id) {
         var e = document.getElementById("optimization-form");
         const bayesienOptFormData = new FormData(e)
-        {#bayesienOptFormData.append("injected_series", JSON.stringify(chartManager.get_injected_norm_data()))#}
         bayesienOptFormData.append("setname", JSON.stringify(setname))
         bayesienOptFormData.append("task_id", task_id)
         bayesienOptFormData.append("csrfmiddlewaretoken", '{{csrf_token}}')
@@ -48,20 +47,28 @@
     }
 
     const optimizationHandler = {
+
+
+         reInit: function (option, start_url, retrieve_url) {
+            this.data = []
+            this.iteration = 0;
+            this.option = option //successive_halving or bayesian_optimization
+            this.start_url = start_url
+            this.retrieve_url = retrieve_url
+        },
+
         init: function (option, start_url, retrieve_url) {
             this.data = []
             this.iteration = 0;
             this.task_id = '{{csrf_token}}'
             this.playing = false
             this.computing = false
-            this.intervalTimer = 800
+            this.intervalTimer = 1000
             this.option = option //successive_halving or bayesian_optimization
             this.start_url = start_url
             this.retrieve_url = retrieve_url
         },
         stopIteration: function () {
-            this.playing = false;
-            this.computing = false;
             clearTimeout(this.timeoutID); // Clear the ongoing timeout
         },
 
@@ -147,7 +154,6 @@
                     let param_names = Object.keys(params)
                     SuccessiveHalvingChart.setParamNames(param_names[0], param_names[1])
                     SuccessiveHalvingChart.add(params)
-
                 }
 
                 this.iteration += 1;
@@ -156,10 +162,8 @@
                     console.log("Waiting for more data..." + this.iteration);
                 }
             }
-
             this.timeoutID = setTimeout(this.iterateData.bind(this), this.intervalTimer);
         }
-
     }
 
 

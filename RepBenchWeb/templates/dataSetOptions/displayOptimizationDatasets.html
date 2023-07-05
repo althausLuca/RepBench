@@ -31,12 +31,6 @@
                                                 aria-label="title: activate to sort column ascending">
                                                 Title
                                             </th>
-                                            {#                                            <th class="" tabindex="0"#}
-                                            {#                                                aria-controls="table_real_world_datasets" rowspan="1" colspan="1"#}
-                                            {#                                                style="width: 184.6667px;"#}
-                                            {#                                                aria-label="owner: activate to sort column descending"#}
-                                            {#                                                aria-sort="ascending">Source#}
-                                            {#                                            </th>#}
                                             <th class="" tabindex="0" aria-controls="table_real_world_datasets"
                                                 rowspan="1" colspan="1" style="width: 30.667px;"
                                                 aria-label="timeseries: activate to sort column ascending">
@@ -44,28 +38,28 @@
                                             </th>
                                             <th class="" tabindex="0" aria-controls="table_real_world_datasets"
                                                 rowspan="1" colspan="1" style="width: 85.6667px;"
-                                                aria-label="values: act     ivate to sort column ascending">Values
+                                                aria-label="values: activate to sort column ascending">Values
                                             </th>
-                                            <th class="" tabindex="0" aria-controls="table_real_world_datasets"
-                                                rowspan="1" colspan="1" style="width: 26.667px;"
-                                                aria-label="granularity: activate to sort column ascending">
-                                                Granularity
-                                            </th>
-                                            <th class="" tabindex="0" aria-controls="table_real_world_datasets"
-                                                rowspan="1" colspan="1" style="width: 91.5px;"
-                                                aria-label="actions: activate to sort column ascending">Action
-                                            </th>
-                                        </tr>
+{#                                            <th class="" tabindex="0" aria-controls="table_real_world_datasets"#}
+{#                                                rowspan="1" colspan="1" style="width: 26.667px;"#}
+{#                                                aria-label="granularity: activate to sort column ascending">#}
+{#                                                Granularity#}
+{#                                            </th>#}
+{#                                            <th class="" tabindex="0" aria-controls="table_real_world_datasets"#}
+{#                                                rowspan="1" colspan="1" style="width: 91.5px;"#}
+{#                                                aria-label="actions: activate to sort column ascending">Action#}
+{#                                            </th>#}
+                                           </tr>
                                         </thead>
                                         <tbody>
 
                                         {% for name,attr in  syntheticDatasets.items %}
                                             <tr>
-                                               <td tabindex="0" class="">{{ attr.title }}</td>
-                                                <td style="text-align: right">{{ attr.ts_nbr }}</td>
-                                                <td style="text-align: right">{{ attr.values }}</td>
-                                                <td style="text-align: right">-</td>
-                                                <td style="text-align: right"><a href="{% url 'opt' setname=attr.title %}">Optimize</a></td>
+                                               <td tabindex="0" class=""><a href="{% url 'opt' setname=attr.title %}">{{ attr.title }}</a></td>
+                                                <td style="text-align: left">{{ attr.ts_nbr }}</td>
+                                                <td style="text-align: left">{{ attr.values }}</td>
+{#                                                <td style="text-align: right">-</td>#}
+{#                                                <td style="text-align: right"><a href="{% url 'opt' setname=attr.title %}">Optimize</a></td>#}
                                             </tr>
                                         {% endfor %}
 {#                                        {% for name,attr in  datasets.items %}#}

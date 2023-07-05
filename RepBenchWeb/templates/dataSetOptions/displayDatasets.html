@@ -58,7 +58,7 @@
                                             </th>
                                             <th class="" tabindex="0" aria-controls="table_real_world_datasets"
                                                 rowspan="1" colspan="1" style="width: 85.6667px;"
-                                                aria-label="values: act     ivate to sort column ascending">Values
+                                                aria-label="values: activate to sort column ascending">Values
                                             </th>
                                             <th class="" tabindex="0" aria-controls="table_real_world_datasets"
                                                 rowspan="1" colspan="1" style="width: 76.667px;"
@@ -87,9 +87,9 @@
                                                         {{ attr.url_text }} <a href=" {{ attr.ref_url }} "> <span><iconify-icon icon="mdi:link-variant"></iconify-icon>
 </span> </a>
                                                 </td>
-                                                <td style="text-align: right">{{ attr.ts_nbr }}</td>
-                                                <td style="text-align: right">{{ attr.values }}</td>
-                                                <td style="text-align: right"> {{ attr.granularity }}</td>
+                                                <td style="text-align: left">{{ attr.ts_nbr }}</td>
+                                                <td style="text-align: left">{{ attr.values }}</td>
+                                                <td style="text-align: left"> {{ attr.granularity }}</td>
                                                 {#                <td style="text-align: right"><a href="{% url 'injection' setname=attr.title %}">Inject and Repair</a></td>#}
                                             </tr>
                                         {% endfor %}

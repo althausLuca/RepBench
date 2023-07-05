@@ -7,7 +7,7 @@ import numpy as np
 
 class SpeedAndAccelerationEstimator(SCREENEstimator):
 
-    def __init__(self, t: int = 50, smax: float = 0.1, smin=None, amax=1, amin=None, ci=None, **kwargs):
+    def __init__(self, t: int = 50, smax: float = 0.1, smin=None, amax: float =1.0, amin=None, ci=None, **kwargs):
 
         """
         param ci need to be a tuple e.g (0.1,0.9)
@@ -32,7 +32,7 @@ class SpeedAndAccelerationEstimator(SCREENEstimator):
         #         "smin": -np.linspace(0.0001, 1, num=20),
 
         return {"smax": np.linspace(2/20, 2, num=20),
-                "amax": np.linspace(1/20, 2, num=20), }
+                "amax": np.linspace(1/20, 4, num=20), }
 
     def repair(self, injected, truth, columns_to_repair, labels=None):
         truth = None

@@ -72,7 +72,7 @@ let repair = (alg) => fetch(repair_url, {
     });
     console.log(repairResponse)
     init_threshold_chart(repairResponse.injected_diff)
-    thresholdChart.updateThreshold(final_reductions[0].threshold)
+    thresholdChart.updateThreshold($("#threshold").val())
     initClassificationReductionChart(repairResponse.injected_series.concat(repairResponse.reductions))
 
     const boxes = document.querySelectorAll('.full-height')

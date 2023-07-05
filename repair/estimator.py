@@ -87,41 +87,18 @@ class Estimator(ABC, BaseEstimator):
         else:
             return scores
 
+    def repair(self, injected : pd.DataFrame, truth : pd.DataFrame, columns_to_repair, labels=None) -> pd.DataFrame:
+        """
+        Main method to repair the injected data
+        Args:
+            injected: injected data to be repaired
+            truth (optional):   original data used by IMR together with the labels
+            columns_to_repair:  columns to repair
+            labels (optional) : labels of known ground truth as used by the IMR algorithm
 
-    # def mae_score(self, X, y, labels):
-    #     predicted = self.predict(X, y, labels)
-    #     flatten_y = y.values.flatten()
-    #     flatten_predicted = predicted.values.flatten()
-    #     weights = np.ones_like(predicted.values).astype(bool)
-    #     weights[labels] = False
-    #     weights = weights.flatten()
-    #     score_ = sm.mean_absolute_error(flatten_y[weights], flatten_predicted[weights])
-    #     return score_
-    #
-    #
-    # def full_rmse(self, X, y, labels):
-    #     predicted = self.predict(X, y, labels)
-    #     flatten_y = y.values.flatten()
-    #     flatten_predicted = predicted.values.flatten()
-    #     weights = np.ones_like(predicted.values).astype(bool)
-    #     weights[labels] = False
-    #     weights = weights.flatten()
-    #     score_ = sm.mean_squared_error(flatten_y[weights], flatten_predicted[weights], squared=False)
-    #     return score_
-    #
-    #
-    # def partial_rmse(self, X, y, labels):
-    #     predicted = self.predict(X, y, labels)
-    #     flatten_y = y.values.flatten()
-    #     flatten_predicted = predicted.values.flatten()
-    #     weights = np.invert(np.isclose(X.values, y.values))
-    #     weights[labels] = False
-    #     weights = weights.flatten()
-    #     score_ = sm.mean_squared_error(flatten_y[weights], flatten_predicted[weights], squared=False)
-    #     return score_
-
-
-    def repair(self, injected, truth, columns_to_repair, labels=None):
+        Returns:
+            repaired data
+        """
         raise NotImplementedError(self)
 
 

@@ -1,23 +1,12 @@
 {% extends "displayDataset/displayDatasetSynthetic.html" %}
 {% load static %}
 
-    <div class="kt-portlet">
-        <div class="kt-portlet__head">
-            <div class="kt-portlet__head-label">
-                <h3 class="kt-portlet__head-title">  Select an Algorithm </h3>
-            </div>
-            <div class="kt-portlet__head-toolbar">
-            </div>
-        </div>
-        <div class="kt-portlet__body" >
-        </div>
 
-    </div>
 {% block aboveChartContent %}
       <div class="kt-portlet kt-portlet__body--fill">
         <div class="kt-portlet__head">
             <div class="kt-portlet__head-label">
-                <h3 class="kt-portlet__head-title"> Select an Algorithm </h3>
+                <h3 class="kt-portlet__head-title"> Truncation  Algorithm </h3>
             </div>
             <div class="kt-portlet__head-toolbar">
             </div>
@@ -39,6 +28,7 @@
                         {% endfor %}
                     </select>
                 </div>
+
                 {% for key, form in alg_forms.items %}
                     {% include 'parts/form.html' with form=form form_id=key style="display:none;" class="run-btn" button_label="RUN!" onclick="repair('"|add:key|add:"')" %}
                 {% endfor %}
@@ -59,14 +49,6 @@
             transform: translate(0, -10px);
         }
     </style>
-
-    {#    <div class="col-md-12">#}
-
-    {#    </div>#}
-
-
-    {#    </div>#}
-
     <div class="kt-portlet">
         <div class="kt-portlet__head">
             <div class="kt-portlet__head-label">
@@ -84,16 +66,6 @@
         </div>
 
     </div>
-
-
-
-{#    <div class="viz-chart-info">#}
-{#        <h2>Reduced Series update with IRLS Algorithm</h2>#}
-{#        Difference of series is dependent on the K and delta. Larger values of K result into better#}
-{#        distinguishable series.#}
-{#    </div>#}
-{#    <div id="classificationReductionChartContainer"></div>#}
-
     <div class="kt-portlet">
     <div class="kt-portlet__head">
         <div class="kt-portlet__head-label">
@@ -110,14 +82,6 @@
     </div>
 
 </div>
-
-{##}
-{#    <div class="viz-chart-info">#}
-{#        <h2>Detection of Anomalies</h2>#}
-{#        Normalized absolute differences between the reduced series and the anomalous series to classify the#}
-{#        anomalies.#}
-{#    </div>#}
-{#    <div id="thresholdChartContainer"></div>#}
 
     <div class="kt-portlet">
     <div class="kt-portlet__head">
@@ -136,17 +100,6 @@
 
 </div>
 
-
-{#    <div class="viz-chart-info">#}
-{#        <h2>Repair of Timeseries</h2>#}
-{#        Replacing the values above the threshold with the values of the iteratively reduced series. First the#}
-{#        values classified as anomalies are linearly interpolated. Then the values are replaced with the#}
-{#        iteratively reduced series.#}
-{#    </div>#}
-{##}
-{##}
-{#    <div id="menu" class="col-md-3">#}
-{#    </div>#}
 
 
     <script type="text/javascript">
@@ -172,7 +125,7 @@
         }
         displayfunc("RPCA")
 
-        const dataTitle = '{{ data_info.title }}'
+        {#const dataTitle = '{{ data_info.title }}'#}
         {#const injection_url = "{% url 'inject_data' setname=setname %}"#}
         const repair_url = "{% url 'alg_inspection_repair' setname=setname %}"
         {#const store_url = "{% url 'store_data' setname=setname %}"#}
