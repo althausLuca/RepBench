@@ -17,8 +17,8 @@ X_train , y_train = recommendation_input_loader.get_train_data()
 X_test , y_test = recommendation_input_loader.get_test_data()
 
 
-print(y_test, "y_test")
-print(y_train, "y_train")
+# print(y_test, "y_test")
+# print(y_train, "y_train")
 
 
 def start_raytunes(request):

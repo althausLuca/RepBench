@@ -1,4 +1,5 @@
-[rpca]
+## config file for the repair algorithm names have to match repair/algorithms_config.py
+[RPCA]
     threshold = 1.2
     classification_truncation = 2
     repair_truncation = 3
@@ -7,7 +8,7 @@
     delta = 1
 
 
-[cdrep]
+[CDREP]
     classification_truncation = 2
     repair_truncation = 3
     threshold = 1.2
@@ -15,12 +16,12 @@
     repair_iter = 10
     delta = 1
 
-[imr]
+[IMR]
      p = 3
      tau = 0.02
      n_max_itr= 20000
 
-[screen]
+[SCREEN]
     t = 3
     smin = -0.1
     smax = +0.1
