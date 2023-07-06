@@ -1,8 +1,20 @@
 import numpy as np
 
 from django import forms
-from repair.algorithms_config import SPEEDandAcceleration, IMR, SCREEN, RPCA, CDREP
+from repair.algorithms_config import SPEEDandAcceleration, IMR, SCREEN, RPCA, CDREP , ALGORITHM_TYPES
 from RepBenchWeb.forms.utils import hiddenField
+
+ALGORITHM_CHOICES = [(a, a) for a in ALGORITHM_TYPES]
+
+class AlgorithmsForm(forms.Form):
+    algorithms = forms.MultipleChoiceField(label='Algorithms',
+                              initial=[choice[1] for choice in ALGORITHM_CHOICES],
+                              widget=forms.CheckboxSelectMultiple(
+                                  attrs={'class': 'multi-checkbox', "name": 'algorithms[]'}),
+                              choices=ALGORITHM_CHOICES
+                              )
+
+
 
 
 class RPCAparamForm(forms.Form):

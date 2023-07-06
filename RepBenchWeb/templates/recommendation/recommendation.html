@@ -40,7 +40,6 @@
         }
     </style>
 
-    {% include "recommendation/recommendation-script.html" %}
 
     <div class="row">
         {% block recommendation_computation %}
@@ -48,9 +47,10 @@
                 {% include 'recommendation/flaml-example.html' %}
             </div>
         {% endblock %}
+    {% include "recommendation/recommendation-script.html" %}
 
         {#        <div id="below-chart" class="row col-md-12">#}
-        <div id="main-chart" class="col-md-6 disable-mouse-events">
+        <div id="main-chart" class="col-md-6 disable-mouse-events"> {# disable-mouse-events #}
             <div class="kt-portlet">
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label">
@@ -59,7 +59,7 @@
                                 <form id="select-dataset" action="" onsubmit="return false">
                                     {% csrf_token %}
                                     {% for field in  injected_datasets_form.visible_fields %}
-                                        {{ field }}
+                                         {{ field }}
                                     {% endfor %}
                                 </form>
                                 <button class="btn btn-primary" style="margin-left:10px"

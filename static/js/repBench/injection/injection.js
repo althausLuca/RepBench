@@ -33,7 +33,6 @@ const inject = function (injectionURL) {
                 }
 
                 chartManager.addSeries(s, true, "injected")
-                s["dashStyle"] = 'ShortDot'
             })
         )
 

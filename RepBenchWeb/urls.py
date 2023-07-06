@@ -18,6 +18,7 @@ from RepBenchWeb.views import (
 from RepBenchWeb.views import dimensionality_reduction_view, synthetic_dataset_view, data_loader
 from RepBenchWeb.views.recommendation.recommendation_tasks import FlamlTask
 from RepBenchWeb.views.optimization.optimization_tasks import SuccesiveHalvingTask, BayesianOptimisationTask
+from RepBenchWeb.views.repair.repair_comparison import RepairAndCompare
 
 app_name = 'RepBenchWeb'
 
@@ -39,8 +40,9 @@ urlpatterns = [
     path('repairDataset/<str:type>', repair_view.RepairView.repair_datasets, name='repair_datasets'),
 
     ## repair view
-    path('repair', repair_view.RepairView.as_view(), name='repair'),
+    # path('repair', repair_view.RepairView.as_view(), name='repair'),
     path('repair/<str:setname>', repair_view.RepairView.as_view(), name='repair'),
+    path('inject-compare', RepairAndCompare.as_view(), name='inject_and_compare'),
 
     path('injection/<str:setname>', injection_view.InjectionView.as_view(), name='injectAndRepair'),
 
@@ -50,8 +52,6 @@ urlpatterns = [
 
     ##  repair data
     path('repair_data/<str:setname>', repair_view.RepairView.repair_data, name='repair_data'),
-
-
 
     # optimization
     path('optimization_datasets',datasets_display.display_optimization_datasets,name="optimization_datasets"),
@@ -96,7 +96,7 @@ urlpatterns = [
 
     # path('user_recommendation', file_upload_view.upload_files, name="user_recommendation"),
     path('userData/', file_upload_view.upload_files, name='upload_files'),
-    path('upload', data_upload_view.UploadView.as_view(), name='data_upload'),
+    path('upload', data_upload_view.UploadView.as_view(), name='upload'),
 
     path('flaml_example',FlamlTask.init_task, name='start_flaml'),
     path('raytunes_example',recommendation_example_view.start_raytunes, name='start_raytunes'),

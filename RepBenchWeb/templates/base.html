@@ -110,6 +110,8 @@
             });
 
         </script>
+        {% include "play-buttons-script.html" %}
+        {%  include "displayDataset/download.html" %}
     {% endblock %}
 
 </head>
@@ -159,7 +161,7 @@
                                 <li class="kt-menu__item kt-menu__item--submenu kt-menu__item--rel"
                                     data-ktmenu-submenu-toggle="hover" aria-haspopup="true"><a href="javascript:;"
                                                                                                class="kt-menu__link kt-menu__toggle"><span
-                                        class="kt-menu__link-text">Display</span></a>
+                                        class="kt-menu__link-text">Datasets</span></a>
                                     <div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--left">
                                         <ul class="kt-menu__subnav">
                                             <li class="kt-menu__item " aria-haspopup="true"><a
@@ -172,6 +174,12 @@
                                                     class="kt-menu__link "><i
                                                     class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span
                                                     class="kt-menu__link-text">Synthetic Datasets</span></a></li>
+
+                                            <li class="kt-menu__item " aria-haspopup="true"><a
+                                                    href="{% url 'upload'  %}"
+                                                    class="kt-menu__link"><i
+                                                    class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span
+                                                    class="kt-menu__link-text">New</span></a></li>
                                         </ul>
                                     </div>
                                 </li>
@@ -185,13 +193,13 @@
                                                     href="{% url 'display_datasets' option="Repair" %}"
                                                     class="kt-menu__link "><i
                                                     class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span
-                                                    class="kt-menu__link-text">Inject and Repair Real World  Datasets</span></a>
+                                                    class="kt-menu__link-text">Inject & Repair</span></a>
                                             </li>
                                             <li class="kt-menu__item " aria-haspopup="true"><a
-                                                    href="{% url 'display_datasets' option="Repair" %}"
+                                                    href="{% url 'inject_and_compare' %}"
                                                     class="kt-menu__link "><i
                                                     class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span
-                                                    class="kt-menu__link-text">Synthetic Datasets</span></a></li>
+                                                    class="kt-menu__link-text">Compare Repair</span></a></li>
                                         </ul>
                                     </div>
                                 </li>
@@ -205,31 +213,31 @@
                                                     href="{% url 'recommendation' type="FLAML" %}"
                                                     class="kt-menu__link "><i
                                                     class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span
-                                                    class="kt-menu__link-text">FLAML Recommendation</span></a></li>
+                                                    class="kt-menu__link-text">FLAML Model Selection</span></a></li>
                                             <li class="kt-menu__item " aria-haspopup="true"><a
                                                     href="{% url 'recommendation' type="RayTune" %}"
                                                     class="kt-menu__link "><i
                                                     class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span
-                                                    class="kt-menu__link-text">RayTune Recommendation</span></a></li>
+                                                    class="kt-menu__link-text">Ray Tune Model Selection</span></a></li>
                                         </ul>
                                     </div>
                                 </li>
                                 <li class="kt-menu__item kt-menu__item--submenu kt-menu__item--rel"
                                     data-ktmenu-submenu-toggle="hover" aria-haspopup="true"><a href="javascript:;"
                                                                                                class="kt-menu__link kt-menu__toggle"><span
-                                        class="kt-menu__link-text">Algorithm Analysis</span></a>
+                                        class="kt-menu__link-text">Hyperparameters</span></a>
                                     <div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--left">
                                         <ul class="kt-menu__subnav">
                                             <li class="kt-menu__item " aria-haspopup="true"><a
                                                     href="{% url 'optimization_datasets' %}"
                                                     class="kt-menu__link "><i
                                                     class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span
-                                                    class="kt-menu__link-text">Parameter Optimization</span></a></li>
+                                                    class="kt-menu__link-text">Parameter Calibration</span></a></li>
                                             <li class="kt-menu__item " aria-haspopup="true"><a
                                                     href="{% url 'dim_reduction_datasets' %}"
                                                     class="kt-menu__link "><i
                                                     class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span
-                                                    class="kt-menu__link-text">Matrix Truncation</span></a></li>
+                                                    class="kt-menu__link-text">Parameter Impact</span></a></li>
                                         </ul>
                                     </div>
                                 </li>

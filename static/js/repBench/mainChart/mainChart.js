@@ -108,6 +108,7 @@ const createEmptyChart = function (length, container = 'highcharts_container') {
     length = parseInt(length)
     if (length > 1000) length = 1000
     length =  timeInterval * 1000 * length
+
     // chartManager.setTimeInterval(timeInterval*1000)
     // let series = [{data:[] , visible:false, showInLegend: false}]
     let series = [{
@@ -116,6 +117,7 @@ const createEmptyChart = function (length, container = 'highcharts_container') {
         showInLegend: false,
         visible: false
     }]
+    chartManager.setPointStartAndTimeInterval(Date.UTC(2010, 0, 1), timeInterval*1000)
     initMainChart(series)
     mainChart.showLoading()
 }
@@ -131,8 +133,8 @@ const initMainChart = function (series = {}, addSeriesToChartManager = false, co
         },
         plotOptions: {
             series: {
-                pointStart: Date.UTC(2010, 0, 1),
-                pointInterval: timeInterval* 1000 // one day
+                pointStart: chartManager.pointStart,
+                pointInterval: chartManager.pointInterval // one day
             }
         },
         legend: {
@@ -172,10 +174,6 @@ const initMainChart = function (series = {}, addSeriesToChartManager = false, co
                 position: 'relative',
                 "font-family": "Arial"
             },
-            // inputDateParser: function (value) {
-            //     value = value.split(/[:\.]/);
-            //     return 1
-            // },
             enabled: true,
             inputEnabled: false,
             // inputDateFormat: '%y',

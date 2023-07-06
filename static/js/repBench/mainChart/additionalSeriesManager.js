@@ -11,6 +11,41 @@ class ChartManager {
             '#91e8e1', '#7cb5ec', '#434348', '#90ed7d', '#f7a35c', '#8085e9'];
         this.repairedColors = ['#ff7f0e', '#1f77b4', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f',
             '#bcbd22', '#17becf', '#2ca02c', '#d62728', '#9467bd', '#e377c2', '#7f7f7f'];
+
+        this.pointStart = Date.UTC(2010, 0, 1);
+        this.pointInterval = 1000
+    }
+
+    setPointStartAndTimeInterval(pointSTart, pointInterval) {
+        this.pointStart = pointSTart
+        this.pointInterval = pointInterval
+    }
+
+    dotGroundTruth() {
+        // this.injectedSeries.forEach(inj => {
+        //     let zones = []
+        //     let inArea = false
+        //
+        //     // create zones
+        //     inj.originalData.forEach((d, i) => {
+        //         if (d === null && inArea) { //leaving anomaly
+        //             zones.push({
+        //                 value: this.pointStart + Math.max(i - 1, 0) * chartManager.pointInterval,
+        //                 dashStyle: "dot"
+        //             })
+        //             inArea = false
+        //         }
+        //         if (d !== null && !inArea) { //entering anomaly
+        //             zones.push({
+        //                 value: this.pointStart + i * this.pointInterval,
+        //                 // dashStyle: "solid",
+        //             })
+        //             inArea = true
+        //         }
+        //     })
+        //     // console.log(zones)
+        //     inj.chartSeriesObj.linkedParent.update({zones: zones, zoneAxis: 'x'})
+        // })
     }
 
     getColor(type) {
@@ -21,11 +56,6 @@ class ChartManager {
             return "red"
         }
         return this.colors[this.originalSeries.length % this.colors.length];
-    }
-
-    setTimeInterval(timeStepMS, timeStart) {
-        // this.timeInterval = timeStepMS;
-        // this.timeStart = timeStart
     }
 
     getMinMaxIndices() {
@@ -40,15 +70,14 @@ class ChartManager {
 
     getSeriesChartData(ser) {
         let chartSeriesData = ser._chartSeriesData
-        chartSeriesData.color = ser.color
+        // chartSeriesData.linkedTo = ser.linkedTo
         chartSeriesData.data = this.normalized ? [...ser.normData] : [...ser.originalData];
         return chartSeriesData
     }
 
     addSeries(series, addToChart = true, series_type = "original", merge_with = null) {
+        this.removeSeries(series.id)
         series_type = series.series_type ? series.series_type : series_type
-
-
         let ser = {
             id: series.id,
             originalData: series.data.map(s => s),
@@ -79,6 +108,10 @@ class ChartManager {
             ser.chartSeriesObj = mainChart.addSeries(this.getSeriesChartData(ser));
             // ser.chartSeriesData = null;
         }
+        try {
+            this.dotGroundTruth()
+        } catch (e) {
+        }
         return ser;
     }
 
@@ -106,10 +139,12 @@ class ChartManager {
     }
 
     hideNoneInjectedSeries() {
-        let seriesNamesToHide = this.injectedSeries.map(s=>s._chartSeriesData.linkedTo)
+        let seriesNamesToHide = this.injectedSeries.map(s => s._chartSeriesData.linkedTo)
         let seriesToHide = mainChart.series.filter(s => !seriesNamesToHide.includes(s.userOptions.name) &&
-            this.originalSeries.map(s=>s.name).includes(s.userOptions.name))
-        seriesToHide.forEach(s => { s.hide() })
+            this.originalSeries.map(s => s.name).includes(s.userOptions.name))
+        seriesToHide.forEach(s => {
+            s.hide()
+        })
     }
 
     removeSeries(id) {
@@ -117,7 +152,10 @@ class ChartManager {
         this.repairedSeries = this.repairedSeries.filter(s => s._chartSeriesData.id !== id)
         this.reducedSeries = this.reducedSeries.filter(s => s._chartSeriesData.id !== id)
         this.originalSeries = this.originalSeries.filter(s => s._chartSeriesData.id !== id)
-        mainChart.get(id).remove();
+        try {
+            mainChart.get(id).remove();
+        } catch (err) {
+        }
     }
 
     removeSeriesByName(name) {
@@ -125,6 +163,7 @@ class ChartManager {
         this.repairedSeries = this.repairedSeries.filter(s => s._chartSeriesData.name !== name)
         this.reducedSeries = this.reducedSeries.filter(s => s._chartSeriesData.name !== name)
         this.originalSeries = this.originalSeries.filter(s => s._chartSeriesData.name !== name)
+
     }
 
     _getChartXAxis() {
@@ -150,18 +189,30 @@ class ChartManager {
             })
         }
         let allChartSeries = this.getAllSeries().map(s => this.getSeriesChartData(s))
+        try {
+            allChartSeries.forEach(s => {
+                s.isVisible = mainChart.get(s.id).isVisible
+            })
+
+        } catch (e) {
+        }
 
         const axis0isDefined = this._getChartXAxis()
+
         initMainChart(allChartSeries)
         if (axis0isDefined) {
             mainChart.xAxis[0].setExtremes(axis0isDefined.min, axis0isDefined.max)
         }
+        this.getAllSeries().forEach((s, i) => {
+            s.chartSeriesObj = mainChart.series[i]
+        })
+
 
         if (typeof adjustLayout === 'function') {
             adjustLayout()
         }
+        this.dotGroundTruth()
     }
-
 
     setZscore() {
         this.normalized = true
@@ -173,6 +224,36 @@ class ChartManager {
         this.resetSeries()
     }
 
+
+    downloadOriginalSeries() {
+        var filename = "original_series.csv";
+        var result = this.originalSeries.reduce((acc, original_series) => {
+            var {name, data} = this.getSeriesChartData(original_series);
+            acc[name] = data;
+            return acc;
+        }, {});
+
+        download(result,filename)
+    }
+    downloadInjectedSeries() {
+        var filename = "injected_series.csv";
+        var result = this.injectedSeries.reduce((acc, injected_series) => {
+            var {name, data} = this.getSeriesChartData(injected_series);
+            acc[name] = data;
+            return acc;
+        }, {});
+        download(result,filename)
+    }
+
+    downloadRepairedSeries() {
+        var filename = "repaired_series.csv";
+        var result = this.repairedSeries.reduce((acc, repaired_series) => {
+            var {name, data} = this.getSeriesChartData(repaired_series);
+            acc[name] = data;
+            return acc;
+        }, {});
+        download(result,filename)
+    }
 
 }
 

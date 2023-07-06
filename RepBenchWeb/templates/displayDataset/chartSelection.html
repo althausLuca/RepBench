@@ -1,0 +1,84 @@
+{% load static %}
+
+<div id="main-chart col-md-10""> {# disable-mouse-events #}
+<div class="kt-portlet">
+    <div class="kt-portlet__head">
+        <div class="kt-portlet__head-label">
+            <h3 class="kt-portlet__head-title">
+                <row style="display: flex; align-items: center; justify-content: flex-end;">
+                    <form id="select-dataset" action="" onsubmit="return false">
+                        {% csrf_token %}
+                        {% for field in dataset_form.visible_fields %}
+                            {{ field }}
+                        {% endfor %}
+                    </form>
+                </row>
+            </h3>
+        </div>
+        <div class="kt-portlet__head-toolbar">
+            <div id="highcharts_head_actions" class="kt-portlet__head-actions">
+                <div class="dropdown dropdown-inline">
+                    {% include "displayDataset/chartButton.html" %}
+                     <a id="reset_chart_btn" class="btn btn-outline-brand btn-bold btn-sm"
+                       onclick="chartManager.clearAllSeries();return false;">Reset</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="kt-portlet__body kt-portlet__body--fit">
+    </div>
+    <script src="{% static 'js/lib/binarytransport/jquery.binarytransport.js' %}"
+            type="text/javascript"></script>
+    <script src="http://code.highcharts.com/stock/highstock.js"></script>
+    <script src="http://code.highcharts.com/maps/modules/map.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+
+    <div id="highcharts_container"></div>
+
+
+    <script>
+        let datasetName = "{{ set_name }}";
+        let chart_title = "{{ data_title }}"
+        const timeInterval = "{{ 100000 }}";
+    </script>
+
+    <script src="{% static 'js/repBench/mainChart/additionalSeriesManager.js' %}"
+            type="text/javascript"></script>
+
+
+    <script src="{% static 'js/repBench/mainChart/mainChart.js' %}" type="text/javascript"></script>
+    {#        <script>#}
+    {#            chartHeight = 560;#}
+    {#        </script>#}
+    <!--begin: Highcharts -->
+    {#                {% include 'parts/MainChart.html' with chartHeight=400 %}#}
+    <!--end: Highcharts -->
+</div>
+</div>
+
+<script>
+    var selectElement = document.getElementById("selected_dataset_title");
+
+    function updateChart() {
+        var selectedDataset = document.getElementById("selected_dataset_title").value;
+
+        {#let data_url = '{% url data_fetch_url_name setname=setname  %}' + '?RepBenchWeb={{ RepBenchWeb|default_if_none:5 }}'#}
+
+        // Construct the data URL with the selected dataset value
+        var dataUrl = '{% url 'get_data' setname="placeholder" %}'.replace("placeholder", encodeURIComponent(selectedDataset));
+
+        // Fetch the main chart data using the constructed data URL
+        createEmptyChart(1000);
+        var mainChartFetchPromise = fetchMainChartData(dataUrl);
+    }
+
+    selectElement.addEventListener("change", function (event) {
+        event.preventDefault(); // Prevent the default form submission behavior
+
+        // Submit the form
+        updateChart()
+    });
+    updateChart()
+</script>

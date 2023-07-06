@@ -1,34 +1,36 @@
 <script>
     const recommendationHandler = {
         init: function (option, start_url, retrieve_url) {
-            this.flaml_response_data = []
-            this.flaml_response_iter = 0;
-            this.flaml_series = [];
+           this.data = []
+            this.iteration = 0;
             this.task_id = '{{csrf_token}}'
             this.playing = false
             this.computing = false
-            this.intervalTimer = 800
+            this.intervalTimer = 1000
             this.option = option//flaml or ray
             this.start_url = start_url
             this.retrieve_url = retrieve_url
+            this.timeoutID = null
             RecommendationChart.init()
 
         },
-        startTuning: function () {
+        start: function () {
             RecommendationChart.init()
-            this.playing = false
-            this.flaml_response_iter = 0;
-            this.flaml_response_data = [];
+            this.iteration = 0;
+            this.data = [];
+            this.data = [];
             this.flaml_series = []
+
+            if(this.timeoutID != null) {
+                clearTimeout(this.timeoutID); // Clear the ongoing timeout/iteration
+            }
 
             let queryString = $('#recommendation_settings_form').serialize();
             const params = new URLSearchParams(queryString);
             const estimatorList = params.getAll("estimator_list");
-            console.log(estimatorList)
             queryString += '&estimator_list=' + estimatorList;
 
-            document.getElementById("start-button-right-text").innerHTML = "Starting " + this.option;
-            {#initFlamlChart([]);#}
+            document.getElementById("play-recommendation-info-text").innerHTML = "Starting " + this.option;
             RecommendationChart.chart.showLoading()
 
             $.ajax({
@@ -41,12 +43,10 @@
                     // Display message that Flaml is running
                     // Call function to retrieve Flaml results periodically
                     // Create chart
-                    document.getElementById("start-button-right-text").innerHTML = "Starting " + this.option + "..."
-                    this.getRecommendationResults();
+                    document.getElementById("play-recommendation-info-text").innerHTML = "Starting " + this.option + "..."
+                    this.getResults();
                     this.iterateData();
                     RecommendationChart.chart.hideLoading()
-                    this.playing = true
-
                     const parameterNames = {
                         "RandomForest": ["n_estimators", "max_features", "max_leaf_nodes"],
                         "ExtraTrees": ["n_estimators", "max_features", "max_leaf_nodes"],
@@ -54,7 +54,9 @@
                         "LGBM": ["n_estimators", "num_leaves", "learning_rate", "min_child_samples"],
                         "XGBoostSklearn": ["n_estimators", "max_depth", "learning_rate", "min_child_weight", "reg_alpha", "reg_lambda"]
                     };
-                    parameterTable.init(parameterNames);
+                    if(this.option !== "ray"){
+                                            parameterTable.init(parameterNames);
+                    }
                 },
                 error: function (response) {
                     console.log(response);
@@ -63,7 +65,7 @@
 
         },
 
-        getRecommendationResults: function () {
+        getResults: function () {
             $.ajax({
                 type: 'POST',
                 url: this.retrieve_url,
@@ -71,17 +73,15 @@
                 success: response => {
                     {#console.log("EYYY", response);#}
                     if (response.status === 'running') {
-                        this.flaml_response_data = response.data;
+                        this.data = response.data;
                         RecommendationChart.chart.redraw();
                         setTimeout(() => {
-                            this.getRecommendationResults();  // Pass the task_id again in the recursive call
+                            this.getResults();  // Pass the task_id again in the recursive call
                         }, 1000);
                     } else if (response.status === 'done') {
                         console.log("DONE");
-                        this.playing = false
 
                         const elements = document.querySelectorAll('.disable-mouse-events');
-                        console.log("ELEMENTS TO DISABLE")
                         elements.forEach(function (element) {
                             element.classList.remove('disable-mouse-events');
                             element.classList.add('disable-mouse-events-removed')
@@ -104,8 +104,8 @@
 
         iterateData: function () {
             console.log("iterate")
-            if (this.flaml_response_iter < this.flaml_response_data.length && this.playing) {
-                let currentData = this.flaml_response_data[this.flaml_response_iter];
+            if (this.iteration < this.data.length && this.playing) {
+                let currentData = this.data[this.iteration];
                 console.log(currentData, "CURRENT DATA")
 
                 let score = currentData.score;
@@ -113,26 +113,29 @@
                 let estimator = currentData.estimator
                 let parameters = currentData.parameters
                 let runtime = currentData.runtime
-                document.getElementById("start-button-right-text").innerHTML = "Iter:" + this.flaml_response_iter +
+                document.getElementById("play-recommendation-info-text").innerHTML = "Iter:" + this.iteration +
                     "| Estimator: " + estimator +
                     " | " + runtime + "s" +
                     " | Score: " + roundedScore;
 
-                this.flaml_response_iter = this.flaml_response_iter + 1;
-                this.flaml_series.push({y: score, x: this.flaml_response_iter, name: estimator})
-                RecommendationChart.addData(score, estimator, this.flaml_response_iter, parameters);
+                this.iteration = this.iteration + 1;
+                this.flaml_series.push({y: score, x: this.iteration, name: estimator})
+                RecommendationChart.addData(score, estimator, this.iteration, parameters);
                 parameterTable.addData(roundedScore, estimator, parameters);
                 {#addDataToFlamlChart(score, currentData.estimator , 1);#}
             } else {
                 if (this.playing) {
-                    console.log("Waiting for more data..." + this.flaml_response_iter);
+                    console.log("Waiting for more data..." + this.iteration);
                 }
             }
 
-            setTimeout(this.iterateData.bind(this), this.intervalTimer);
+            this.timeoutID = setTimeout(this.iterateData.bind(this), this.intervalTimer);
         }
 
     }
+
+    registerPlayAndReloadBtns("recommendation",recommendationHandler)
+
 
 
     const parameterTable = {
@@ -318,40 +321,40 @@
 
 
     $(document).ready(function () {
-        $('#play-recommendation').on('click', function (event) {
-            // Prevent form submission if it's a submit button
+    {#    $('#play-recommendation').on('click', function (event) {#}
+    {#        // Prevent form submission if it's a submit button#}
             {#event.preventDefault();#}
-            $(this).find('i').toggle();
-            recommendationHandler.playing = !recommendationHandler.playing
-        });
-
-
-        $('#start-form').on('submit', function (event) {
-            event.preventDefault();
-            if (recommendationHandler.computing) {
-                return;
-            } else {
-                recommendationHandler.computing = true;
-                recommendationHandler.startTuning()
-            }
-        });
-
-
-        $('#reload').on('click', function (event) {
-            // Prevent form submission if it's a submit button
-            event.preventDefault();
-
-            if (!recommendationHandler.playing && recommendationHandler.computing) {
-                recommendationHandler.playing = true
-                $('#play-recommendation').find('i').toggle();
-            }
-
-            if (recommendationHandler.computing) {
-                recommendationHandler.startTuning()
-            }
-
-
-        });
+    {#        $(this).find('i').toggle();#}
+    {#        recommendationHandler.playing = !recommendationHandler.playing#}
+    {#    });#}
+    {##}
+    {##}
+    {#    $('#start-form').on('submit', function (event) {#}
+    {#        event.preventDefault();#}
+    {#        if (recommendationHandler.computing) {#}
+    {#            return;#}
+    {#        } else {#}
+    {#            recommendationHandler.computing = true;#}
+    {#            recommendationHandler.start()#}
+    {#        }#}
+    {#    });#}
+    {##}
+    {##}
+    {#    $('#reload').on('click', function (event) {#}
+    {#        // Prevent form submission if it's a submit button#}
+    {#        event.preventDefault();#}
+    {##}
+    {#        if (!recommendationHandler.playing && recommendationHandler.computing) {#}
+    {#            recommendationHandler.playing = true#}
+    {#            $('#play-recommendation').find('i').toggle();#}
+    {#        }#}
+    {##}
+    {#        if (recommendationHandler.computing) {#}
+    {#            recommendationHandler.start()#}
+    {#        }#}
+    {##}
+    {##}
+    {#    });#}
 
 
         //recommendation table settings

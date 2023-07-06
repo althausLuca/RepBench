@@ -1,0 +1,401 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-10">
+            {% include "displayDataset/chartSelection.html" %}
+        </div>
+        <div class="col-md-2">
+            <div id="form_portlets">
+                <div id="injection_portlet" class="kt-portlet" data-ktportlet="true">
+                    <div class="kt-portlet__head">
+                        <div class="kt-portlet__head-label">
+                            <h3 class="kt-portlet__head-title">Anomaly Injection</h3>
+                        </div>
+                        <div class="kt-portlet__head-toolbar">
+                        </div>
+                    </div>
+                    <div class="kt-portlet__body kt-portlet__body--fit">
+                        <form id="injectionForm" name="injectionForm_name" class="kt-form"
+                                {#                                  onsubmit="inject('{% url 'inject_data' setname=setname %}'); return false;"#}
+                              enctype="multipart/form-data"
+                        >
+                            {% csrf_token %}
+                            <div class="kt-portlet__body">
+                                {% for field in injection_form.visible_fields %}
+                                    <div class="form-group">
+                                        {{ field.label_tag }}
+                                        {% if field.field.widget.attrs.myInfo %}
+                                            <a tabindex="0" class="btn" role="button" data-toggle="kt-popover"
+                                               data-placement="top" data-trigger="focus"
+                                               data-content="{{ field.field.widget.attrs.myInfo }}"
+                                               data-original-title=""
+                                               title=""><i
+                                                    class="mdi mdi-information-outline mdi-18px"></i></a>
+                                        {% endif %}
+                                        {{ field }}
+                                    </div>
+                                {% endfor %}
+                                <!-- Invisible fields -->
+                                {% for field in invisible_fields %}
+                                    {{ field }}
+                                {% endfor %}
+                                <div class="kt-form__actions">
+                                    <button id="injection-button" type="submit" class="btn btn-primary">Inject
+                                    </button>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div id="form_portlets">
+                <div id="repair_portlet" class="kt-portlet" data-ktportlet="true">
+                    <div class="kt-portlet__head">
+                        <div class="kt-portlet__head-label">
+                            <h3 class="kt-portlet__head-title">Repair</h3>
+                        </div>
+                        <div class="kt-portlet__head-toolbar">
+                        </div>
+                    </div>
+                    <div class="kt-portlet__body kt-portlet__body--fit">
+                        <form id="repairForm" name="repairForm_name" class="kt-form"
+                                {#                                  onsubmit="inject('{% url 'inject_data' setname=setname %}'); return false;"#}
+                              enctype="multipart/form-data"
+                        >
+                            {% csrf_token %}
+                            <div class="kt-portlet__body">
+                                {% for field in algorithm_form.visible_fields %}
+                                    <div class="form-group">
+                                        {#                                        {{ field.label_tag }}#}
+                                        {% if field.field.widget.attrs.myInfo %}
+                                            <a tabindex="0" class="btn" role="button" data-toggle="kt-popover"
+                                               data-placement="top" data-trigger="focus"
+                                               data-content="{{ field.field.widget.attrs.myInfo }}"
+                                               data-original-title=""
+                                               title=""><i
+                                                    class="mdi mdi-information-outline mdi-18px"></i></a>
+                                        {% endif %}
+                                        {{ field }}
+                                    </div>
+                                {% endfor %}
+                                <!-- Invisible fields -->
+                                {% for field in invisible_fields %}
+                                    {{ field }}
+                                {% endfor %}
+                                <div class="kt-form__actions">
+                                    <button id="repair-button" type="submit" class="btn btn-primary">Repair
+                                    </button>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <script>
+        let repair_url = null
+        let injection_url = null
+        let dataTitle = null
+        let datasets_columns = {{ datasets_columns|safe }};
+        let updateDatsetsColumns = function () {
+            let selected_dataset = selectElement.options[selectElement.selectedIndex].value;
+            let selected_dataset_columns = datasets_columns[selected_dataset];
+            let selectDataSet = document.getElementById("id_data_columns"); // the <select> element
+            selectDataSet.innerHTML = "";
+            for (let i = 0; i < selected_dataset_columns.length; i++) {
+                let opt = document.createElement('option');
+                opt.value = selected_dataset_columns[i];
+                opt.innerHTML = selected_dataset_columns[i];
+                selectDataSet.appendChild(opt);
+            }
+            repair_url = '{% url 'repair_data' setname="placeholder" %}'.replace("placeholder", encodeURIComponent(selected_dataset));
+            injection_url = '{% url 'inject_data' setname="placeholder" %}'.replace("placeholder", encodeURIComponent(selected_dataset));
+            dataTitle = selected_dataset;
+        }
+
+        var selectElement = document.getElementById("selected_dataset_title");
+        selectElement.addEventListener("change", function () {
+            updateDatsetsColumns();
+        })
+        updateDatsetsColumns()
+
+        let injectionButton = document.getElementById("injection-button");
+        injectionButton.addEventListener("click", function (event) {
+            event.preventDefault();
+            console.log("inject");
+            console.log(injection_url)
+            inject(injection_url);
+        })
+
+
+        let repairButton = document.getElementById("repair-button");
+        repairButton.addEventListener("click", function (event) {
+            event.preventDefault();
+            let repairForm = document.getElementById("repairForm");
+            let repairFormData = new FormData(repairForm)
+            // Get all the checkbox elements
+            var checkboxes = document.getElementsByName('algorithms');
+            // Create an array to store the selected values
+            var selectedValues = [];
+            // Loop through each checkbox
+            for (var i = 0; i < checkboxes.length; i++) {
+                // Check if the checkbox is checked
+                if (checkboxes[i].checked) {
+                    // Add the value to the selectedValues array
+                    selectedValues.push(checkboxes[i].value);
+                }
+            }
+            console.log(selectedValues)
+            console.log("repair url", repair_url)
+            mainChart.showLoading()
+            repairFormData.append("injected_series", JSON.stringify(chartManager.get_injected_norm_data()))
+            repairFormData.append('csrfmiddlewaretoken', csrftoken)
+            repairFormData.append("distinct_ids", 1)
+            chartManager.hideNoneInjectedSeries()
+            selectedValues.forEach(algorithm => {
+                    repairFormData.append("alg_type", algorithm)
+                    fetch(repair_url, {
+                        method: 'POST',
+                        body: repairFormData,
+                    }).then(response => response.json()).then(responseJson => {
+                        console.log(responseJson)
+                        const repSeries = responseJson.repaired_series
+                        const scores = responseJson.scores
+                        repairResult = repSeries
+
+
+                        const chartRepairSeries = Object.keys(repSeries).map(key => {
+                            let repair = repSeries[key]
+                            console.log(repair)
+                            return chartManager.addSeries(repair, true, "repair")
+                        })
+                    }).finally(() => {
+                            mainChart.hideLoading()
+                        }
+                    )
+                }
+            )
+        })
+    </script>
+
+
+    <script src="{% static 'js/repBench/injection/injection.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/repBench/repair/repair.js' %}" type="text/javascript"></script>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+{#{% block css %}#}
+{#    {{ block.super }}#}
+{#    <link href="{% static 'css/lib/highcharts/highcharts.css' %}" rel="stylesheet" type="text/css"/>#}
+{#    <link href="{% static 'css/custom/highcharts.css' %}" rel="stylesheet" type="text/css"/>#}
+{#    <link href="{% static 'css/lib/nouislider/nouislider.min.css' %}" rel="stylesheet" type="text/css"/>#}
+{#    <link href="{% static 'css/lib/roundslider/roundslider.min.css' %}" rel="stylesheet" type="text/css"/>#}
+{#    <link href="{% static 'css/lib/ion-rangeslider/ion.rangeSlider.min.css' %}" rel="stylesheet" type="text/css"/>#}
+{#{% endblock %}#}
+
+
+<div class="row">
+    <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
+        <div id="chart-portlet" class="kt-portlet">
+            <div class="kt-portlet__head">
+                <div class="kt-portlet__head-label">
+                    <h3 class="kt-portlet__head-title"><h2> {{ setname }} </h2></h3>
+                </div>
+                <div class="kt-portlet__head-toolbar">
+                    <div id="highcharts_head_actions" class="kt-portlet__head-actions">
+                        <a id="reset_chart_btn" class="btn btn-outline-brand btn-bold btn-sm"
+                           onclick="chartManager.clearAllSeries();return false;">Reset</a>
+                        <div class="dropdown dropdown-inline">
+                            <a href="#" class="btn btn-outline-brand btn-icon btn-sm" data-toggle="dropdown"
+                               aria-haspopup="true" aria-expanded="false">
+                                <i class="mdi mdi-18px mdi-dots-horizontal"></i>
+                            </a>
+
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <ul class="kt-nav">
+                                    <li class="kt-nav__section kt-nav__section--first">
+                                        <span class="kt-nav__section-text">Load Data</span>
+                                    </li>
+                                    <li class="kt-nav__item">
+                                        <a id="raw_btn" onclick="chartManager.setOriginal(); return false;"
+                                           class="kt-nav__link">
+                                            <span class="kt-nav__link-text">Raw</span>
+                                        </a>
+                                    </li>
+                                    <li class="kt-nav__item">
+                                        <a id="zscore_btn" onclick="chartManager.setZscore(); return false;"
+                                           class="kt-nav__link">
+                                            <span class="kt-nav__link-text">Normalized</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="kt-portlet__body kt-portlet__body--fit">
+                <!--begin: Highcharts -->
+                {% include 'displayDataset/MainChart.html' %}
+                <!--end: Highcharts -->
+            </div>
+        </div>
+
+
+        <div id="detection_portlets" class="row"></div>
+        <!--end: Inner Row -->
+    </div>
+    <!--end: Inner Row -->
+
+    <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+        <div class="row">
+            <div id="form_portlets" class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div id="injection_portlet" class="kt-portlet" data-ktportlet="true">
+                    <div class="kt-portlet__head">
+                        <div class="kt-portlet__head-label">
+                            <h3 class="kt-portlet__head-title">Anomaly Injection</h3>
+                        </div>
+                        <div class="kt-portlet__head-toolbar">
+                        </div>
+                    </div>
+                    <div class="kt-portlet__body kt-portlet__body--fit">
+                        <form id="injectionForm" name="injectionForm_name" class="kt-form"
+                              onsubmit="inject('{% url 'inject_data' setname=setname %}'); return false;"
+                              enctype="multipart/form-data"
+                        >
+                            {% csrf_token %}
+                            <div class="kt-portlet__body">
+                                {% for field in injection_form.visible_fields %}
+                                    <div class="form-group">
+                                        {{ field.label_tag }}
+                                        {% if field.field.widget.attrs.myInfo %}
+                                            <a tabindex="0" class="btn" role="button" data-toggle="kt-popover"
+                                               data-placement="top" data-trigger="focus"
+                                               data-content="{{ field.field.widget.attrs.myInfo }}"
+                                               data-original-title=""
+                                               title=""><i
+                                                    class="mdi mdi-information-outline mdi-18px"></i></a>
+                                        {% endif %}
+                                        {{ field }}
+                                    </div>
+                                {% endfor %}
+                                <!-- Invisible fields -->
+                                {% for field in invisible_fields %}
+                                    {{ field }}
+                                {% endfor %}
+                                <div class="kt-form__actions">
+                                    <button id="injection-button" type="submit" class="btn btn-primary">Inject
+                                    </button>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div id="form_portlets" class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div id="repair_portlet" class="kt-portlet" data-ktportlet="true">
+                    <div class="kt-portlet__head">
+                        <div class="kt-portlet__head-label">
+                            <h3 class="kt-portlet__head-title">Anomaly Repair</h3>
+                        </div>
+                        <div class="kt-portlet__head-toolbar">
+                        </div>
+                    </div>
+                    <div class="kt-portlet__body kt-portlet__body--fit">
+                        {% include 'parts/repairForm.html' %}
+                        <div id="form_append_container"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
+            <div id="score_container" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                {% include 'injectionAndRepair/score-board.html' %}
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="row" id="store-and-save-content" style="display:block;">
+    <script>
+        const showStoreAndSaveContent = () => {
+            document.getElementById('store-and-save-content').style.display = 'block';
+        }
+    </script>
+    <div class="col-md-7">
+        {% include "parts/store-form.html" %}
+    </div>
+</div>
+
+
+<script>
+    let score_portlet = document.getElementById('score_portlets')
+    let injection_portlet = document.getElementById('injection_portlet')
+    let repair_portlet = document.getElementById('repair_portlet')
+    // set repair portlet_height = injection portlet height
+    repair_portlet.style.height = injection_portlet.offsetHeight + 'px'
+
+    // set score portlet height be such that the bottom matches chart-portlet bottom
+    let chart_portlet = document.getElementById('chart-portlet');
+    let chartPortletRect = chart_portlet.getBoundingClientRect();
+    let scorePortletRect = score_portlet.getBoundingClientRect();
+
+    let chartPortletBottom = chartPortletRect.bottom;
+    let scorePortletBottom = scorePortletRect.bottom;
+    let scorePortletHeight = scorePortletRect.height;
+
+    let heightDifference = chartPortletBottom - scorePortletBottom;
+    let newScorePortletHeight = scorePortletHeight + heightDifference;
+
+    score_portlet.style.height = newScorePortletHeight + 'px';
+
+
+    let repairBtns = document.getElementsByClassName('repair_button');
+    let injectionBtn = document.getElementById('injection-button');
+
+    // Get the top position of the injection button
+    let injectionBtnTop = injectionBtn.offsetTop;
+
+    // Set the top position of each repair button
+    for (let i = 0; i < repairBtns.length; i++) {
+        let repairBtn = repairBtns[i];
+        repairBtn.style.position = 'absolute';
+        repairBtn.style.top = injectionBtnTop + 'px';
+    }
+
+    //delete help text initial-score-portlet-text when repair is run (buttons with class repair_button)
+    let initial_score_portlet_text = document.getElementById('initial-score-portlet-text')
+
+    Array.from(document.getElementsByClassName('repair_button')).forEach(function (element) {
+        element.addEventListener('click', function () {
+            initial_score_portlet_text.remove()
+        })
+    })
+
+</script>
+
+
+
+

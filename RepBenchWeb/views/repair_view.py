@@ -51,6 +51,7 @@ class RepairView(SyntheticDatasetView):
         post = request.POST.dict()
         post.pop("csrfmiddlewaretoken")
         alg_type = post.pop("alg_type")
+        distinct_ids = post.pop("distinct_ids",False)
         params = {k: parse_param_input(v) for k, v in post.items()}
 
         # Stored Anomalous Data
@@ -81,7 +82,8 @@ class RepairView(SyntheticDatasetView):
         alg_name = f"{alg_type}{tuple((v for v in params.values()))}"
         scores = {"name": alg_name, "colorByPoint": "true", "score_data": score_data}
 
-        repaired_series = map_repair_data(repair, injected_data_container, alg_name, links, df_original)
+        repaired_series = map_repair_data(repair, injected_data_container, alg_name, links, df_original ,
+                                          distinct_ids=distinct_ids)
         output = {"repaired_series": repaired_series, "scores": scores, "metrics": metrics}
 
         score_context = {

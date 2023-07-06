@@ -47,9 +47,7 @@
     }
 
     const optimizationHandler = {
-
-
-         reInit: function (option, start_url, retrieve_url) {
+        reInit: function (option, start_url, retrieve_url) {
             this.data = []
             this.iteration = 0;
             this.option = option //successive_halving or bayesian_optimization
@@ -67,6 +65,9 @@
             this.option = option //successive_halving or bayesian_optimization
             this.start_url = start_url
             this.retrieve_url = retrieve_url
+            this.timeoutID = null
+            document.getElementById("play-optimization-info-text").innerHTML = "Iteration:" + "-" +
+                " | " + "runtime: - " + "s"
         },
         stopIteration: function () {
             clearTimeout(this.timeoutID); // Clear the ongoing timeout
@@ -75,9 +76,14 @@
         start: function () {
             this.iteration = 0;
             this.data = [];
+            document.getElementById("play-optimization-info-text").innerHTML = "Iteration:" + "-" +
+                " | " + "runtime: - " + "s"
             SuccessiveHalvingChart.clear()
             ErrorChart.clear()
 
+            if(this.timeoutID != null) {
+                clearTimeout(this.timeoutID); // Clear the ongoing timeout/iteration
+            }
             $.ajax({
                 type: 'POST',
                 url: this.start_url,
@@ -135,8 +141,7 @@
             if (this.iteration < this.data.length && this.playing) {
                 let currentData = this.data[this.iteration];
                 console.log(currentData, "CURRENT DATA")
-                document.getElementById("start-button-right-text").innerHTML = "Iter:" + (this.iteration + 1) +
-                    {#"| Estimator: " + estimator +#}
+                document.getElementById("play-optimization-info-text").innerHTML = "Iteration:" + (this.iteration + 1) +
                     " | " + currentData.runtime + "s"
                 {#" | Score: " + currentData;#}
 
@@ -165,11 +170,5 @@
             this.timeoutID = setTimeout(this.iterateData.bind(this), this.intervalTimer);
         }
     }
-
-
-</script>
-
-{% include "play-buttons-script.html" %}
-<script>
     registerPlayAndReloadBtns("optimization", optimizationHandler)
 </script>

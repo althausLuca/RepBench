@@ -59,8 +59,8 @@ class InjectionForm(forms.Form):
         )
 
         self.fields["data_set"] = forms.CharField(widget=forms.HiddenInput(), required=False, initial=ts_name)
-        # self.fields["seed"] = forms.IntegerField(label='Seed', required=False, widget=forms.NumberInput(
-        #     attrs={'title': 'Enter numbers Only', 'min': 0, 'step': 1, "class": 'form-control'}))
+        self.fields["seed"] = forms.IntegerField(label='Seed', required=False, widget=forms.NumberInput(
+            attrs={'title': 'Enter numbers Only', 'min': 0, 'step': 1, "class": 'form-control'}))
 
 
 class store_injection_form(forms.Form):
