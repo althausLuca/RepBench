@@ -12,6 +12,8 @@
 {% endblock %}
 
 
+
+
 {% block content %}
     <div class="row">
         <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
@@ -21,36 +23,7 @@
                         <h3 class="kt-portlet__head-title"><h2> {{ setname }} </h2></h3>
                     </div>
                     <div class="kt-portlet__head-toolbar">
-                        <div id="highcharts_head_actions" class="kt-portlet__head-actions">
-                            <a id="reset_chart_btn" class="btn btn-outline-brand btn-bold btn-sm"
-                               onclick="chartManager.clearAllSeries();return false;">Reset</a>
-                            <div class="dropdown dropdown-inline">
-                                <a href="#" class="btn btn-outline-brand btn-icon btn-sm" data-toggle="dropdown"
-                                   aria-haspopup="true" aria-expanded="false">
-                                    <i class="mdi mdi-18px mdi-dots-horizontal"></i>
-                                </a>
-
-                                <div class="dropdown-menu dropdown-menu-right">
-                                    <ul class="kt-nav">
-                                        <li class="kt-nav__section kt-nav__section--first">
-                                            <span class="kt-nav__section-text">Load Data</span>
-                                        </li>
-                                        <li class="kt-nav__item">
-                                            <a id="raw_btn" onclick="chartManager.setOriginal(); return false;"
-                                               class="kt-nav__link">
-                                                <span class="kt-nav__link-text">Raw</span>
-                                            </a>
-                                        </li>
-                                        <li class="kt-nav__item">
-                                            <a id="zscore_btn" onclick="chartManager.setZscore(); return false;"
-                                               class="kt-nav__link">
-                                                <span class="kt-nav__link-text">Normalized</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
+                        {%  include "displayDataset/chartButton.html" with include_reset=1 %}
                     </div>
                 </div>
                 <div class="kt-portlet__body kt-portlet__body--fit">

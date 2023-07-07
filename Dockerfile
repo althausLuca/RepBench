@@ -21,6 +21,8 @@ RUN pip install nevergrad
 RUN pip install -U zoopt
 RUN pip install tsfel
 
+RUN apt-get install -y openjdk-17-jdk
+RUN pip install JPype1
 # Copy project
 COPY . /code/
 

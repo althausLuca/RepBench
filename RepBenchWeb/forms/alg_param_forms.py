@@ -1,7 +1,7 @@
 import numpy as np
 
 from django import forms
-from repair.algorithms_config import SPEEDandAcceleration, IMR, SCREEN, RPCA, CDREP , ALGORITHM_TYPES
+from repair.algorithms_config import SPEEDandAcceleration, IMR, SCREEN, RPCA, CDREP , ALGORITHM_TYPES , SCR
 from RepBenchWeb.forms.utils import hiddenField
 
 ALGORITHM_CHOICES = [(a, a) for a in ALGORITHM_TYPES]
@@ -72,4 +72,12 @@ class SpeedAndAccelerationField(forms.Form):
     #smin = forms.FloatField(help_text="Minimal change less than 0.", label='SMIN', initial=-0.5,
     #                        widget=forms.NumberInput(attrs={'max': "0", "step": "any", "class": 'form-control'}))
     smax = forms.FloatField(help_text="Maximal change greater than 0.", label='SMAX', initial=0.5,
+                            widget=forms.NumberInput(attrs={'min': "0", "step": "any", "class": 'form-control'}))
+
+
+class SRCFForm(forms.Form):
+    alg_type = hiddenField(SCR)
+    THETA = forms.FloatField(help_text="Theta", label='Theta', initial=5,
+                            widget=forms.NumberInput(attrs={'min': "0", "step": 1 , "class": 'form-control'}))
+    delta = forms.FloatField(help_text="Delta", label='Delta', initial=500,
                             widget=forms.NumberInput(attrs={'min': "0", "step": "any", "class": 'form-control'}))

@@ -1,63 +1,117 @@
-<a href="#"  id="chart-btn" class="btn btn-outline-brand btn-icon btn-sm" data-toggle="dropdown"
-   aria-haspopup="true" aria-expanded="false">
-    <i class="mdi mdi-18px mdi-dots-horizontal"></i>
-</a>
-<div class="dropdown-menu dropdown-menu-right">
-    <ul class="kt-nav">
-        <li class="kt-nav__section kt-nav__section--first">
-            <span class="kt-nav__section-text">Load Data</span>
-        </li>
-        <li class="kt-nav__item">
-            <a id="raw_btn" onclick="chartManager.setOriginal(); return false;"
-               class="kt-nav__link">
-                <span class="kt-nav__link-text">Raw</span>
-            </a>
-        </li>
-        <li class="kt-nav__item">
-            <a id="zscore_btn" onclick="chartManager.setZscore(); return false;"
-               class="kt-nav__link">
-                <span class="kt-nav__link-text">Normalized</span>
-            </a>
-        </li>
-        <li class="kt-nav__section kt-nav__section--first">
-            <span class="kt-nav__section-text">Download Data</span>
-        </li>
-        <li class="kt-nav__item">
-            <a id="raw_btn" onclick="chartManager.downloadOriginalSeries(); return false;"
-               class="kt-nav__link">
-                <span class="kt-nav__link-text">Original Data</span>
-            </a>
-        </li>
-        <li id="injected-download-item" class="kt-nav__item" style="display: none">
-            <a id="raw_btn" onclick="chartManager.downloadInjectedSeries(); return false;"
-               class="kt-nav__link">
-                <span class="kt-nav__link-text">Injected Data</span>
-            </a>
-        </li>
-        <li id="repair-download-item" class="kt-nav__item" style="display: none">
-            <a id="raw_btn" onclick="chartManager.downloadRepairedSeries(); return false;"
-               class="kt-nav__link">
-                <span class="kt-nav__link-text">Repaired Data</span>
-            </a>
-        </li>
-    </ul>
+{% load static %}
+<div id="highcharts_head_actions" class="kt-portlet__head-actions">
+
+    {% if include_reset %}
+    <a id="reset_chart_btn" class="btn btn-outline-brand btn-bold btn-sm"
+       onclick="chartManager.clearAllSeries();return false;">Reset</a>
+    {% endif %}
+    <div class="dropdown dropdown-inline">
+        <a href="#" class="btn btn-outline-brand btn-icon btn-sm" data-toggle="dropdown"
+           aria-haspopup="true" aria-expanded="false">
+            <i class="mdi mdi-18px mdi-dots-horizontal"></i>
+        </a>
+        <div class="dropdown-menu dropdown-menu-right">
+            <ul class="kt-nav">
+                <li class="kt-nav__section kt-nav__section--first">
+                    <span class="kt-nav__section-text">Load Data</span>
+                </li>
+                <li class="kt-nav__item">
+                    <a id="raw_btn" onclick="chartManager.setOriginal(); return false;"
+                       class="kt-nav__link">
+                        <span class="kt-nav__link-text">Raw</span>
+                    </a>
+                </li>
+                <li class="kt-nav__item">
+                    <a id="zscore_btn" onclick="chartManager.setZscore(); return false;"
+                       class="kt-nav__link">
+                        <span class="kt-nav__link-text">Normalized</span>
+                    </a>
+                </li>
+                <li class="kt-nav__section kt-nav__section--first">
+                    <span class="kt-nav__section-text">Download Data</span>
+                </li>
+                <li class="kt-nav__item">
+                    <a id="raw_btn" onclick="chartManager.downloadOriginalSeries(); return false;"
+                       class="kt-nav__link">
+                        <span class="kt-nav__link-text">Original Data</span>
+                    </a>
+                </li>
+                <li id="injected-download-item" class="kt-nav__item" style="display: none">
+                    <a id="raw_btn" onclick="chartManager.downloadInjectedSeries(); return false;"
+                       class="kt-nav__link">
+                        <span class="kt-nav__link-text">Injected Data</span>
+                    </a>
+                </li>
+                <li id="repair-download-item" class="kt-nav__item" style="display: none">
+                    <a id="raw_btn" onclick="chartManager.downloadRepairedSeries(); return false;"
+                       class="kt-nav__link">
+                        <span class="kt-nav__link-text">Repaired Data</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
 </div>
+
+
+{#<a href="#" id="chart-btn" class="btn btn-outline-brand btn-icon btn-sm" data-toggle="dropdown"#}
+{#   aria-haspopup="true" aria-expanded="false">#}
+{#    <i class="mdi mdi-18px mdi-dots-horizontal"></i>#}
+{#</a>#}
+{#<div class="dropdown-menu dropdown-menu-right">#}
+{#    <ul class="kt-nav">#}
+{#        <li class="kt-nav__section kt-nav__section--first">#}
+{#            <span class="kt-nav__section-text">Load Data</span>#}
+{#        </li>#}
+{#        <li class="kt-nav__item">#}
+{#            <a id="raw_btn" onclick="chartManager.setOriginal(); return false;"#}
+{#               class="kt-nav__link">#}
+{#                <span class="kt-nav__link-text">Raw</span>#}
+{#            </a>#}
+{#        </li>#}
+{#        <li class="kt-nav__item">#}
+{#            <a id="zscore_btn" onclick="chartManager.setZscore(); return false;"#}
+{#               class="kt-nav__link">#}
+{#                <span class="kt-nav__link-text">Normalized</span>#}
+{#            </a>#}
+{#        </li>#}
+{#        <li class="kt-nav__section kt-nav__section--first">#}
+{#            <span class="kt-nav__section-text">Download Data</span>#}
+{#        </li>#}
+{#        <li class="kt-nav__item">#}
+{#            <a id="raw_btn" onclick="chartManager.downloadOriginalSeries(); return false;"#}
+{#               class="kt-nav__link">#}
+{#                <span class="kt-nav__link-text">Original Data</span>#}
+{#            </a>#}
+{#        </li>#}
+{#        <li id="injected-download-item" class="kt-nav__item" style="display: none">#}
+{#            <a id="raw_btn" onclick="chartManager.downloadInjectedSeries(); return false;"#}
+{#               class="kt-nav__link">#}
+{#                <span class="kt-nav__link-text">Injected Data</span>#}
+{#            </a>#}
+{#        </li>#}
+{#        <li id="repair-download-item" class="kt-nav__item" style="display: none">#}
+{#            <a id="raw_btn" onclick="chartManager.downloadRepairedSeries(); return false;"#}
+{#               class="kt-nav__link">#}
+{#                <span class="kt-nav__link-text">Repaired Data</span>#}
+{#            </a>#}
+{#        </li>#}
+{#    </ul>#}
+{#</div>#}
 
 <script>
     var chartBtn = document.getElementById('chart-btn');
     chartBtn.addEventListener('click', function (e) {
         e.preventDefault();
         console.log('click')
-        if(chartManager.injectedSeries.length > 0){
+        if (chartManager.injectedSeries.length > 0) {
             document.getElementById('injected-download-item').style.display = 'block';
-        }
-        else{
+        } else {
             document.getElementById('injected-download-item').style.display = 'none';
         }
-        if(chartManager.repairedSeries.length > 0){
+        if (chartManager.repairedSeries.length > 0) {
             document.getElementById('repair-download-item').style.display = 'block';
-        }
-        else{
+        } else {
             document.getElementById('repair-download-item').style.display = 'none';
         }
     });

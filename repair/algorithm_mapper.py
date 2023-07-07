@@ -8,6 +8,7 @@ algo_mapper = {
     ac.IMR: algs.IMR_estimator,
     ac.CDREP: algs.CDRecEstimator,
     ac.SPEEDandAcceleration: algs.SpeedAndAccelerationEstimator,
+    ac.SCR: algs.SCREstimator,
 }
 
 

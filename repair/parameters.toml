@@ -17,28 +17,34 @@
     delta = 1
 
 [IMR]
-     p = 3
-     tau = 0.02
-     n_max_itr= 20000
+    p = 3
+    tau = 0.02
+    n_max_itr = 20000
 
 [SCREEN]
     t = 3
     smin = -0.1
     smax = +0.1
-     #ci = [0.1,0.9] # use confidence intervall approach when smin and smax are not set
+    #ci = [0.1,0.9] # use confidence intervall approach when smin and smax are not set
 
 
 [screenglobal] # use percentile approach when smin and smax are not set
-     t = 1
-     ci = [0.1,0.9] # use confidence intervall approach when smin and smax are not set
+    t = 1
+    ci = [0.1, 0.9] # use confidence intervall approach when smin and smax are not set
 
 
 [speed_acceleration]
-        t = 3
-        smin = -0.1
-        smax = +0.1
-        amax = 0.1
-        amin = -0.1
+    t = 3
+    smin = -0.1
+    smax = +0.1
+    amax = 0.1
+    amin = -0.1
+
+
+[SCR]
+    THETA = 5
+    delta = 1000
+
 
 
 # cd , rpca params :

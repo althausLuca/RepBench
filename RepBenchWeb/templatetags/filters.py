@@ -26,7 +26,10 @@ def cc2_paper_link():
 
 @register.filter()
 def parse_alg_name(alg_name):
-    return algo_names[alg_name]
+    try :
+        return algo_names[alg_name]
+    except KeyError:
+        return alg_name
 
 
 

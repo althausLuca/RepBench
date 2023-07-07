@@ -15,9 +15,9 @@ def django_file_to_pandas(uploaded_file: UploadedFile) -> pd.DataFrame:
     delimiter: str = dialect.delimiter
 
     print(delimiter)
-
+    print(uploaded_file)
     df = pd.read_csv(uploaded_file, delimiter=delimiter)
-
+    print(df)
     df.columns = [column.strip() for column in df.columns]
     print(df.columns)
     print([type(column) for column in df.columns])
