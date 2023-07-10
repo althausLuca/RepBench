@@ -2,11 +2,11 @@
 <div id="highcharts_head_actions" class="kt-portlet__head-actions">
 
     {% if include_reset %}
-    <a id="reset_chart_btn" class="btn btn-outline-brand btn-bold btn-sm"
-       onclick="chartManager.clearAllSeries();return false;">Reset</a>
+        <a id="reset_chart_btn" class="btn btn-outline-brand btn-bold btn-sm"
+           onclick="chartManager.clearAllSeries();return false;">Reset</a>
     {% endif %}
     <div class="dropdown dropdown-inline">
-        <a href="#" class="btn btn-outline-brand btn-icon btn-sm" data-toggle="dropdown"
+        <a id="chart-btn" href="#" class="btn btn-outline-brand btn-icon btn-sm" data-toggle="dropdown"
            aria-haspopup="true" aria-expanded="false">
             <i class="mdi mdi-18px mdi-dots-horizontal"></i>
         </a>
@@ -100,19 +100,23 @@
 {#</div>#}
 
 <script>
-    var chartBtn = document.getElementById('chart-btn');
-    chartBtn.addEventListener('click', function (e) {
-        e.preventDefault();
-        console.log('click')
-        if (chartManager.injectedSeries.length > 0) {
-            document.getElementById('injected-download-item').style.display = 'block';
-        } else {
-            document.getElementById('injected-download-item').style.display = 'none';
-        }
-        if (chartManager.repairedSeries.length > 0) {
-            document.getElementById('repair-download-item').style.display = 'block';
-        } else {
-            document.getElementById('repair-download-item').style.display = 'none';
-        }
+
+    $(document).ready(function () {
+        var chartBtn = document.getElementById('chart-btn');
+        chartBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            console.log('click')
+            if (chartManager.injectedSeries.length > 0) {
+                document.getElementById('injected-download-item').style.display = 'block';
+            } else {
+                document.getElementById('injected-download-item').style.display = 'none';
+            }
+            if (chartManager.repairedSeries.length > 0) {
+                document.getElementById('repair-download-item').style.display = 'block';
+            } else {
+                document.getElementById('repair-download-item').style.display = 'none';
+            }
+        });
     });
+
 </script>

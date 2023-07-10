@@ -247,6 +247,13 @@ class ChartManager {
         var filename = "injected_series.csv";
         var result = this.injectedSeries.reduce((acc, injected_series) => {
             var {name, data} = this.getSeriesChartData(injected_series);
+            var truthLink = injected_series._chartSeriesData.linkedTo;
+            var truthSeries = this.originalSeries.find(s => s._chartSeriesData.id === truthLink);
+            var truthData= this.getSeriesChartData(truthSeries).data;
+
+            data = data.map((d,i) => {
+                return d === null ? truthData[i] : d;
+            });
             acc[name] = data;
             return acc;
         }, {});

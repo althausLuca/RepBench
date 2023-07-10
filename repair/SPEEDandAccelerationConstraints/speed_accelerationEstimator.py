@@ -7,7 +7,7 @@ import numpy as np
 
 class SpeedAndAccelerationEstimator(SCREENEstimator):
 
-    def __init__(self, t: int = 50, smax: float = 0.1, smin=None, amax: float =1.0, amin=None, ci=None, **kwargs):
+    def __init__(self, t: int = 3, smax: float = 0.1, smin=None, amax: float =1.0, amin=None, ci=None, **kwargs):
 
         """
         param ci need to be a tuple e.g (0.1,0.9)
