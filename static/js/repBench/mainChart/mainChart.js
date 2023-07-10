@@ -107,17 +107,17 @@ const createEmptyChart = function (length, container = 'highcharts_container') {
     chartManager = new ChartManager();
     length = parseInt(length)
     if (length > 1000) length = 1000
-    length =  timeInterval * 1000 * length
+    length = timeInterval * 1000 * length
 
     // chartManager.setTimeInterval(timeInterval*1000)
     // let series = [{data:[] , visible:false, showInLegend: false}]
     let series = [{
-        data: [[Date.UTC(2010, 0, 1), 7], [Date.UTC(2010, 0, 1)+length, 12]],
+        data: [[Date.UTC(2010, 0, 1), 7], [Date.UTC(2010, 0, 1) + length, 12]],
         opacity: 0,
         showInLegend: false,
         visible: false
     }]
-    chartManager.setPointStartAndTimeInterval(Date.UTC(2010, 0, 1), timeInterval*1000)
+    chartManager.setPointStartAndTimeInterval(Date.UTC(2010, 0, 1), timeInterval * 1000)
     initMainChart(series)
     mainChart.showLoading()
 }
@@ -146,7 +146,7 @@ const initMainChart = function (series = {}, addSeriesToChartManager = false, co
         },
         tooltip: tooltip,
         chart: {
-            height: chartHeight+40,
+            height: chartHeight + 40,
             type: 'line',
             zoomType: 'x',
             // animation: false,
@@ -189,12 +189,12 @@ const initMainChart = function (series = {}, addSeriesToChartManager = false, co
                     text: 'D'
                 },
 
-                 {
+                {
                     type: 'month',
                     count: 1,
                     text: 'M'
                 },
-                 {
+                {
                     type: 'year',
                     count: 1,
                     text: 'Y'
@@ -218,6 +218,9 @@ const initMainChart = function (series = {}, addSeriesToChartManager = false, co
             chartManager.addSeries(s, false,)
         })
     }
+
+
+
 }
 
 

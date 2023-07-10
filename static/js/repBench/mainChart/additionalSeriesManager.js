@@ -9,7 +9,7 @@ class ChartManager {
 
         this.colors = ['#7cb5ec', '#434348', '#90ed7d', '#f7a35c', '#8085e9', '#50394c', '#e4d354', '#8085e8', '#8d4653',
             '#91e8e1', '#7cb5ec', '#434348', '#90ed7d', '#f7a35c', '#8085e9'];
-        this.repairedColors = [ '#2ca02c', '#1f77b4','#9467bd', '#8c564b', '#e377c2', '#7f7f7f',
+        this.repairedColors = ['#2ca02c', '#1f77b4', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f',
             '#bcbd22', '#17becf', '#2ca02c', '#d62728', '#9467bd', '#e377c2', '#7f7f7f'];
 
         this.pointStart = Date.UTC(2010, 0, 1);
@@ -51,15 +51,13 @@ class ChartManager {
     getColor(type) {
         let color = null
         if (type === "repair") {
-            color =  this.repairedColors[this.repairedSeries.length % this.repairedColors.length];
+            color = this.repairedColors[this.repairedSeries.length % this.repairedColors.length];
+        } else if (type === "injected") {
+            color = "red"
+        } else {
+            color = this.colors[this.originalSeries.length % this.colors.length];
         }
-        else if (type === "injected") {
-            color =  "red"
-        }
-        else{
-            color =  this.colors[this.originalSeries.length % this.colors.length];
-        }
-        console.log("color" , color)
+        console.log("color", color)
         return color
     }
 
@@ -75,7 +73,7 @@ class ChartManager {
 
     getSeriesChartData(ser) {
         let chartSeriesData = ser._chartSeriesData
-        console.log("COLOR ON ADDING" , chartSeriesData.color)
+        console.log("COLOR ON ADDING", chartSeriesData.color)
         // chartSeriesData.linkedTo = ser.linkedTo
         chartSeriesData.data = this.normalized ? [...ser.normData] : [...ser.originalData];
         return chartSeriesData
@@ -83,9 +81,9 @@ class ChartManager {
 
     addSeries(series, addToChart = true, series_type = "original", merge_with = null) {
         this.removeSeries(series.id)
-        console.log("color" , series.color)
+        console.log("color", series.color)
         series_type = series.series_type ? series.series_type : series_type
-        series.color  = series.color !== undefined ? series.color : this.getColor(series_type)
+        series.color = series.color !== undefined ? series.color : this.getColor(series_type)
         let ser = {
             id: series.id,
             originalData: series.data.map(s => s),
@@ -185,6 +183,7 @@ class ChartManager {
     }
 
     resetSeries(showOnlyInjected = false) {
+
         // if (mainChart !== null) {
         //     mainChart.showLoading('<img src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif">');
         // }
@@ -210,6 +209,10 @@ class ChartManager {
         initMainChart(allChartSeries)
         if (axis0isDefined) {
             mainChart.xAxis[0].setExtremes(axis0isDefined.min, axis0isDefined.max)
+        }
+        //  correct axis if its to large
+        if (mainChart.xAxis[0].dataMax < mainChart.xAxis[0].max) {
+            mainChart.xAxis[0].setExtremes(mainChart.xAxis[0].dataMin, mainChart.xAxis[0].dataMax)
         }
         this.getAllSeries().forEach((s, i) => {
             s.chartSeriesObj = mainChart.series[i]
@@ -241,23 +244,24 @@ class ChartManager {
             return acc;
         }, {});
 
-        download(result,filename)
+        download(result, filename)
     }
+
     downloadInjectedSeries() {
         var filename = "injected_series.csv";
         var result = this.injectedSeries.reduce((acc, injected_series) => {
             var {name, data} = this.getSeriesChartData(injected_series);
             var truthLink = injected_series._chartSeriesData.linkedTo;
             var truthSeries = this.originalSeries.find(s => s._chartSeriesData.id === truthLink);
-            var truthData= this.getSeriesChartData(truthSeries).data;
+            var truthData = this.getSeriesChartData(truthSeries).data;
 
-            data = data.map((d,i) => {
+            data = data.map((d, i) => {
                 return d === null ? truthData[i] : d;
             });
             acc[name] = data;
             return acc;
         }, {});
-        download(result,filename)
+        download(result, filename)
     }
 
     downloadRepairedSeries() {
@@ -267,7 +271,7 @@ class ChartManager {
             acc[name] = data;
             return acc;
         }, {});
-        download(result,filename)
+        download(result, filename)
     }
 
 }
