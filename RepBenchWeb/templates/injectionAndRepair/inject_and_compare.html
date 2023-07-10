@@ -2,7 +2,27 @@
 {% load static %}
 
 
+
+
 {% block content %}
+    <style>
+        #repairForm {
+            margin-top: 10px;
+        }
+
+        #repairForm label {
+            font-size: 20px;
+        {#background: black;#}
+        }
+        .loading-gif {
+            height: 20px;
+            width: 20px;
+            margin-left: 5px;
+        }
+
+    </style>
+
+
     <div class="row">
         <div class="col-md-10">
             {% include "displayDataset/chartSelection.html" with include_reset=1 %}
@@ -53,7 +73,7 @@
                 </div>
             </div>
             <div id="form_portlets">
-                <div id="repair_portlet" class="kt-portlet" data-ktportlet="true">
+                <div id="repair_portlet" class="kt-portlet ">
                     <div class="kt-portlet__head">
                         <div class="kt-portlet__head-label">
                             <h3 class="kt-portlet__head-title">Repair</h3>
@@ -61,35 +81,33 @@
                         <div class="kt-portlet__head-toolbar">
                         </div>
                     </div>
-                    <div class="kt-portlet__body kt-portlet__body--fit">
+                    <div class="kt-portlet__body kt-portlet__body--fit-top">
                         <form id="repairForm" name="repairForm_name" class="kt-form"
                                 {#                                  onsubmit="inject('{% url 'inject_data' setname=setname %}'); return false;"#}
                               enctype="multipart/form-data"
                         >
                             {% csrf_token %}
-                            <div class="kt-portlet__body">
-                                {% for field in algorithm_form.visible_fields %}
-                                    <div class="form-group">
-                                        {#                                        {{ field.label_tag }}#}
-                                        {% if field.field.widget.attrs.myInfo %}
-                                            <a tabindex="0" class="btn" role="button" data-toggle="kt-popover"
-                                               data-placement="top" data-trigger="focus"
-                                               data-content="{{ field.field.widget.attrs.myInfo }}"
-                                               data-original-title=""
-                                               title=""><i
-                                                    class="mdi mdi-information-outline mdi-18px"></i></a>
-                                        {% endif %}
-                                        {{ field }}
-                                    </div>
-                                {% endfor %}
-                                <!-- Invisible fields -->
-                                {% for field in invisible_fields %}
+                            {% for field in algorithm_form.visible_fields %}
+                                <div class="form-group">
+                                    {#                                        {{ field.label_tag }}#}
+                                    {% if field.field.widget.attrs.myInfo %}
+                                        <a tabindex="0" class="btn" role="button" data-toggle="kt-popover"
+                                           data-placement="top" data-trigger="focus"
+                                           data-content="{{ field.field.widget.attrs.myInfo }}"
+                                           data-original-title=""
+                                           title=""><i
+                                                class="mdi mdi-information-outline mdi-18px"></i></a>
+                                    {% endif %}
                                     {{ field }}
-                                {% endfor %}
-                                <div class="kt-form__actions">
-                                    <button id="repair-button" type="submit" class="btn btn-primary">Repair
-                                    </button>
                                 </div>
+                            {% endfor %}
+                            <!-- Invisible fields -->
+                            {% for field in invisible_fields %}
+                                {{ field }}
+                            {% endfor %}
+                            <div class="kt-form__actions">
+                                <button id="repair-button" type="submit" class="btn btn-primary">Repair
+                                </button>
                             </div>
 
                         </form>
@@ -154,42 +172,57 @@
                     selectedValues.push(checkboxes[i].value);
                 }
             }
-            console.log(selectedValues)
-            console.log("repair url", repair_url)
+            {#console.log(selectedValues)#}
+            {#console.log("repair url", repair_url)#}
             mainChart.showLoading()
             repairFormData.append("injected_series", JSON.stringify(chartManager.get_injected_norm_data()))
             repairFormData.append('csrfmiddlewaretoken', csrftoken)
             repairFormData.append("distinct_ids", 1)
             chartManager.hideNoneInjectedSeries()
-            selectedValues.forEach(algorithm => {
-                    repairFormData.append("alg_type", algorithm)
-                    fetch(repair_url, {
-                        method: 'POST',
-                        body: repairFormData,
-                    }).then(response => response.json()).then(responseJson => {
-                        console.log(responseJson)
-                        const repSeries = responseJson.repaired_series
-                        const scores = responseJson.scores
-                        repairResult = repSeries
 
+            async function performSequentialFetches() {
+                for (const algorithm of selectedValues) {
+                    const loadingGif = document.createElement("img");
+                    loadingGif.src = "https://upload.wikimedia.org/wikipedia/commons/9/92/Loading_icon_cropped.gif";
+                    loadingGif.classList.add("loading-gif")
+                    const label = document.querySelector(`input[value="${algorithm}"]`).parentElement;
+                    label.appendChild(loadingGif);
+                    repairFormData.append("alg_type", algorithm);
+                    console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+                    try {
+                        const response = await fetch(repair_url, {
+                            method: 'POST',
+                            body: repairFormData,
+                        });
+                        const responseJson = await response.json();
+                        console.log(responseJson);
+                        const repSeries = responseJson.repaired_series;
+                        const scores = responseJson.scores;
+                        repairResult = repSeries;
 
                         const chartRepairSeries = Object.keys(repSeries).map(key => {
-                            let repair = repSeries[key]
-                            console.log(repair)
-                            return chartManager.addSeries(repair, true, "repair")
-                        })
-                    }).finally(() => {
-                            mainChart.hideLoading()
-                        }
-                    )
+                            let repair = repSeries[key];
+                            console.log(repair);
+                            return chartManager.addSeries(repair, true, "repair");
+                        });
+                    } catch (error) {
+                        console.error(error);
+                    } finally {
+                        label.removeChild(loadingGif);
+                        mainChart.hideLoading();
+
+                    }
                 }
-            )
+            }
+
+            performSequentialFetches();
+
         })
     </script>
 
 
     <script src="{% static 'js/repBench/injection/injection.js' %}" type="text/javascript"></script>
-    <script src="{% static 'js/repBench/repair/repair.js' %}" type="text/javascript"></script>
+    {#    <script src="{% static 'js/repBench/repair/repair.js' %}" type="text/javascript"></script>#}
 
 {% endblock %}
 

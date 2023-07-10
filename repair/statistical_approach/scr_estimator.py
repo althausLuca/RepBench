@@ -37,25 +37,22 @@ class SCREstimator(Estimator):
         columns_to_repair = [c for c in columns_to_repair if c < injected.shape[1]]
         for col in columns_to_repair:
             if injected.shape[0] < 1000:
-                x = np.array(injected.iloc[:, col])
-                truth = np.array(truth.iloc[:, col])
-
-                dirtyTimeSeries = jpype.JArray(jpype.JDouble)(x)
-                truth = jpype.JArray(jpype.JDouble)(truth)
-                retval = dp_runner.start(self.THETA, self.delta, dirtyTimeSeries, truth)
-
+                injected_np = np.array(injected.iloc[:, col])
+                truth_np = np.array(truth.iloc[:, col])
+                injected_java = jpype.JArray(jpype.JDouble)(injected_np)
+                truth_java = jpype.JArray(jpype.JDouble)(truth_np)
+                retval = dp_runner.start(self.THETA, self.delta, injected_java, truth_java)
                 repair.iloc[:, col] = retval
             else:  # compute in batches
                 for i, (batch_start, batch_end) in enumerate(
                         zip(range(0, len(injected), 1000), range(1000, len(injected), 1000))):
 
                     print("batchstart", batch_start, "batchend", batch_end)
-                    x = np.array(injected.iloc[batch_start:batch_end, col])
-                    truth = np.array(truth.iloc[batch_start:batch_end, col])
-
-                    dirtyTimeSeries = jpype.JArray(jpype.JDouble)(x)
-                    truth = jpype.JArray(jpype.JDouble)(truth)
-                    retval = dp_runner.start(self.THETA, self.delta, dirtyTimeSeries, truth)
+                    injected_np = np.array(injected.iloc[batch_start:batch_end, col])
+                    truth_np = np.array(truth.iloc[batch_start:batch_end, col])
+                    injected_java = jpype.JArray(jpype.JDouble)(injected_np)
+                    truth_java = jpype.JArray(jpype.JDouble)(truth_np)
+                    retval = dp_runner.start(self.THETA, self.delta, injected_java, truth_java)
 
                     repair.iloc[batch_start:batch_end, col] = retval
 

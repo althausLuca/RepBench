@@ -135,6 +135,9 @@ const ErrorChart = {
                     text:"Algorithm"
                 }
             },
+             credits: {
+                enabled: false
+            },
             yAxis: {
                 title: {
                     text: 'Error Value'

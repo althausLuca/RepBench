@@ -158,7 +158,7 @@
                     let params = currentData.params
                     let param_names = Object.keys(params)
                     SuccessiveHalvingChart.setParamNames(param_names[0], param_names[1])
-                    SuccessiveHalvingChart.add(params)
+                    SuccessiveHalvingChart.add(params ,currentData.score)
                 }
 
                 this.iteration += 1;

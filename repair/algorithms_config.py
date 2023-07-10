@@ -13,7 +13,7 @@ WindowRPCA = "wrpca"
 SCREEN_l = "screen_5_95"
 SCREEN_l2 = "screen_10_90"
 
-SPEEDandAcceleration = "speed_acceleration"
+SPEEDandAcceleration = "SCREEN*"
 ALGORITHM_TYPES = (IMR,SCREEN,RPCA,CDREP,SPEEDandAcceleration,SCR)
 
 #black is used for the truth, and red for anomalies

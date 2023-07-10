@@ -1,4 +1,57 @@
 <script>
+
+
+
+
+    const ErrorChart = {
+        html_id: "ErrorChart",
+        chart: Highcharts.chart("ErrorChart", {
+            chart: {
+                type: 'line'
+            },
+            credits: {
+                enabled: false
+            },
+            title: {
+                text: ''
+            },
+            xAxis: {
+                allowDecimals: false,
+                title: {
+                    text: "Iteration"
+                },
+                labels: {
+                    formatter: function () {
+                        return this.value + 1;
+                    },
+                },
+
+            },
+            yAxis: {
+                title: {
+                    text: "RMSE"
+                },
+                labels: {
+                    format: '{value}'
+                }
+            },
+            series: [{
+                name: 'Error',
+                data: [],
+                showInLegend: false
+            }]
+        }),
+
+        add: function (dataPoint) {
+            this.chart.series[0].addPoint(dataPoint);
+        },
+
+        clear: function () {
+            this.chart.series[0].setData([]);
+        }
+    }
+
+
     const SuccessiveHalvingChart = {
         html_id: "SucessiveHalvingChart",
         param_1: '',
@@ -50,7 +103,12 @@
                 name: 'Halvings',
                 data: [],
                 showInLegend: false
-            }]
+            }],
+
+            tooltip: {
+                headerFormat: '<b></b><br>',
+                pointFormat: '<b></b><br>score:{point.score}</b><br/>'
+            },
         }),
 
         update: function (data) {
@@ -62,8 +120,49 @@
             this.chart.series[0].setData(dataTuples);
         },
 
-        add: function (dataPoint) {
-            this.chart.series[0].addPoint([dataPoint[this.param_1], dataPoint[this.param_2]]);
+        add: function (dataPoint, score) {
+            let bestPointSettings = {marker: {symbol: "diamond" ,  zIndex: 1000, radius: 18}}
+            let defaultSettings = {marker: {symbol: "circle" , radius: 12}}
+            let isBest = true
+
+            // reset color of last point and update best score
+            if (this.chart.series[0].data.length > 0) {
+                let lastPoint = this.chart.series[0].data[this.chart.series[0].data.length - 1]
+                lastPoint.update({color: 'rgba(119, 152, 191,1)'})
+
+                //check if it has the highest score
+                let scores = this.chart.series[0].data.map(d => d.score)
+                let maxScore = Math.min(...scores)
+                if (score > maxScore) {
+                    isBest = false
+                }
+            }
+
+            if (isBest) {
+                 this.chart.series[0].data.forEach(d => {
+                    if (d.marker.symbol === "diamond") {
+                        d.update(defaultSettings, true, true)
+                    }
+                })
+                this.chart.series[0].addPoint({
+                    x: dataPoint[this.param_1],
+                    y: dataPoint[this.param_2],
+                    color: 'rgba(223, 83, 83,1)',
+                    score: score,
+                    ...bestPointSettings,
+                });
+
+            }
+            else {
+                this.chart.series[0].addPoint({
+                    x: dataPoint[this.param_1],
+                    y: dataPoint[this.param_2],
+                    color: 'rgba(223, 83, 83,1)',
+                    score: score,
+                    ...defaultSettings
+                });
+            }
+
         },
 
         setParamNames: function (param_1, param_2) {
@@ -78,61 +177,6 @@
             this.chart.xAxis[0].setTitle({text: ""});
             this.chart.yAxis[0].setTitle({text: ""});
         }
-
-    }
-
-    const ErrorChart = {
-        html_id: "ErrorChart",
-        chart: Highcharts.chart("ErrorChart", {
-            chart: {
-                type: 'line'
-            },
-            credits: {
-                enabled: false
-            },
-            title: {
-                text: ''
-            },
-            xAxis: {
-                allowDecimals: false,
-                title: {
-                    text: "Iteration"
-                },
-                labels: {
-                    formatter: function () {
-                        return this.value + 1;
-                    },
-                },
-
-            },
-            yAxis: {
-                title: {
-                    text: "RMSE"
-                },
-                labels: {
-                    format: '{value}'
-                }
-            },
-            series: [{
-                name: 'Error',
-                data: [],
-                showInLegend: false
-            }]
-        }),
-
-        add: function (dataPoint) {
-            this.chart.series[0].addPoint(dataPoint);
-        },
-
-        clear: function () {
-            this.chart.series[0].setData([]);
-        }
-        {#setParamNames: function (param_1, param_2) {#}
-        {#    this.chart.xAxis[0].setTitle({text: param_1});#}
-        {#    this.chart.yAxis[0].setTitle({text: param_2});#}
-        {#    this.param_1 = param_1;#}
-        {#    this.param_2 = param_2;#}
-        {# }#}
 
     }
 

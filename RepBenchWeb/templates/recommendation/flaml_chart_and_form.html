@@ -24,6 +24,25 @@
     </form>
 {% endblock %}
 
+{% block portlet-toolbar %}
+    <div>
+        <div>
+            <div style="position:absolute;right:0;top:0">
+                {% include "parts/info-box.html" with id="rec-info" %}
+            </div>
+        </div>
+        <div id="rec-info" style="display:none; margin-top: 35px">
+            <li>
+                Recommendation using <a href="https://microsoft.github.io/FLAML/">FLAML</a>
+            </li>
+            <li>
+                We display the scores of the different classification estimators <br>
+                while keeping track of the current best estimator and their parameters.
+            </li>
+        </div>
+    </div>
+
+{% endblock %}
 {% block portlet-body %}
     <div class="row" style="height:520px">
         <div class="col-md-9">
@@ -56,7 +75,8 @@
 
                 <div class="slider-container">
                     <span class="tooltip_">0</span>
-                    <input class= "form-control" name="train-size" type="range" min="20" max="100" step="10" id="range-slider" data-tooltip="0">
+                    <input class="form-control" name="train-size" type="range" min="20" max="100" step="10"
+                           id="range-slider" data-tooltip="0">
 
                     <style>
                         .slider-container {
@@ -68,10 +88,7 @@
                             position: absolute;
                             top: 5px; /* Adjust the positioning as needed */
                             left: 98%;
-                            {#transform: translateX(10px);#}
-                            {#background-color: #000;#}
-                            {#color: #fff;#}
-                            padding: 5px 10px;
+                        {#transform: translateX(10px);#}{#background-color: #000;#}{#color: #fff;#} padding: 5px 10px;
                             border-radius: 5px;
                         }
                     </style>

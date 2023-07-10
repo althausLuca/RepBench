@@ -44,9 +44,9 @@ def algorithm1(x: np.array, smin=-1, smax=1, amin=-1, amax=1, w=5):
                 z_max_k_i_a = np.inf
                 z_min_k_i_a = -np.inf
             else:
-                z_max_k_i_a = (x_prime[k - 1] * (t[i] - t[k]) - (amax/2 * (t[i] - t[k]) ** 2 - x[i]) * (t[k] - t[k - 1]))/ \
+                z_max_k_i_a = (x_prime[k - 1] * (t[i] - t[k]) - (amax * (t[i] - t[k]) ** 2 - x[i]) * (t[k] - t[k - 1]))/ \
                             (t[i] - t[k - 1])
-                z_min_k_i_a = (x_prime[k - 1] * (t[i] - t[k]) - (amin/2 * (t[i] - t[k]) ** 2 - x[i]) * (t[k] - t[k - 1]))/ \
+                z_min_k_i_a = (x_prime[k - 1] * (t[i] - t[k]) - (amin * (t[i] - t[k]) ** 2 - x[i]) * (t[k] - t[k - 1]))/ \
                             (t[i] - t[k - 1])
             """
             compute zmin_k_i_s and zmax_k_i_s with formula 34 and 36

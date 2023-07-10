@@ -1,7 +1,14 @@
+<style>
+    tr.current-row > * {
+        font-weight: bold !important;
+    {#font-size: 20px !important;#}
+    }
+</style>
+
 <script>
     const recommendationHandler = {
         init: function (option, start_url, retrieve_url) {
-           this.data = []
+            this.data = []
             this.iteration = 0;
             this.task_id = '{{csrf_token}}'
             this.playing = false
@@ -18,10 +25,9 @@
             RecommendationChart.init()
             this.iteration = 0;
             this.data = [];
-            this.data = [];
             this.flaml_series = []
 
-            if(this.timeoutID != null) {
+            if (this.timeoutID != null) {
                 clearTimeout(this.timeoutID); // Clear the ongoing timeout/iteration
             }
 
@@ -54,8 +60,9 @@
                         "LGBM": ["n_estimators", "num_leaves", "learning_rate", "min_child_samples"],
                         "XGBoostSklearn": ["n_estimators", "max_depth", "learning_rate", "min_child_weight", "reg_alpha", "reg_lambda"]
                     };
-                    if(this.option !== "ray"){
-                                            parameterTable.init(parameterNames);
+                    if (this.option !== "ray") {
+                        parameterTable.init(parameterNames);
+                        parameterTable.data = [];
                     }
                 },
                 error: function (response) {
@@ -96,17 +103,17 @@
                     }
                 },
                 error: function (response) {
-                    console.log(response);
+                    {#console.log(response);#}
                     alert('Error retrieving Flaml results');
                 }
             });
         },
 
         iterateData: function () {
-            console.log("iterate")
+            {#console.log("iterate")#}
             if (this.iteration < this.data.length && this.playing) {
                 let currentData = this.data[this.iteration];
-                console.log(currentData, "CURRENT DATA")
+                {#console.log(currentData, "CURRENT DATA")#}
 
                 let score = currentData.score;
                 let roundedScore = Math.round(score * 1000) / 1000;
@@ -125,7 +132,7 @@
                 {#addDataToFlamlChart(score, currentData.estimator , 1);#}
             } else {
                 if (this.playing) {
-                    console.log("Waiting for more data..." + this.iteration);
+                    {#console.log("Waiting for more data..." + this.iteration);#}
                 }
             }
 
@@ -134,24 +141,20 @@
 
     }
 
-    registerPlayAndReloadBtns("recommendation",recommendationHandler)
-
-
+    registerPlayAndReloadBtns("recommendation", recommendationHandler)
 
     const parameterTable = {
         tableId: "parameterTable",
-        data: {},
-        dataHistory: [],
+        data: [],
         parameter_names: null,
         intervalTimer: 1000,
         hasStarted: false,
-        isPaused: true,
-        breakHistoryFlag: false,
+        playing: false,
+        timeoutID: null,
+        iteration: 0,
 
         init: function (parameter_names) {
-            console.log("INIT PARAMETER TABLE")
-            this.data = {};
-            this.dataHistory = [];
+            this.iteration = 0;
             this.parameter_names = parameter_names;
             const table = document.getElementById(this.tableId); // Get the table element by its ID
 
@@ -162,10 +165,6 @@
             const headerRow = document.createElement("tr");
 
             // Create and populate cells for the header row
-            const scoreHeaderCell = document.createElement("th");
-            scoreHeaderCell.textContent = "Score";
-            headerRow.appendChild(scoreHeaderCell);
-
             const estimatorHeaderCell = document.createElement("th");
             estimatorHeaderCell.textContent = "Estimator";
             headerRow.appendChild(estimatorHeaderCell);
@@ -174,6 +173,9 @@
             parametersHeaderCell.textContent = "Parameters";
             headerRow.appendChild(parametersHeaderCell);
 
+            const scoreHeaderCell = document.createElement("th");
+            scoreHeaderCell.textContent = "Score";
+            headerRow.appendChild(scoreHeaderCell);
             // Append the header row to the table
             table.appendChild(headerRow);
 
@@ -183,10 +185,6 @@
                 newRow.setAttribute("data-estimator", estimator); // Set a custom attribute to identify the row
 
                 // Create and populate cells for the estimator row
-                const scoreCell = document.createElement("td");
-                scoreCell.className = "score-cell";
-                scoreCell.textContent = "-";
-                newRow.appendChild(scoreCell);
 
                 const estimatorCell = document.createElement("td");
                 estimatorCell.textContent = estimator;
@@ -200,7 +198,15 @@
                     parameterElement.textContent = `${name}: -`;
                     parametersCell.appendChild(parameterElement);
                 });
+
+
                 newRow.appendChild(parametersCell);
+
+                const scoreCell = document.createElement("td");
+                scoreCell.className = "score-cell";
+                scoreCell.textContent = "-";
+                newRow.appendChild(scoreCell);
+
 
                 // Append the new row to the table
                 table.appendChild(newRow);
@@ -213,12 +219,12 @@
         },
 
         addData: function (score, estimator, parameters) {
-            this.dataHistory.push({
+            this.data.push({
                 score: score,
                 estimator: estimator,
                 parameters: parameters
             });
-            console.log("ADD DATA", this.dataHistory)
+
             {#this.showData(score, estimator, parameters);#}
         },
 
@@ -231,7 +237,15 @@
                 };
 
                 const table = document.getElementById(this.tableId); // Get the table element by its ID
+                // remove class from all rows
+                const rows = table.querySelectorAll("tr");
+                rows.forEach(function (row) {
+                    row.classList.remove("current-row");
+                });
+                table.querySelector(`tr[data-estimator="${estimator}"]`);
                 const row = table.querySelector(`tr[data-estimator="${estimator}"]`); // Find the row with the matching estimator
+                row.classList.add("current-row"); // Add a highlight class to the row
+                // renve class after 1 second
 
                 // Update the score and parameters cells for the existing row
                 const scoreCell = row.querySelector(".score-cell");
@@ -254,11 +268,14 @@
                 };
 
                 const table = document.getElementById(this.tableId); // Get the table element by its ID
-
+                const rows = table.querySelectorAll("tr");
+                rows.forEach(function (row) {
+                    row.classList.remove("current-row");
+                });
                 // Create a new row for the data
                 const newRow = document.createElement("tr");
                 newRow.setAttribute("data-estimator", estimator); // Set a custom attribute to identify the row
-
+                newRow.classList.add("current-row")
                 // Create and populate cells for the score, estimator, and parameters
                 const scoreCell = document.createElement("td");
                 scoreCell.className = "score-cell";
@@ -288,115 +305,78 @@
         {#displayHistory: function (i) {#}
         {#    this.showData(this.dataHistory[i].score, this.dataHistory[i].estimator, this.dataHistory[i].parameters)#}
         {# },#}
-
-        replayHistory: async function () {
-            this.breakHistoryFlag = true
-
-            // first stop all other instance of this.replayHistory running
-
-
-            const history_ = [...this.dataHistory]
-            console.log(history_)
+        start() {
+            {#init(this.parameter_names)#}
             this.init(this.parameter_names)
-            this.dataHistory = history_
+            this.replayHistory()
+        },
 
-            this.currentHistoryPromise = await new Promise(resolve => setTimeout(resolve, this.intervalTimer));
+        replayHistory: function () {
+            // first stop all other instance of this.replayHistory running
+            {#const history_ = [...this.dataHistory]#}
+            {#console.log(history_)#}
+            {#this.init(this.parameter_names)#}
+            {#this.dataHistory = history_#}
 
-            this.breakHistoryFlag = false
-            parameterTable.hasStarted = true;
-
-            for (let i = 0; i < history_.length; i++) {
-                if (this.breakHistoryFlag) break;
-                if (!this.isPaused) {
-                    const dataPoint = history_[i];
-                    this.showData(dataPoint.score, dataPoint.estimator, dataPoint.parameters);
-                    console.log("parameter table is updating", this);
-                }
-                await new Promise(resolve => setTimeout(resolve, this.intervalTimer));
+            {#this.currentHistoryPromise = await new Promise(resolve => setTimeout(resolve, this.intervalTimer));#}
+            if (this.iteration < this.data.length && this.playing) {
+                const dataPoint = this.data[this.iteration];
+                this.showData(dataPoint.score, dataPoint.estimator, dataPoint.parameters);
+                console.log("parameter table is updating", this);
+                this.iteration += 1
             }
-            this.hasStarted = false
+            if (this.iteration < this.data.length) {
+                this.timeoutID = setTimeout(this.replayHistory.bind(this), this.intervalTimer);
+            }
+
         }
 
+
     }
+    registerPlayAndReloadBtns("recommendation-table", parameterTable)
 
 
-    $(document).ready(function () {
-    {#    $('#play-recommendation').on('click', function (event) {#}
+    {#$(document).ready(function () {#}
+    {#    //recommendation table settings#}
+    {#    // play-recommendation-table#}
+    {##}
+    {#    $('#play-recommendation-table').on('click', function (event) {#}
     {#        // Prevent form submission if it's a submit button#}
-            {#event.preventDefault();#}
+    {#        event.preventDefault();#}
+    {##}
+    {#        console.log("play recommendation table")#}
     {#        $(this).find('i').toggle();#}
-    {#        recommendationHandler.playing = !recommendationHandler.playing#}
-    {#    });#}
-    {##}
-    {##}
-    {#    $('#start-form').on('submit', function (event) {#}
-    {#        event.preventDefault();#}
-    {#        if (recommendationHandler.computing) {#}
-    {#            return;#}
-    {#        } else {#}
-    {#            recommendationHandler.computing = true;#}
-    {#            recommendationHandler.start()#}
+    {#        if (!parameterTable.hasStarted) {#}
+    {#            parameterTable.replayHistory()#}
     {#        }#}
+    {#        parameterTable.playing = !parameterTable.isPaused#}
     {#    });#}
     {##}
     {##}
-    {#    $('#reload').on('click', function (event) {#}
+    {#    $('#reload-recommendation-table').on('click', function (event) {#}
     {#        // Prevent form submission if it's a submit button#}
     {#        event.preventDefault();#}
     {##}
-    {#        if (!recommendationHandler.playing && recommendationHandler.computing) {#}
-    {#            recommendationHandler.playing = true#}
-    {#            $('#play-recommendation').find('i').toggle();#}
+    {#        if (parameterTable.isPaused) {#}
+    {#            parameterTable.isPaused = false#}
+    {#            $('#play-recommendation-table').find('i').toggle();#}
     {#        }#}
     {##}
-    {#        if (recommendationHandler.computing) {#}
-    {#            recommendationHandler.start()#}
-    {#        }#}
+    {#        parameterTable.replayHistory()#}
     {##}
+    {##}
+    {#        // show the first <i> tag#}
+    {#$('#play-recommendation-table').find('i').first().show();#}
+    {##}
+    {##}
+    {##}
+    {#if (recommendationHandler.computing) {#}
+    {#    recommendationHandler.startTuning()#}
+    {# }#}
     {##}
     {#    });#}
 
 
-        //recommendation table settings
-        // play-recommendation-table
-
-        $('#play-recommendation-table').on('click', function (event) {
-            // Prevent form submission if it's a submit button
-            event.preventDefault();
-
-            console.log("play recommendation table")
-            $(this).find('i').toggle();
-            if (!parameterTable.hasStarted) {
-                parameterTable.replayHistory()
-            }
-            parameterTable.isPaused = !parameterTable.isPaused
-        });
-
-
-        $('#reload-recommendation-table').on('click', function (event) {
-            // Prevent form submission if it's a submit button
-            event.preventDefault();
-
-            if (parameterTable.isPaused) {
-                parameterTable.isPaused = false
-                $('#play-recommendation-table').find('i').toggle();
-            }
-
-            parameterTable.replayHistory()
-
-
-            // show the first <i> tag
-            {#$('#play-recommendation-table').find('i').first().show();#}
-
-
-
-            {#if (recommendationHandler.computing) {#}
-            {#    recommendationHandler.startTuning()#}
-            {# }#}
-
-        });
-
-
-    });
+    {# });#}
 
 </script>
