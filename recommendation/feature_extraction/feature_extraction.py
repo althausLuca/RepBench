@@ -15,7 +15,7 @@ feature_endings = {"catch22": "__ct",
                    }
 
 
-def extract_features(dataset: pd.DataFrame, column):
+def extract_features(dataset: pd.DataFrame, column , replace_nan=True):
     """
     Extracts features from a dataset and returns them as a dictionary.
     Args:
@@ -29,6 +29,9 @@ def extract_features(dataset: pd.DataFrame, column):
     single_features = single_ts_feature_extraction(dataset.iloc[:, column].values)
     multi_features = multi_ts_feature_extraction(dataset, column)
     single_features.update(multi_features)
+
+    if replace_nan:
+        single_features = {k: v if not np.isnan(v) else 0 for k, v in single_features.items()}
     return single_features
 
 
