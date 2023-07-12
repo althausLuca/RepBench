@@ -1,7 +1,8 @@
 <script>
 
 
-
+    const bestPointSettings = {marker: {symbol: "diamond", zIndex: 1000, radius: 12}, color: "darkgreen"}
+    const defaultSettings = {marker: {symbol: "circle", radius: 6}, color: 'rgba(119, 152, 191,1)'}
 
     const ErrorChart = {
         html_id: "ErrorChart",
@@ -42,8 +43,52 @@
             }]
         }),
 
+        {#add: function (dataPoint) {#}
+        {#    this.chart.series[0].addPoint(dataPoint);#}
+        {# },#}
         add: function (dataPoint) {
-            this.chart.series[0].addPoint(dataPoint);
+            if (dataPoint === undefined) {
+                return
+            }
+
+            console.log("AAAAAAAAAAAAAAAAADDDDDDDDDDDDD")
+            let isBest = true;
+
+            // reset color of last point and update best score
+            if (this.chart.series[0].data.length > 0) {
+                {#let lastPoint = this.chart.series[0].data[this.chart.series[0].data.length - 1];#}
+                {#lastPoint.update(defaultSettings);#}
+
+                //check if it has the lowest score (since we're tracking error)
+                console.log("AAAATENTION")
+                let scores = this.chart.series[0].data.map(d => {
+                    console.log("d", d);
+                    console.log("data.point", dataPoint);
+                    return d.y
+                });
+                let minScore = Math.min(...scores);
+                if (dataPoint > minScore) {
+                    isBest = false;
+                }
+            }
+
+            if (isBest) {
+                this.chart.series[0].data.forEach(d => {
+                    if (d.marker.symbol === "diamond") {
+                        d.update(defaultSettings, true, true);
+                    }
+                });
+                this.chart.series[0].addPoint({
+                    y: dataPoint,
+                    ...bestPointSettings,
+                });
+
+            } else {
+                this.chart.series[0].addPoint({
+                    y: dataPoint,
+                    ...defaultSettings,
+                });
+            }
         },
 
         clear: function () {
@@ -56,6 +101,8 @@
         html_id: "SucessiveHalvingChart",
         param_1: '',
         param_2: '',
+        minScore: 10000000,
+
         chart: Highcharts.chart("SucessiveHalvingChart", {
             chart: {
                 type: 'scatter',
@@ -103,7 +150,19 @@
                 name: 'Halvings',
                 data: [],
                 showInLegend: false
-            }],
+            }, {
+                name: 'Optimum',
+                data: [],
+                lineWidth: 0,
+                ...bestPointSettings
+            },
+                {#    name: 'Latest Point',#}
+                {#    data: [],#}
+                {#    lineWidth: 0,#}
+                {#    ...defaultSettings,#}
+                {##}
+
+            ],
 
             tooltip: {
                 headerFormat: '<b></b><br>',
@@ -121,39 +180,38 @@
         },
 
         add: function (dataPoint, score) {
-            let bestPointSettings = {marker: {symbol: "diamond" ,  zIndex: 1000, radius: 18}}
-            let defaultSettings = {marker: {symbol: "circle" , radius: 12}}
-            let isBest = true
-
+            console.log("SCOOOOORE", score)
+            let isBest = false
             // reset color of last point and update best score
             if (this.chart.series[0].data.length > 0) {
-                let lastPoint = this.chart.series[0].data[this.chart.series[0].data.length - 1]
-                lastPoint.update({color: 'rgba(119, 152, 191,1)'})
+                {#let lastPoint = this.chart.series[0].data[this.chart.series[0].data.length - 1]#}
+                {#lastPoint.update({color: 'rgba(119, 152, 191,1)'})#}
 
                 //check if it has the highest score
-                let scores = this.chart.series[0].data.map(d => d.score)
-                let maxScore = Math.min(...scores)
-                if (score > maxScore) {
-                    isBest = false
+                if (score < this.minScore) {
+                    isBest = true
+                    this.minScore = score
                 }
             }
 
             if (isBest) {
-                 this.chart.series[0].data.forEach(d => {
+                this.chart.series[this.chart.series.length - 1].data.forEach(d => {
                     if (d.marker.symbol === "diamond") {
                         d.update(defaultSettings, true, true)
                     }
                 })
-                this.chart.series[0].addPoint({
-                    x: dataPoint[this.param_1],
-                    y: dataPoint[this.param_2],
-                    color: 'rgba(223, 83, 83,1)',
-                    score: score,
-                    ...bestPointSettings,
+                this.chart.addSeries({
+                    name: 'Best Point',
+                    data: [{
+                        x: dataPoint[this.param_1],
+                        y: dataPoint[this.param_2],
+                        score: score,
+                        ...bestPointSettings,
+                    }],
+                    showInLegend: false
                 });
 
-            }
-            else {
+            } else {
                 this.chart.series[0].addPoint({
                     x: dataPoint[this.param_1],
                     y: dataPoint[this.param_2],
@@ -170,12 +228,20 @@
             this.chart.yAxis[0].setTitle({text: param_2});
             this.param_1 = param_1;
             this.param_2 = param_2;
+            this.minScore = 10000000;
+
         },
 
         clear: function () {
             this.chart.series[0].setData([]);
+            //delete all series with index bigger than 1
+            while (this.chart.series.length > 1) {
+                this.chart.series[this.chart.series.length - 1].remove(true);
+            }
             this.chart.xAxis[0].setTitle({text: ""});
             this.chart.yAxis[0].setTitle({text: ""});
+            this.minScore = 10000000;
+
         }
 
     }

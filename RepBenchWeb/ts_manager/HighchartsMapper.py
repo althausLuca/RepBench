@@ -35,7 +35,7 @@ def map_injected_series(injected_series: pd.Series, injected_series_norm: pd.Ser
             "data": injected_series.replace({np.nan: None}).values.tolist(),
             "norm_data": injected_series_norm.replace({np.nan: None}).values.tolist(),
             "color": "red",
-            "dashStyle": "dot",
+            # "dashStyle": "dot",
             "legendIndex": -1,
             "showInLegend": True
             }

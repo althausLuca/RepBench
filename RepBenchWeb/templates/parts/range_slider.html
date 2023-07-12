@@ -1,9 +1,9 @@
 {% load static %}
 <label for="range-slider" style="translateY(50px);">Training Size</label>
-<div class="slider-container">
 
+<div class="slider-container">
     <span class="tooltip_">0</span>
-    <input class="form-control" name="train-size" type="range" min="20" max="100" step="10"
+    <input class="form-control" name="train-size" type="range" min="20" max="100" step="5"
            id="range-slider" data-tooltip="0">
 
     <style>
@@ -36,7 +36,7 @@
             const max = rangeSlider.max || 100;
             const percentage = ((value - min) / (max - min)) * 100;
             {#const tooltipLeft = (percentage * rangeWidth) / 100 - tooltipWidth / 2;#}
-            {#tooltip_.style.left = `${tooltipLeft}px`;#}
+            tooltip_.style.left = `${tooltipLeft}px`;
         };
 
         // Add event listener for input event

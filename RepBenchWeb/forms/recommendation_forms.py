@@ -46,7 +46,7 @@ class FLAMLSettingsForm(forms.Form):
 
     # todo make selection of features work
     features = forms.MultipleChoiceField(label='Feature Extrators',
-                                         initial=[choice[0] for choice in FEATURE_CHOICES],
+                                         initial=[choice[0] for choice in FEATURE_CHOICES[:2]],
                                          widget=forms.CheckboxSelectMultiple(
                                              attrs={'class': 'kt-checkbox', "name": 'estimator_list[]'}),
                                          choices=FEATURE_CHOICES
@@ -76,7 +76,7 @@ class RayTuneSettingsForm(forms.Form):
         choices=RAYTUNES_OPTIMIZER_CHOICES, attrs={"class": 'form-control'}))  # add more if needed
 
     ray_tunes_features = forms.MultipleChoiceField(label='Feature Extrators',
-                                         initial=[choice[0] for choice in FEATURE_CHOICES],
+                                         initial=[choice[0] for choice in FEATURE_CHOICES[:2]],
                                          widget=forms.CheckboxSelectMultiple(
                                              attrs={'class': 'kt-checkbox', "name": 'estimator_list[]'}),
                                          choices=FEATURE_CHOICES

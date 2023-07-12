@@ -61,8 +61,8 @@ def algorithm1(x: np.array, smin=-1, smax=1, amin=-1, amax=1, w=5):
                 z_max_k_i_s = x[i] - smax * (t[i] - t[k])
                 z_min_k_i_s = x[i] - smin * (t[i] - t[k])
 
-            X_min.add(max(z_min_k_i_a, z_min_k_i_s)) # not sure if this should be a max in the paper it is a min
-            X_max.add(min(z_max_k_i_a, z_max_k_i_s)) # not sure if this should be a min in the paper it is a max
+            X_min.add(min(z_min_k_i_a, z_min_k_i_s)) # not sure if this should be a max in the paper it is a min
+            X_max.add(max(z_max_k_i_a, z_max_k_i_s)) # not sure if this should be a min in the paper it is a max
             print(k,z_min_k_i_a, z_min_k_i_s)
         """
         compute x_mid_k with formula 41
@@ -108,13 +108,13 @@ print(repair)
 """
 Example plot aproximation
 """""
-x = np.array([1.25, 1.2, 1.35, 1.25, 1.2,1.25,1.4,1.25,1.25,1.2,1.3,1.35,1.2,1.4,2.5 ,1.3,1.32
+x = np.array([1.25, 1.2, 1.35, 1.25, 1.2,1.25,1.35,1.25,1.25,1.2,1.3,1.35,1.2,1.4,2.5 ,1.3,1.32
               ,1.27,1.2,1.35,1.22,0,0,0,0,1.24,1.22,1.26,1.22,1.2,1.15,1.15,1.15,1.15,1.15,1.15])
 # from example 3.7
-smin = -0.12
-smax = 0.12
+smin = -0.151
+smax = 0.151
 amax =  0.1
-amin = -0.1
+amin =  -0.1
 w = 1
 repair = algorithm1(x, smin, smax,amin, amax,w)
 
