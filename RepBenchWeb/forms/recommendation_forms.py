@@ -26,7 +26,7 @@ RayTunes_ESTIMATOR_CHOICES = [
 RAYTUNES_OPTIMIZER_CHOICES = [("hyperopt", "HyperOpt"), ("nevergrad", "NeverGrad"), ("ZOOpt", "ZOOpt"),
                               ("default", "Default(GridSearch)")]
 
-FEATURE_CHOICES = [("catch22", "Catch22"), ("tsfresh_minimal", "TSFreshMinimal"), ("tsfresh_selected", "TSFresh")]
+FEATURE_CHOICES = [("catch22", "Catch22"), ("tsfresh_selected", "TSFresh") ,("tsfel" , "TSFEL") ]
 METRIC_CHOICES = [('accuracy', 'Accuracy'), ('micro_f1', 'Micro F1'), ('macro_f1', 'Macro F1')]
 TASK_CHOICES = [('classification', 'classification')]  # add more if needed
 DATA_FRACTION_CHOICES = [('20', '20%'), ('40', '40%'), ('60', '60%'), ('80', '80%'), ('100', '100%')]
@@ -34,8 +34,8 @@ DATA_FRACTION_CHOICES = [('20', '20%'), ('40', '40%'), ('60', '60%'), ('80', '80
 class FLAMLSettingsForm(forms.Form):
     time_budget = forms.IntegerField(label='Time Budget (seconds)', initial=60, widget=forms.NumberInput(
         attrs={'id': "time_budget_id", 'min': 0, "class": 'form-control'}))
-    metric = forms.CharField(label='Metric', initial='accuracy', widget=forms.Select(choices=METRIC_CHOICES, attrs={
-        "class": 'form-control'}))
+    # metric = forms.CharField(label='Metric', initial='accuracy', widget=forms.Select(choices=METRIC_CHOICES, attrs={
+    #     "class": 'form-control'}))
     # task = forms.CharField(initial='classification', widget=forms.HiddenInput(), required=False)
     estimator_list = forms.MultipleChoiceField(label='Estimators',
                                                initial=[choice[1] for choice in ESTIMATOR_CHOICES],
@@ -75,9 +75,15 @@ class RayTuneSettingsForm(forms.Form):
     ray_tunes_optimizer = forms.CharField(label='Optimizer', initial='default', widget=forms.Select(
         choices=RAYTUNES_OPTIMIZER_CHOICES, attrs={"class": 'form-control'}))  # add more if needed
 
-    ray_tunes_metric = forms.CharField(label='Metric', initial='accuracy',
-                                       widget=forms.Select(choices=METRIC_CHOICES, attrs={
-                                           "class": 'form-control'}))
+    ray_tunes_features = forms.MultipleChoiceField(label='Feature Extrators',
+                                         initial=[choice[0] for choice in FEATURE_CHOICES],
+                                         widget=forms.CheckboxSelectMultiple(
+                                             attrs={'class': 'kt-checkbox', "name": 'estimator_list[]'}),
+                                         choices=FEATURE_CHOICES
+                                         )
+    # ray_tunes_metric = forms.CharField(label='Metric', initial='accuracy',
+    #                                    widget=forms.Select(choices=METRIC_CHOICES, attrs={
+    #                                        "class": 'form-control'}))
 
     # ray_tunes_features = forms.ChoiceField(label='Features',
     #                                        initial=[choice[0] for choice in FEATURE_CHOICES],

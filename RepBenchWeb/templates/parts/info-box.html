@@ -1,0 +1,29 @@
+{% load static  %}
+
+{#requires an id:element_to_show_and_hide#}
+{#{% include "parts/info-box" with id=element_to_show_and_hide  %}#}
+{#page must then contain an element with this with style="display:none"id#}
+
+
+<button id="{{ id }}-show" type="button" class="btn">
+                         <i class="mdi  mdi-18px mdi-information" aria-hidden="true"></i> show details
+</button>
+<button id="{{ id }}-hide"  type="button" class="btn" style="display: none;">
+                         <i class="mdi  mdi-18px mdi-information" aria-hidden="true"></i> hide details
+</button>
+
+
+<script>
+$(document).ready(function(){
+    $("#{{ id }}-show").click(function(){
+        $("#{{ id }}").show();
+        $("#{{ id }}-show").hide();
+        $("#{{ id }}-hide").show();
+    });
+    $("#{{ id }}-hide").click(function(){
+        $("#{{ id }}").hide();
+        $("#{{ id }}-show").show();
+        $("#{{ id }}-hide").hide();
+    });
+});
+</script>

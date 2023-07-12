@@ -1,0 +1,49 @@
+{% load static %}
+<label for="range-slider" style="translateY(50px);">Training Size</label>
+<div class="slider-container">
+
+    <span class="tooltip_">0</span>
+    <input class="form-control" name="train-size" type="range" min="20" max="100" step="10"
+           id="range-slider" data-tooltip="0">
+
+    <style>
+        .slider-container {
+            position: relative;
+            margin-right: 30px;
+        }
+
+        .tooltip_ {
+            position: absolute;
+            top: 5px; /* Adjust the positioning as needed */
+            left: 98%;
+        {#transform: translateX(10px);#}{#background-color: #000;#}{#color: #fff;#} padding: 5px 10px;
+            border-radius: 5px;
+        }
+    </style>
+
+    <script>
+        // Get the range slider and tooltip elements
+        const rangeSlider = document.getElementById('range-slider');
+        const tooltip_ = document.querySelector('.tooltip_');
+
+        // Update the tooltip value and position
+        const updateTooltip = () => {
+            const value = rangeSlider.value;
+            tooltip_.textContent = value;
+            const rangeWidth = rangeSlider.offsetWidth;
+            const tooltipWidth = tooltip_.offsetWidth;
+            const min = rangeSlider.min || 0;
+            const max = rangeSlider.max || 100;
+            const percentage = ((value - min) / (max - min)) * 100;
+            {#const tooltipLeft = (percentage * rangeWidth) / 100 - tooltipWidth / 2;#}
+            {#tooltip_.style.left = `${tooltipLeft}px`;#}
+        };
+
+        // Add event listener for input event
+        rangeSlider.addEventListener('input', updateTooltip);
+
+        // Initial update of the tooltip value and position
+        updateTooltip();
+    </script>
+
+</div>

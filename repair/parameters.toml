@@ -33,7 +33,7 @@
     ci = [0.1, 0.9] # use confidence intervall approach when smin and smax are not set
 
 
-[speed_acceleration]
+["SCREEN*"] # needs quotes because of the *
     t = 3
     smin = -0.1
     smax = +0.1
@@ -47,18 +47,6 @@
 
 
 
-# cd , rpca params :
-# classification_truncation
-# repair_truncation
-# threshold
-# repair_iter
-# n_max_iter
-##
-# imr params;
-# p
-# tau
-# screen params;
-# t
-# smin
-# smax
+[KFilter]
+    transition_cov = 0.5
 

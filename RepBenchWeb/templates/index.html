@@ -24,21 +24,35 @@
                 {{ Title }} is an online tool to Visualize The Repair of Anomaly Repair Techniques.
             </p>
 
-{#            <h5>Features</h5>#}
+            {#            <h5>Features</h5>#}
             <div class="row">
                 <div class="col-md-5">
                     <p><b>Main Parts:</b></p>
                     <ul>
                         <li>Display
                             <ul>
-                                <li><a href="{% url 'display_datasets' option="Display" %}">Datasets</a></li>
+                                <li><a href="{% url 'display_datasets' option="Display" %}">
+                                    Real-World Datasets</a></li>
+                            </ul>
+                            <ul>
+                                <li><a href="{% url 'display_datasets' option="Display" synthetic="True" %}">
+                                       Synthetic Datasets</a>
+                                </li>
                             </ul>
                         </li>
                         <li>Repair
                             <ul>
-                                <li><a href="{% url 'display_datasets' option="Repair" %}">Repair Synthetic Datasets</a>
+                                <li><a href="{% url 'display_datasets' option="Repair" %}">Inject and Repair
+                                    Datasets</a>
                                 </li>
-                                <li><a href="{% url 'display_datasets' %}">Inject Data and Repair</a></li>
+                                <li><a href="{% url 'inject_and_compare' %}">Compare different Repair Techniques</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>Recommendation
+                            <ul>
+                                <li><a  href="{% url 'recommendation' type="FLAML" %}">Model Selection using Flaml</a></li>
+                                <li><a href="{% url 'recommendation' type="RayTune" %}">Model Selection using RayTune</a></li>
                             </ul>
                         </li>
                         <li>Algorithm Analysis
@@ -47,13 +61,7 @@
                                     Repair of Matrix
                                     decomposition Techniques</a></li>
                                 <li><a href=" {% url 'optimization_datasets' %}">Display Parameter Search using Bayesian
-                                    Optimization</a></li>
-                            </ul>
-                        </li>
-                        <li>Recommendation
-                            <ul>
-                                <li><a href="">Real-World Datasets</a></li>
-                                <li><a href="">Synthetic Datasets</a></li>
+                                    Optimization or Successive Halving Search</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -61,8 +69,11 @@
                 <div class="col-md-5">
                     <p><b>Supported algorithms:</b></p>
                     <ul>
-                        <li>Iterative Minimum Repairing (IMR) <a href="https://www.vldb.org/pvldb/vol10/p1046-song.pdf"  target="_"> [VLDB 2017] </a>   </li>
-                        <li>Stream Data Cleaning under Speed Constraints (SCREEN) <a href="https://sxsong.github.io/doc/15sigmod-screen.pdf"  target="_">  [SIGMOD 2015] </a> </li>
+                        <li>Iterative Minimum Repairing (IMR) <a href="https://www.vldb.org/pvldb/vol10/p1046-song.pdf"
+                                                                 target="_"> [VLDB 2017] </a></li>
+                        <li>Stream Data Cleaning under Speed Constraints (SCREEN) <a
+                                href="https://sxsong.github.io/doc/15sigmod-screen.pdf" target="_"> [SIGMOD 2015] </a>
+                        </li>
                         <li>CDrep (Repair based on the Centroid Decomposition)</li>
                         <li>RPCA (Robust PCA using Huber Loss Function)</li>
                     </ul>
@@ -73,22 +84,22 @@
                 Infolab</a>, a research group at the <a href="http://www.unifr.ch/" target="_blank">University of
                 Fribourg</a>, Switzerland.</p>
 
-{#            <div id="Publications">#}
-{#                <p>#}
-{#                <h3>#}
-{#                    <b>Publications:</b>#}
-{#                </h3>#}
-{#                <ol>#}
-{#                    <li>Zhang, Aoqian, et al. <b>"Time series data cleaning: From anomaly detection to anomaly#}
-{#                        repairing."</b> Proceedings of the VLDB Endowment 10.10 (2017): 1046-1057.#}
-{#                    </li>#}
-{#                    <li>Song, Shaoxu, et al. <b>"SCREEN: stream data cleaning under speed constraints."</b> Proceedings#}
-{#                        of#}
-{#                        the 2015 ACM SIGMOD International Conference on Management of Data. 2015.#}
-{#                    </li>#}
-{#                </ol>#}
-{#            </div>#}
-{#                        </p>#}
+            {#            <div id="Publications">#}
+            {#                <p>#}
+            {#                <h3>#}
+            {#                    <b>Publications:</b>#}
+            {#                </h3>#}
+            {#                <ol>#}
+            {#                    <li>Zhang, Aoqian, et al. <b>"Time series data cleaning: From anomaly detection to anomaly#}
+            {#                        repairing."</b> Proceedings of the VLDB Endowment 10.10 (2017): 1046-1057.#}
+            {#                    </li>#}
+            {#                    <li>Song, Shaoxu, et al. <b>"SCREEN: stream data cleaning under speed constraints."</b> Proceedings#}
+            {#                        of#}
+            {#                        the 2015 ACM SIGMOD International Conference on Management of Data. 2015.#}
+            {#                    </li>#}
+            {#                </ol>#}
+            {#            </div>#}
+            {#                        </p>#}
         </div>
     </div>
 {% endblock %}

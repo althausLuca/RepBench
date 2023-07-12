@@ -42,8 +42,8 @@ class BaseDataSet(models.Model):
         """
         Returns: dict of features for each column
         """
-        if self.features == {}:
-            self.compute_features()
+        #if self.features == {}:
+        self.compute_features()
         return self.features
 
     @property
@@ -141,7 +141,7 @@ class InjectedContainer(BaseDataSet):
             repair_norm = (repair - mean) / std
             # normalize truth data w.r.t injected series
             repair_converted[alg_name] = map_repair_data(repair_norm, injected_data_container, alg_name=alg_name,
-                                                         links=None, df_original=truth)
+                                                         links=None, df_original=truth , distinct_ids=True)
         recommendation_results["alg_repairs"] = repair_converted
 
         # self.recommendation = json.dumps(recommendation_results, cls=)

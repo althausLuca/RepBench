@@ -58,7 +58,10 @@ class RecommendationInputLoader:
         # self.labels = encoder.classes_
         # remove features with nan entries
         if nan_safe:
+            #replace nan values with 0
+            self.feature_values = self.feature_values.fillna(0)
             nan_free_rows = ~np.isnan(self.feature_values.values).any(axis=1)
+            print(np.isnan(self.feature_values.values).any(axis=1))
             self.feature_values = self.feature_values.iloc[nan_free_rows, :]
             self.categories_encoded = self.categories_encoded[nan_free_rows]
 

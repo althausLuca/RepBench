@@ -1,10 +1,11 @@
 import numpy as np
 
 from django import forms
-from repair.algorithms_config import SPEEDandAcceleration, IMR, SCREEN, RPCA, CDREP , ALGORITHM_TYPES , SCR
+from repair.algorithms_config import SPEEDandAcceleration, IMR, SCREEN, RPCA, CDREP , ALGORITHM_TYPES , SCR , KalmanFilter
 from RepBenchWeb.forms.utils import hiddenField
 
 ALGORITHM_CHOICES = [(a, a) for a in ALGORITHM_TYPES]
+
 
 class AlgorithmsForm(forms.Form):
     algorithms = forms.MultipleChoiceField(label='Algorithms',
@@ -13,8 +14,6 @@ class AlgorithmsForm(forms.Form):
                                   attrs={'class': 'multi-checkbox', "name": 'algorithms[]'}),
                               choices=ALGORITHM_CHOICES
                               )
-
-
 
 
 class RPCAparamForm(forms.Form):
@@ -81,3 +80,10 @@ class SRCFForm(forms.Form):
                             widget=forms.NumberInput(attrs={'min': "0", "step": 1 , "class": 'form-control'}))
     delta = forms.FloatField(help_text="Delta", label='Delta', initial=500,
                             widget=forms.NumberInput(attrs={'min': "0", "step": "any", "class": 'form-control'}))
+
+
+
+class KalmanFilterFilterForm(forms.Form):
+    alg_type = hiddenField(KalmanFilter)
+    transition_cov = forms.FloatField(help_text="transition_covariance", label='Cov', initial=0.5,
+                             widget=forms.NumberInput(attrs={'min': 0, "step": 0.1,"max":1, "class": 'form-control'}))

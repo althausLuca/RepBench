@@ -31,9 +31,10 @@ def algorithm1(x: np.array, smin=-1, smax=1, amin=-1, amax=1, w=5):
             xmax_k_s = x_prime[k - 1] + smax * (t[k] - t[k - 1])
             x_max_k = min(xmax_k_s, xmax_k_a)
 
-        for i in range(k + 1, len(x)):
+        for i in range(k +1, len(x)):
             if t[i] - t[k] > w:
                 break
+            print(k,"AA")
             """
             compute zmin_k_i_a and zmax_k_i_a with formula 35 and 36
             z_max_k_i_a = (x_prime_k-1*(t_i - t_k) -  (amax*(t_i - t_k)**2 -x_i )*(t_k - t_k-1))/(t_i - t_k-1)
@@ -62,13 +63,13 @@ def algorithm1(x: np.array, smin=-1, smax=1, amin=-1, amax=1, w=5):
 
             X_min.add(max(z_min_k_i_a, z_min_k_i_s)) # not sure if this should be a max in the paper it is a min
             X_max.add(min(z_max_k_i_a, z_max_k_i_s)) # not sure if this should be a min in the paper it is a max
-
+            print(k,z_min_k_i_a, z_min_k_i_s)
         """
         compute x_mid_k with formula 41
         xmid_k = median(X_min U X_max U {x_k))
         """
         x_mid_k = np.median(list(X_min.union(X_max).union({x[k]})))
-        print(list(X_min.union(X_max).union({x[k]})), x_mid_k)
+        # print(list(X_min.union(X_max).union({x[k]})), x_mid_k)
         """
         compute x_prime_k (repair) with formula 41
         xmid_k = median(X_min U X_max U {x_k)) 46
@@ -101,3 +102,24 @@ should results in  {0, 0.5, 2, 4.5, 6}
 
 repair = algorithm1(x, smin, smax,amin, amax,w)
 print(repair)
+
+
+
+"""
+Example plot aproximation
+"""""
+x = np.array([1.25, 1.2, 1.35, 1.25, 1.2,1.25,1.4,1.25,1.25,1.2,1.3,1.35,1.2,1.4,2.5 ,1.3,1.32
+              ,1.27,1.2,1.35,1.22,0,0,0,0,1.24,1.22,1.26,1.22,1.2,1.15,1.15,1.15,1.15,1.15,1.15])
+# from example 3.7
+smin = -0.12
+smax = 0.12
+amax =  0.1
+amin = -0.1
+w = 1
+repair = algorithm1(x, smin, smax,amin, amax,w)
+
+import matplotlib.pyplot as plt
+plt.plot(x, label="original")
+plt.plot(repair, label="repaired")
+plt.legend()
+plt.show()

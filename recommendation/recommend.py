@@ -70,7 +70,7 @@ def get_all_repairs(injected_data_container: InjectedDataContainer):
 
 
 def get_recommendation_and_repair(injected_data_container: InjectedDataContainer, classifier, features=None):
-    if features is None:
+    if True is None:
         results: dict = get_recommendation_from_classifier(injected_data_container, classifier)
     else:
         results = get_recommendation_from_classifier_and_features(classifier,
@@ -96,16 +96,18 @@ def get_recommendation_from_classifier_and_features(classifier, features_per_col
     except:
         used_estimator = str(classifier.__class__.__name__.split("Estimator")[0])
 
+
     probabilities_per_col = []
     for col in injected_columns:
         features = features_per_col[col]
-        print("FEATURES", list(features.keys())[0:10])
-        print("used features", list(used_features)[0:10])
+        print("FEATURES", list(features.keys())[-20:])
+        print("used features", list(used_features)[-20:])
 
         fd = pd.DataFrame.from_dict({f_name: [v] for f_name, v in features.items() if f_name in used_features})
         print("final features", list(fd.columns)[0:10])
         print("FEATURES", list(features.values())[0:10])
 
+        print("tsfel_features", {f for f in used_features if f.endswith("fel")})
         prediction = classifier.predict(fd)[0]
         print(f"AUTOML PREDICTION column: {col}", prediction)
         print(f"AUTOML PREDICTION column: {col}decoded ", decode(prediction))

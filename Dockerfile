@@ -23,6 +23,9 @@ RUN pip install tsfel
 
 RUN apt-get install -y openjdk-17-jdk
 RUN pip install JPype1
+
+RUN pip install pykalman
+
 # Copy project
 COPY . /code/
 

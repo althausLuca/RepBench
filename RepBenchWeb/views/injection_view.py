@@ -6,8 +6,6 @@ from django.shortcuts import render
 from RepBenchWeb.forms.file_upload import UploadFilesForm
 from RepBenchWeb.utils.encoder import RepBenchJsonRespone
 from injection.injectedDataContainer import InjectedDataContainer
-from RepBenchWeb.forms.alg_param_forms import SCREENparamForm, RPCAparamForm, CDparamForm, IMRparamField, \
-    SpeedAndAccelerationField , SRCFForm
 from RepBenchWeb.forms.injection_form import store_injection_form, InjectionForm
 from RepBenchWeb.models import InjectedContainer, DataSet
 from RepBenchWeb.views.config import *
@@ -16,6 +14,8 @@ from RepBenchWeb.ts_manager.HighchartsMapper import map_injected_series
 from RepBenchWeb.views.repair_view import RepairView
 from injection.injection_methods.basic_injections import add_anomalies
 from testing_frame_work.data_methods.data_class import DataContainer
+from RepBenchWeb.forms import ParamForms
+
 
 class InjectionView(RepairView):
     template = INJECT_AND_REPAIR_TEMPLATE
@@ -23,13 +23,6 @@ class InjectionView(RepairView):
                  "mae": "MAE",
                  "partial_rmse": "RMSE on Anomaly",
                  "runtime": "runtime"}
-
-    ParamForms = {"SCREEN": SCREENparamForm(),
-                  "RPCA": RPCAparamForm(),
-                  "CDrec": CDparamForm(),
-                  "IMR": IMRparamField(),
-                  "SPEEDandAcceleration": SpeedAndAccelerationField(),
-                  "SCR" : SRCFForm()}
 
     def get(self, request, setname="BAFU"):
         data_object = DataSet.objects.get(title=setname)
@@ -40,7 +33,7 @@ class InjectionView(RepairView):
         context["data_fetch_url_name"] = self.data_fetch_url_name
         context["store_form"] = store_injection_form
         context["injection_form"] = InjectionForm(list(df.columns))
-        context["alg_forms"] = self.ParamForms
+        context["alg_forms"] = ParamForms
         context["upload_form"] = UploadFilesForm()
 
         return render(request, self.template, context=context)

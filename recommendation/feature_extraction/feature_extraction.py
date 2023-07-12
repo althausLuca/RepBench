@@ -11,10 +11,11 @@ feature_endings = {"catch22": "__ct",
                    "tsfresh_minimal": "__tsf_m",
                    "multi_dim": "__md",
                    "tsfresh_selected": "__tsf_s",
-                   "tsfel": "__tsfel"
+                   "tsfel": "__tsfel",
                    }
 
-def extract_features(dataset : pd.DataFrame, column):
+
+def extract_features(dataset: pd.DataFrame, column):
     """
     Extracts features from a dataset and returns them as a dictionary.
     Args:
@@ -24,12 +25,11 @@ def extract_features(dataset : pd.DataFrame, column):
     Returns:
         dictionary of features
     """
-    dataset = (dataset - dataset.mean())/dataset.std()  #normalize
+    dataset = (dataset - dataset.mean()) / dataset.std()  # normalize
     single_features = single_ts_feature_extraction(dataset.iloc[:, column].values)
     multi_features = multi_ts_feature_extraction(dataset, column)
     single_features.update(multi_features)
     return single_features
-
 
 
 def clean_feature_name(name):
@@ -50,8 +50,10 @@ def single_ts_feature_extraction(input_data):
     selected_tsfresh_features = extract_selected_ts_fresh_features(np_data)
     tsfresh_features_minimal = extract_ts_fresh_features(np_data)
     catch22_features = extract_catch22_features(np_data)
-    extract_tsfel_features(np_data)
+    tsfel_features = extract_tsfel_features(np_data)
+
     features.update(catch22_features)
+    features.update(tsfel_features)
     features.update(selected_tsfresh_features)
     features.update(tsfresh_features_minimal)
     return features
@@ -95,12 +97,12 @@ def multi_ts_feature_extraction(dataset: pd.DataFrame, column):
 
 def extract_tsfel_features(data: np.ndarray):
     data = data.flatten()
-    data= pd.DataFrame(data)
+    data = pd.DataFrame(data)
     cfg_file = tsfel.get_features_by_domain()
-    tsfel_features = tsfel.time_series_features_extractor(cfg_file,data)
+    tsfel_features = tsfel.time_series_features_extractor(cfg_file, data)
     tsfel_features = dict(zip(tsfel_features.columns, tsfel_features.values.flatten()))
-    tsfel_features = {name + feature_endings["tsfel"]: round(val, 5) for name, val in tsfel_features.items()}
-    print("TSFELL FEATURES" , tsfel_features)
+    tsfel_features = {name.replace(" ", "_") + feature_endings["tsfel"]: round(val, 5) for name, val in tsfel_features.items()}
+    print("TSFELL FEATURES", tsfel_features)
 
     return tsfel_features
 

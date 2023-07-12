@@ -7,9 +7,9 @@ from recommendation.feature_extraction.load_features import compute_features
 
 mode = "train"
 data_folder = f"data/recommendation/{mode}"
-load_file_path = f"recommendation/results/scores/score_{mode}_server"
+load_file_path = f"recommendation/results/scores/scores_{mode}"
 store_path = "recommendation/results/features"
-store_file_name = f"features_{mode}_server"
+store_file_name = f"features_{mode}"
 
 
 compute_features(load_filename=load_file_path,
