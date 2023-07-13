@@ -119,7 +119,7 @@
         </div>
     </div>
 
-    <div class="row" id="scores"></div>
+    <div class="row" id="scores" style="display:none;"></div>
 
     <script>
         let repair_url = null
@@ -183,6 +183,7 @@
             MultiScoreChart.clear()
 
             async function performSequentialFetches() {
+
                 for (const algorithm of selectedValues) {
                     const loadingGif = document.createElement("img");
                     loadingGif.src = "https://upload.wikimedia.org/wikipedia/commons/9/92/Loading_icon_cropped.gif";
@@ -209,8 +210,9 @@
                         const RMSE = Math.floor(scores["RMSE"] * 1000) / 1000;
                         const RMSE_on_anomaly = Math.floor(scores["RMSE on Anomaly"] * 1000) / 1000;
                         const MAE = Math.floor(scores["MAE"] * 1000) / 1000;
-                        console.log("COOOOOOOOOOLOUUUR", chartRepairSeries.color)
-                        console.log(chartRepairSeries)
+
+                        scoreDiv = document.getElementById("scores");
+                        scoreDiv.style.display = "block";
                         MultiScoreChart.addData(algorithm, RMSE, MAE, RMSE_on_anomaly, chartRepairSeries.color);
                     } catch (error) {
                         console.error(error);
