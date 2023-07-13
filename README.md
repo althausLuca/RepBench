@@ -5,8 +5,8 @@ various algorithms and metrics for evaluating the effectiveness of anomaly repai
 conditions. Users can introduce different types of anomalies into datasets and use the RepBench web application to view
 the data, repair results, and experiment with algorithm parameters.
 
-[**Prerequisites**](#prerequisites) | [**Build**](#build) |[**Repair**](#anomaly-repair) | [**Injection
-**](#anomaly-injection)|[**RepBench Web Application**](#web-tool)
+[**Prerequisites**](#prerequisites) | [**Build**](#build) | [**Repair**](#anomaly-repair) | [**Injection**](#anomaly-injection) 
+| [**RepBench Web Application**](#web-tool)
 
 # Anomaly Repair
 
@@ -19,7 +19,7 @@ runtime on various real-world time series datasets using different repair scenar
 - All the datasets used in this benchmark can be
   found [here](https://github.com/althausLuca/RepairBenchmark/tree/master/data).
 - The full list of repair scenarios can be
-  found [here](https://github.com/althausLuca/RepairBenchmark/tree/master/injection/scenarios/README.md).
+  found [here](https://github.com/althausLuca/RepBench/blob/master/testing_frame_work/scenarios/README.md).
 
 ___
 
@@ -53,7 +53,10 @@ install the requirements for the Benchmark
 $ pip3 install -r testing_frame_work/testing_framework_requierements.txt
 ```
 
+Additionaly, to use the SRC algorithm you need Java to run on your system e.g., openjdk-17-jre.
+
 ___
+
 
 ## Execution
 
@@ -71,7 +74,8 @@ $ python3 TestingFramework.py -d dataset -a anomaly_type -scen scenario_type -al
 | elec     | all          | ts_nbr        | cdrep     |
 | all      |              | cts_nbr       | kfilter   |
 | all      |              | a_factor      | screen*   |
-|          |              | all           | all       |      
+|          |              | all           | all       |
+
 
 ### Data
 
@@ -106,7 +110,7 @@ $ python3 TestingFramework.py -d bafu5k -scen ts_nbr  -a shift -alg cdrep
 $ python3 TestingFramework.py  -d bafu5k,msd -scen ts_nbr -a shift,outlier -alg cdrep,rpca
 ```
 
-3. Run the whole benchmark: all the algorithms , all the dataset on all scenarios with all anomalies (takes 6 hours)
+3. Run the whole benchmark: all the algorithms , all the dataset on all scenarios with all anomalies (takes ~6 hours)
 
 ```bash
 $ python3 TestingFramework.py -d all -scen all  -a all -alg all

@@ -22,5 +22,8 @@ class UploadFilesForm(forms.Form):
                                widget=forms.TextInput(
                                       attrs={"class": "form-control"}))
 
+    injected_data = forms.FileField(label="Anomalous File", required=False,
+                            widget=forms.ClearableFileInput(
+                                attrs={'placeholder': 'No file selected', "class": "form-control"}))
     # file2 = forms.FileField(label="File 2 (Optional)", required=False)
     # file3 = forms.FileField(label="File 3 (Optional)", required=False)
