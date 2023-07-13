@@ -4,9 +4,9 @@ import numpy as np
 from pandas import DataFrame
 
 from injection.injectedDataContainer import InjectedDataContainer
-from repair.algorithm_mapper import algo_mapper
+from repair import algo_mapper
 from repair.estimator import Estimator
-from repair.param_loader import get_algorithm_params
+from repair import get_algorithm_params
 
 
 def shuffle_labels(labels: DataFrame):

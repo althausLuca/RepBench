@@ -33,7 +33,7 @@
     ci = [0.1, 0.9] # use confidence intervall approach when smin and smax are not set
 
 
-["SCREEN*"] # needs quotes because of the *
+["SCREEN2"] # needs quotes because of the *
     t = 3
     smin = -0.1
     smax = +0.1

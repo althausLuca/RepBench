@@ -7,7 +7,7 @@ sys.path.append(os.path.abspath(
     os.path.join(os.path.dirname(__file__), '..')))  # run from top dir with  python3 recommendation/reccomendation.py
 
 from repair import algo_mapper
-from repair.param_loader import get_algorithm_params
+from repair import get_algorithm_params
 from injection.injectedDataContainer import InjectedDataContainer
 
 from repair.algorithms_config import CDREP, RPCA, IMR, SCREEN

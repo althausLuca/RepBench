@@ -28,9 +28,6 @@ class SpeedAndAccelerationEstimator(SCREENEstimator):
                 }
 
     def suggest_param_range(self, X):
-        # return {"smax": np.linspace(0.0001, 1, num=20),
-        #         "smin": -np.linspace(0.0001, 1, num=20),
-
         return {"smax": np.linspace(2/20, 2, num=20),
                 "amax": np.linspace(1/20, 4, num=20), }
 

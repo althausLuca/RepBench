@@ -8,5 +8,5 @@ from repair.statistical_approach.scr_estimator import SCREstimator
 from repair.kalman_filter.kalmanFilterEstimator import KalmanFilterEstimator
 
 
-## import this last or else you'll get a circular import
-from repair.algorithm_mapper import algo_mapper
+## import utils last because of circular imports
+from repair.utils import (get_algorithm_params, get_main_alg_name, algo_mapper, alias_mapper, aliases)

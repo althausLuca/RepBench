@@ -11,7 +11,7 @@ from RepBenchWeb.models import InjectedContainer, DataSet
 from RepBenchWeb.views.config import *
 from RepBenchWeb.BenchmarkMaps.repairCreation import injected_container_None_Series
 from RepBenchWeb.ts_manager.HighchartsMapper import map_injected_series
-from RepBenchWeb.views.repair_view import RepairView
+from RepBenchWeb.views.repair.repair_view import RepairView
 from injection.injection_methods.basic_injections import add_anomalies
 from testing_frame_work.data_methods.data_class import DataContainer
 from RepBenchWeb.forms import ParamForms

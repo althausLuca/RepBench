@@ -9,11 +9,11 @@ from RepBenchWeb.views.optimization import optimizationview
 from RepBenchWeb.views import (
     index_view,
     dataset_views,
-    repair_view,
     injection_view,
     datasets_display,
     data_upload_view,
 )
+from RepBenchWeb.views.repair import repair_view
 
 from RepBenchWeb.views import dimensionality_reduction_view, synthetic_dataset_view, data_loader
 from RepBenchWeb.views.recommendation.recommendation_tasks import FlamlTask

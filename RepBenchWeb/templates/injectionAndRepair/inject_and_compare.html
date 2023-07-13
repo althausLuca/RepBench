@@ -14,6 +14,7 @@
             font-size: 20px;
         {#background: black;#}
         }
+
         .loading-gif {
             height: 20px;
             width: 20px;
@@ -118,6 +119,7 @@
         </div>
     </div>
 
+    <div class="row" id="scores"></div>
 
     <script>
         let repair_url = null
@@ -154,7 +156,6 @@
             inject(injection_url);
         })
 
-
         let repairButton = document.getElementById("repair-button");
         repairButton.addEventListener("click", function (event) {
             event.preventDefault();
@@ -172,13 +173,14 @@
                     selectedValues.push(checkboxes[i].value);
                 }
             }
-            {#console.log(selectedValues)#}
-            {#console.log("repair url", repair_url)#}
+            repairButton.classList.add("disabled")
             mainChart.showLoading()
             repairFormData.append("injected_series", JSON.stringify(chartManager.get_injected_norm_data()))
             repairFormData.append('csrfmiddlewaretoken', csrftoken)
             repairFormData.append("distinct_ids", 1)
             chartManager.hideNoneInjectedSeries()
+            chartManager.clearRepairedSeries()
+            MultiScoreChart.clear()
 
             async function performSequentialFetches() {
                 for (const algorithm of selectedValues) {
@@ -188,23 +190,28 @@
                     const label = document.querySelector(`input[value="${algorithm}"]`).parentElement;
                     label.appendChild(loadingGif);
                     repairFormData.append("alg_type", algorithm);
-                    console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
                     try {
                         const response = await fetch(repair_url, {
                             method: 'POST',
                             body: repairFormData,
                         });
                         const responseJson = await response.json();
-                        console.log(responseJson);
                         const repSeries = responseJson.repaired_series;
                         const scores = responseJson.scores;
                         repairResult = repSeries;
 
                         const chartRepairSeries = Object.keys(repSeries).map(key => {
                             let repair = repSeries[key];
-                            console.log(repair);
+                            {#console.log(repair);#}
                             return chartManager.addSeries(repair, true, "repair");
-                        });
+                        })[0];
+
+                        const RMSE = Math.floor(scores["RMSE"] * 1000) / 1000;
+                        const RMSE_on_anomaly = Math.floor(scores["RMSE on Anomaly"] * 1000) / 1000;
+                        const MAE = Math.floor(scores["MAE"] * 1000) / 1000;
+                        console.log("COOOOOOOOOOLOUUUR", chartRepairSeries.color)
+                        console.log(chartRepairSeries)
+                        MultiScoreChart.addData(algorithm, RMSE, MAE, RMSE_on_anomaly, chartRepairSeries.color);
                     } catch (error) {
                         console.error(error);
                     } finally {
@@ -213,11 +220,56 @@
 
                     }
                 }
+                repairButton.classList.remove("disabled")
+
             }
 
             performSequentialFetches();
 
         })
+
+
+        const MultiScoreChart = {
+            chart: Highcharts.chart('scores', {
+                chart: {
+                    type: 'column',
+                },
+                title: {
+                    text: 'Algorithm Scores',
+                },
+                xAxis: {
+                    categories: [],
+                },
+                yAxis: {
+                    title: {
+                        text: 'Score',
+                    },
+                },
+                series: [],
+            }),
+
+            addData: function (algorithm, RMSE, MAE, RMSE_on_anomaly, color) {
+                const scores = {
+                    "RMSE": RMSE,
+                    "MAE": MAE,
+                    "RMSE on Anomaly": RMSE_on_anomaly,
+                };
+                const categories = Object.keys(scores);
+                const data = Object.values(scores).map((score) => Math.floor(score * 1000) / 1000);
+                if (this.chart.xAxis[0].categories.length === 0) {
+                    this.chart.xAxis[0].setCategories(categories);
+
+                }
+                this.chart.addSeries({name: algorithm, data: data, color: color});
+            },
+
+            clear: function () {
+                this.chart.xAxis[0].setCategories([]);
+                while (this.chart.series.length > 0) {
+                    this.chart.series[0].remove(true);
+                }
+            },
+        };
     </script>
 
 

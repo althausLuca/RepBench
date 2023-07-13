@@ -1,5 +1,4 @@
 import json
-
 import numpy as np
 import pandas as pd
 import pickle
@@ -31,9 +30,19 @@ def parse_lines_file(file_name):
     try:
         with open(file_name, 'r') as f:
             lines = f.readlines()
+
+        # Remove the last line if it contains '\x00' characters
+        initial_length = len(lines)
+        lines = [line for line in lines if '\x00' not in line]
         json_string = "[" + ",".join(lines) + "]"
         json_array = json.loads(json_string)
-    except FileNotFoundError as e :
+
+        # Resave the file without the last line
+        if len(lines) != initial_length:
+            with open(file_name, 'w') as f:
+                f.writelines(lines)
+
+    except FileNotFoundError as e:
         print(os.listdir())
         raise e
     return json_array

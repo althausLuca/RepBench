@@ -3,6 +3,14 @@ import sys
 
 
 def name_check(choices, para_name):
+    """
+
+    Args:
+        choices list[str]:  list of possible choices
+        para_name str:  name of the parameter
+
+    Returns: function that checks if the input is in the choices to be used by argument parsers
+    """
     def f(str):
         result = []
         for s in str.split(","):
@@ -45,16 +53,6 @@ def add_repair_arguments_to_parser(parser,estimator_choices):
     parser.add_argument("-run_time_n", "-rtn" , type=int ,default=1)
 
 
-    #parser.add_argument("-saverepair",  action='store_true')
-
-
-# def init_injection_parser(scenario_choises = None):
-#     parser = argparse.ArgumentParser()
-#     add_data_arguments_to_parser(parser)
-#     add_injection_arguments_to_parser(parser , scenario_choises =scenario_choises)
-#     return parser.parse_args()
-
-
 def init_repair_parser():
     parser = argparse.ArgumentParser()
     add_data_arguments_to_parser(parser)
@@ -70,7 +68,7 @@ def init_parser(input = None , estimator_choices = None ,scenario_choices = None
     add_repair_arguments_to_parser(parser,estimator_choices = estimator_choices)
 
     if input is not None:
-        "For running/profiling with an IDE"
+        #For running/profiling with and IDE  or simply run it in a file
         args = parser.parse_args(input.split())
     else:
         args = parser.parse_args()

@@ -1,6 +1,7 @@
 from django import forms
 
 from repair import algo_mapper
+from repair import algorithms_config as ac
 
 error_choices = [("rmse", "RMSE"), ("mae", "MAE"), ("partial_rmse", "RMSE on anomaly")]
 
@@ -29,7 +30,7 @@ def infer_step_size(min, max):
 
 def optimization_param_forms_inputs(df):
     b_param_forms = {}
-    alg_input_map = {alg_name: alg().suggest_param_range(df) for alg_name, alg in algo_mapper.items()}
+    alg_input_map = {alg: algo_mapper[alg]().suggest_param_range(df) for alg in ac.ALGORITHM_TYPES}
     for alg, param_range in alg_input_map.items():
         b_param_forms[alg] = [
             {"param_name": k, "min": min(v), "max": max(v), "step": infer_step_size(min(v), max(v)), "label": k}
@@ -40,5 +41,3 @@ def optimization_param_forms_inputs(df):
 RPCA = "RPCA"
 
 
-class RPCAOptimizationform():
-    repair_truncation = forms.IntegerField(label="k", initial=20)

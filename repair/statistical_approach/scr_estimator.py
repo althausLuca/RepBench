@@ -1,8 +1,6 @@
 import pandas as pd
 
-from repair.Screen.globallp import LPconstrainedAE
-from repair.Screen.screen import screen
-from repair.algorithms_config import SCREEN, SCR
+from repair.algorithms_config import SCR
 from repair.estimator import Estimator
 import numpy as np
 import jpype
@@ -56,7 +54,7 @@ class SCREstimator(Estimator):
 
                     repair.iloc[batch_start:batch_end, col] = retval
 
-        # jpype.shutdownJVM()
+        # jpype.shutdownJVM() "OSError: JVM cannot be restarted" if one tries to restart the JVM
         return repair
 
 
@@ -65,7 +63,7 @@ class SCREstimator(Estimator):
         return SCR
 
     def __str__(self):
-        return f'SCR({self.t},{round(self.smax, 1)},{round(self.smin, 1)})'
+        return f'SCR({round(self.THETA, 1)},{round(self.delta, 1)})'
 
     def get_fitted_attributes(self):
         return self.get_fitted_params()

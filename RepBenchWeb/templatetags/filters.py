@@ -6,8 +6,8 @@ from repair.algorithms_config import CDREP, SCREEN, RPCA, IMR , SPEEDandAccelera
 register = template.Library()
 
 WebAppTitle = "RepBench"
-algo_names = { RPCA : "RPCA", CDREP : "CDrep", SCREEN : "SCREEN", IMR : "IMR"  , SPEEDandAcceleration : "Speed+Acceleration"
-}
+# algo_names = { RPCA : "RPCA", CDREP : "CDrep", SCREEN : "SCREEN", IMR : "IMR"  , SPEEDandAcceleration : "Speed+Acceleration"
+# }
 
 ## catch22 filters
 paper_link = "https://www.biorxiv.org/content/10.1101/532259v1.full.pdf"
@@ -26,10 +26,8 @@ def cc2_paper_link():
 
 @register.filter()
 def parse_alg_name(alg_name):
-    try :
-        return algo_names[alg_name]
-    except KeyError:
-        return alg_name
+    from repair  import get_main_alg_name
+    return get_main_alg_name(alg_name)
 
 
 

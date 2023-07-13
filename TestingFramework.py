@@ -8,9 +8,9 @@ import testing_frame_work.repair as alg_runner
 from testing_frame_work.data_methods.data_class import infer_data_file
 import injection.injection_config as ic
 import testing_frame_work.scenarios.scenario_config as sc
-from repair import algorithms_config as algc
+from repair import algo_mapper
 
-estimator_choices = list(algc.ALGORITHM_TYPES) + ["all"]
+estimator_choices = list(algo_mapper.keys()) + ["all"]
 scenario_choices = list(sc.SCENARIO_TYPES) + ["all"]
 anomaly_choices = list(ic.ANOMALY_TYPES) + ["all"]
 
@@ -20,14 +20,7 @@ def main(input=None):
                        scenario_choices=scenario_choices,
                        anomaly_choices=anomaly_choices)
 
-    if args.alg is not None:
-        algorithms: str = arg_parser.parse_repair_algorithms(args)
-
-    elif args.algx is not None:
-        algorithms = arg_parser.parse_repair_algorithms_x(args)
-
-    else:
-        assert False, "algx or alg has to be given as a parameter"
+    algorithms = arg_parser.parse_repair_algorithms(args)
 
     scen_names = arg_parser.parse_scen_names(args)
 

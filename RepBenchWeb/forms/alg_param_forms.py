@@ -87,3 +87,7 @@ class KalmanFilterFilterForm(forms.Form):
     alg_type = hiddenField(KalmanFilter)
     transition_cov = forms.FloatField(help_text="transition_covariance", label='Cov', initial=0.5,
                              widget=forms.NumberInput(attrs={'min': 0, "step": 0.1,"max":1, "class": 'form-control'}))
+
+
+
+ParamForms = {"SCREEN": SCREENparamForm(), "RPCA": RPCAparamForm(), "CDrec": CDparamForm(), "IMR": IMRparamField()}

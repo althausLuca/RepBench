@@ -1,6 +1,6 @@
 from django import forms
 from django.utils.safestring import mark_safe
-from RepBenchWeb.forms.form_config import ANOMALY_CHOICES
+from RepBenchWeb.forms.form_config import ANOMALY_CHOICES , ratio_choices , factor_choices
 
 class RangeSliderInput(forms.TextInput):
     input_type = 'range'
@@ -28,10 +28,6 @@ class RangeSliderInput(forms.TextInput):
                f'</div>'
         return html
 
-
-
-ratio_choices = [( 0.05,"low") , ( 0.1,"medium"), (0.2,"large")]
-factor_choices = [(2,"small"), (3.5,"medium"), (6,"large")]
 class InjectionForm(forms.Form):
     anomaly = forms.CharField(label='Anomaly Type', widget=forms.Select(choices=ANOMALY_CHOICES, attrs={
         "class": 'form-control', "id": "anomaly_id",

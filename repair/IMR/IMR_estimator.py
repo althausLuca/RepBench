@@ -32,29 +32,34 @@ class IMR_estimator(Estimator):
         truth_full = truth.copy()
         repair = injected.copy()
         for col in columns_to_repair:
-            x = np.array(injected)[:, col]
-            truth = np.array(truth_full)[:, col]
-            if np.allclose(x,truth):
-                assert False ,(x,truth)
-                repair.iloc[:, col] = x
+            try:
+                x = np.array(injected)[:, col]
+                truth = np.array(truth_full)[:, col]
+                if np.allclose(x,truth):
+                    assert False ,(x,truth)
+                    repair.iloc[:, col] = x
 
-            col_labels = labels.iloc[:,col]
+                col_labels = labels.iloc[:,col]
 
-            col_labels = np.arange(len(col_labels))[col_labels]
+                col_labels = np.arange(len(col_labels))[col_labels]
 
-            y_0 = x.copy()
-            y_0[col_labels] = truth[col_labels]
+                y_0 = x.copy()
+                y_0[col_labels] = truth[col_labels]
 
-            if  np.allclose(x, y_0):
-                print("Warning: IMR has not enought labeled anomalies")
+                if  np.allclose(x, y_0):
+                    print("Warning: IMR has not enought labeled anomalies")
 
-            if self.max_itr_n is None:
-                max_itr_n  = int(4000*len(x)/1000)
-            else:
-                max_itr_n = self.max_itr_n
-            repair_results = imr(x, y_0, col_labels, tau=self.tau, p=self.p, k=max_itr_n)
-            col_repair = repair_results["repair"]
-            repair.iloc[:, col] = col_repair
+                if self.max_itr_n is None:
+                    max_itr_n  = int(4000*len(x)/1000)
+                else:
+                    max_itr_n = self.max_itr_n
+                repair_results = imr(x, y_0, col_labels, tau=self.tau, p=self.p, k=max_itr_n)
+                col_repair = repair_results["repair"]
+                repair.iloc[:, col] = col_repair
+              # catch numpy.linalg.LinAlgError: Singular matrix which means there are no labels on anomalies
+            except np.linalg.LinAlgError:
+                pass # no repair
+
 
         return repair
 

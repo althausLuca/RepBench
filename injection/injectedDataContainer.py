@@ -7,7 +7,7 @@ import pandas as pd
 
 
 class InjectedDataContainer:
-    def __init__(self, injected, truth, *, class_df=None, labels, name="injected_container"):
+    def __init__(self, injected, truth, *, class_df=None, labels, name="injected_container" , is_checked=False):
         assert injected.shape == truth.shape
 
         self.truth_ = truth  # contains the Original Series
@@ -18,6 +18,8 @@ class InjectedDataContainer:
         self.repair_names = []
         self.name = name
         self.relabeled = 0
+        if not is_checked:
+            self.check = lambda: None
 
         if class_df is None:
             class_df = pd.DataFrame(np.invert(np.isclose(injected, truth))).reindex_like(truth)

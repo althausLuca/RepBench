@@ -13,9 +13,9 @@ sys.path.append(parent_dir)
 from recommendation.feature_extraction.load_features import get_injection_parameter_hashes_checker
 
 
-from repair.param_loader import get_algorithm_params
+from repair import get_algorithm_params
 import  injection.injection_config as inject_conf
-from repair.algorithm_mapper import algo_mapper
+from repair import algo_mapper
 import  repair.algorithms_config as alg_conf
 from datetime import datetime
 from injection.injection import load_injected_data , create_injected_container

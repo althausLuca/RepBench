@@ -140,6 +140,11 @@ class ChartManager {
         // removeScores()
     }
 
+    clearRepairedSeries() {
+        this.repairedSeries.length = 0
+        this.resetSeries()
+    }
+
     getAllSeries() {
         return this.originalSeries.concat(this.injectedSeries).concat(this.repairedSeries).concat(this.reducedSeries)
     }

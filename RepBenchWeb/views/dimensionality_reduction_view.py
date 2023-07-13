@@ -12,7 +12,7 @@ from RepBenchWeb.BenchmarkMaps.repairCreation import injected_container_None_Ser
 from RepBenchWeb.forms.alg_param_forms import RPCAparamForm, CDparamForm
 from RepBenchWeb.ts_manager.HighchartsMapper import map_repair_data, reverse_norm
 from RepBenchWeb.views.dataset_views import DatasetView
-from RepBenchWeb.views.repair_view import RepairView, parse_param_input
+from RepBenchWeb.views.repair.repair_view import RepairView, parse_param_input
 from testing_frame_work.data_methods.data_class import normalize_f
 
 

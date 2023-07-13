@@ -1,7 +1,7 @@
 import injection.injection_config as ic
 import repair.algorithms_config as algc
 from testing_frame_work.scenarios.scenario_config import SCENARIO_TYPES
-
+from repair.utils import get_main_alg_name
 
 def parse_scen_names(args):
     scen_params = args.scen
@@ -12,7 +12,16 @@ def parse_scen_names(args):
 def parse_repair_algorithms(args):
     if "all" in args.alg:
         return algc.ALGORITHM_TYPES
-    return args.alg
+    if "main" in args.alg:
+        return algc.MAIN_ALGORITHMS
+    algorithms = []
+    print(args.alg)
+    for alg_name in args.alg:
+        algorithms.append(get_main_alg_name(alg_name.strip()))
+
+    print("running on algorithms", algorithms)
+    return algorithms
+
 
 
 def parse_anomaly_types(args):

@@ -68,10 +68,10 @@ $ python3 TestingFramework.py -d dataset -a anomaly_type -scen scenario_type -al
 | bafu5k   | shift        | ts_len        | rpca      |
 | humidity | distortion   | a_size        | screen    |
 | msd1_5   | outlier      | a_rate        | imr       |
-| msd_hc   | all          | ts_nbr        | cdrep     |
-| elec     |              | cts_nbr       | all       |
-| all      |              | a_factor      |           |
-|          |              | all           |           |      
+| elec     | all          | ts_nbr        | cdrep     |
+| all      |              | cts_nbr       | kfilter   |
+| all      |              | a_factor      | screen*   |
+|          |              | all           | all       |      
 
 ### Data
 
@@ -96,14 +96,14 @@ in [here](https://github.com/althausLuca/RepBench/blob/master/repair/parameters.
    anomaly (shift)
 
 ```bash
-$ python3 TestingFramework.py -d bafu5k -scen ts_nbr  -a shift -alg cdrec
+$ python3 TestingFramework.py -d bafu5k -scen ts_nbr  -a shift -alg cdrep
 ```
 
 2. Run two algorithms (cdrec, rpca) on two dataset (bafu5k,msd) using one scenario (a_rate) and two anomalies (
    shift,outlier)
 
 ```bash
-$ python3 TestingFramework.py  -d bafu5k,msd -scen ts_nbr -a shift,outlier -alg cdrec,rpca
+$ python3 TestingFramework.py  -d bafu5k,msd -scen ts_nbr -a shift,outlier -alg cdrep,rpca
 ```
 
 3. Run the whole benchmark: all the algorithms , all the dataset on all scenarios with all anomalies (takes 6 hours)
@@ -156,6 +156,7 @@ python3 inject.py -d humidity -a outlier -f 3 -r 0.25 -ts 1,2,3
 ```
 
 # Web Tool
+
 To use the WebApp, you need to install [Docker](https://docs.docker.com/engine/install/ubuntu/) and
 
 ```bash

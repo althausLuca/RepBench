@@ -43,7 +43,7 @@
                     <div style="max-height: 200px; overflow-y: scroll">
                         <table class="table table-striped">
                             <tbody>
-                            {% for ts,a_rate in data_info.anomaly_rates.items %}
+                            {% for ts,a_rate in data_info.injected_rates.items %}
                                 <tr>
                                     <td>{{ ts }}</td>
                                     <td>{{ a_rate }}</td>

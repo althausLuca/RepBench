@@ -1,8 +1,6 @@
 from  django.db.utils import OperationalError
 from django import forms
 
-
-
 def get_data_set_choices():
     DATASET_CHOICES = []
     try:

@@ -21,3 +21,5 @@ sklearn==0.0.post5
 threadpoolctl==3.1.0
 toml==0.10.2
 tzdata==2023.3
+pykalman==0.9.5
+JPype1==1.4.1
