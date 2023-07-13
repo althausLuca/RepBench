@@ -1,5 +1,7 @@
-let chartManager = new ChartManager();
-let chartHeight = 750
+let chartManager = new ChartManager()
+if (typeof chartHeight === 'undefined') {
+  var chartHeight = 750; // Variable declaration and assignment
+}
 
 
 const chartNavigator = { // do not use navigator since it is used by another script

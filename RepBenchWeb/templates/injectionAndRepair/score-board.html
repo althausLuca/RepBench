@@ -10,15 +10,8 @@
         width: 2000px; /* Adjust the width as desired */
         height: 200px; /* Adjust the height as desired */
     }
-</style>
 
-<script src="{% static  'js/repBench/repair/scoreboard.js' %} " type="text/javascript"></script>
-<link href="{% static 'css/lib/roundslider/roundslider.min.css' %}" rel="stylesheet" type="text/css"/>
-<script src="{% static 'js/lib/roundslider/roundslider.min.js' %}"></script>
-<script src="{% static 'js/lib/roundslider/roundslider-init.js' %}"></script>
-
-<style>
-    .rs-title {
+      .rs-title {
         font-size: 13px;
         font-weight: 900;
         z-index: 800;
@@ -39,6 +32,11 @@
     }
 </style>
 
+<script src="{% static  'js/repBench/repair/scoreboard.js' %} " type="text/javascript"></script>
+<link href="{% static 'css/lib/roundslider/roundslider.min.css' %}" rel="stylesheet" type="text/css"/>
+<script src="{% static 'js/lib/roundslider/roundslider.min.js' %}"></script>
+<script src="{% static 'js/lib/roundslider/roundslider-init.js' %}"></script>
+
 
 <div id="score_portlets" class="kt-portlet" data-ktportlet="true">
     <div class="kt-portlet__head">
@@ -46,11 +44,6 @@
             <h3 class="kt-portlet__head-title">Scores</h3>
         </div>
         <div class="kt-portlet__head-toolbar">
-            {#                <div class="kt-portlet__head-group">#}
-            {#                    <a href="#" data-ktportlet-tool="toggle"#}
-            {#                       class="btn btn-sm btn-icon btn-default btn-icon-md"><i#}
-            {#                            class="mdi mdi-chevron-up mdi-18px"></i></a>#}
-            {#                </div>#}
         </div>
     </div>
     <div id="scores_portlet">
@@ -61,7 +54,7 @@
                     a Repair Algorithm.</h5>
             </div>
 
-            <div class="row">
+            <div class="row" style="margin-top: 25px">
                 {#                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">#}
                 <div id="RMSE-slider" class="roundslider inverse"
                      title="RMSE">
