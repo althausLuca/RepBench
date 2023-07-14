@@ -16,8 +16,6 @@ def bayesian_optimization_task(self, alg_name, param_grid, opt_config, *, inject
                 {'params': {'classification_truncation': 1, 'threshold': 0.28}, 'score': 0.52, 'iter': 15}
 
         """
-        # print("Bayesian optimization results: ", results)
-        print("algname", alg_name)
         results["algorithm"] = alg_name
         task_data.add_data(results)
 

@@ -28,7 +28,6 @@ def map_injected_series(injected_series: pd.Series, injected_series_norm: pd.Ser
     map injected pandas series containing values only in anomalies
     and points next to anomalies to highcharts series
     """
-    print("map_injected_series")
     return {"linkedTo": original_column,
             "id": f"{original_column}_injected",
             "name": f"{original_column} anomalous",
@@ -42,8 +41,6 @@ def map_injected_series(injected_series: pd.Series, injected_series_norm: pd.Ser
 
 
 def map_injected_data_container(injected_data_container: InjectedDataContainer):
-    print("map_injected_data_container")
-
     truth: pd.DataFrame = injected_data_container.truth
     injected: pd.DataFrame = injected_data_container.injected
 
@@ -97,8 +94,6 @@ def map_repair_data(repair: DataFrame, injected_data_container: InjectedDataCont
     for i, col_name in enumerate(injected_data_container.truth.columns):
         if i in injected_data_container.injected_columns:
             series_id = str(col_name) + "repair" if distinct_ids is False else str(col_name) + "repair" + alg_name.split("(")[0]
-            print(series_id)
-            print(distinct_ids)
             data[str(col_name) + "repair"] = {
                 "linkedTo": first_series_id if first_series_id is not None else {},
                 "id": series_id,

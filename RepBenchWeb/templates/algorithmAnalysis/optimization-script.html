@@ -25,7 +25,6 @@
             repairResult = repSeries;
             const chartRepairSeries = Object.keys(repSeries).map(key => {
                 let repair = repSeries[key];
-                console.log(repair);
                 return chartManager.addSeries(repair, true, "repair");
             });
 
@@ -98,7 +97,6 @@
 
 
                     optimData = response
-                    console.log("OPTIM DATA", optimData)
                 },
                 error: function (response) {
                     console.log(response);
@@ -113,7 +111,6 @@
                 url: this.retrieve_url,
                 data: $('#start-form').serialize() + '&task_id=' + this.task_id,
                 success: response => {
-                    console.log("EYYY", response);
                     if (response.status === 'running') {
                         this.data = response.data;
                         {#RecommendationChart.chart.redraw();#}
@@ -121,7 +118,6 @@
                             this.getResults();  // Pass the task_id again in the recursive call
                         }, 1000);
                     } else if (response.status === 'done') {
-                        console.log("DONE");
                         this.data = response.data;
                         this.computing = false
                         let last_data = this.data[this.data.length - 1]
@@ -130,17 +126,14 @@
                     {#this.data = response.data;#}
                 },
                 error: function (response) {
-                    console.log(response);
                     alert('Error retrieving optimization results');
                 }
             });
         },
 
         iterateData: function () {
-            console.log(this.iteration + " " + this.data.length + " " + this.playing)
             if (this.iteration < this.data.length && this.playing) {
                 let currentData = this.data[this.iteration];
-                console.log(currentData, "CURRENT DATA")
                 document.getElementById("play-optimization-info-text").innerHTML = "Iteration:" + (this.iteration + 1) +
                     " | " + currentData.runtime + "s"
                 {#" | Score: " + currentData;#}
@@ -164,7 +157,6 @@
                 this.iteration += 1;
             } else {
                 if (this.playing) {
-                    console.log("Waiting for more data..." + this.iteration);
                 }
             }
             this.timeoutID = setTimeout(this.iterateData.bind(this), this.intervalTimer);

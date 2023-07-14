@@ -37,7 +37,6 @@ import psutil
 @atexit.register
 def clean_up_all():
     import multiprocessing
-    print(multiprocessing.active_children())
     for process in multiprocessing.active_children():
         try:
             kill_process(process)

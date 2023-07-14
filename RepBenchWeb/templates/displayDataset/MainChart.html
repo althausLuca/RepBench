@@ -13,7 +13,6 @@
 <script>
     const initialChartLength = "{{ data_info.length }}"
     const timeInterval = "{{ data_info.time_interval }}"
-    console.log("TIME INTER VAL ", timeInterval)
 </script>
 
 {% if chartHeight %}
@@ -25,16 +24,12 @@
 
 {% if highcharts_series %}
     <script>
-        console.log("series provided")
-        console.log(JSON.parse('{{ highcharts_series|safe }}'))
         const highcharts_data = JSON.parse('{{ highcharts_series|safe }}')
-        console.log(highcharts_data)
         createEmptyChart(initialChartLength)
         initMainChart(highcharts_data, true)
     </script>
 {% else %}
     <script>
-        console.log("try to fetch data")
         let data_url = '{% url data_fetch_url_name setname=setname  %}' + '?RepBenchWeb={{ RepBenchWeb|default_if_none:5 }}'
         createEmptyChart(initialChartLength)
         let mainChartFetchPromise = fetchMainChartData(data_url);

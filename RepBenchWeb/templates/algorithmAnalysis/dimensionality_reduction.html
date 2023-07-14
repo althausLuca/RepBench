@@ -13,7 +13,7 @@
         </div>
         <div class="kt-portlet__body" style="text-align:center;">
             <div class="row alg-selection" style="display: flex; justify-content: center; align-items: center;">
-                <div class="form-group" id="alg-selection">
+                <div class="form-group inline-form" id="alg-selection">
                     <label>Algorithm
                         {#                        <a tabindex="10" class="btn" role="button" data-toggle="kt-popover"#}
                         {#                                       data-placement="top"#}
@@ -30,7 +30,7 @@
                 </div>
 
                 {% for key, form in alg_forms.items %}
-                    {% include 'parts/form.html' with form=form form_id=key style="display:none;" class="run-btn" button_label="RUN!" onclick="repair('"|add:key|add:"')" %}
+                    {% include 'parts/form.html' with form=form form_id=key style="display:none;" class="translateY-10" button_label="RUN!" onclick="repair('"|add:key|add:"')" %}
                 {% endfor %}
 
             </div>
@@ -41,14 +41,14 @@
 
 {% block belowChartContent %}
 
-    <style>
-        .form-group {
-            display: inline-block;
-        }
-        .run-btn {
-            transform: translate(0, -10px);
-        }
-    </style>
+{#    <style>#}
+        {#.form-group {#}
+        {#    display: inline-block;#}
+        {# }#}
+        {#.run-btn {#}
+        {#    transform: translate(0, -10px);#}
+        {# }#}
+{#    </style>#}
     <div class="kt-portlet">
         <div class="kt-portlet__head">
             <div class="kt-portlet__head-label">

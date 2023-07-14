@@ -57,7 +57,6 @@ class ChartManager {
         } else {
             color = this.colors[this.originalSeries.length % this.colors.length];
         }
-        console.log("color", color)
         return color
     }
 
@@ -73,7 +72,6 @@ class ChartManager {
 
     getSeriesChartData(ser) {
         let chartSeriesData = ser._chartSeriesData
-        console.log("COLOR ON ADDING", chartSeriesData.color)
         // chartSeriesData.linkedTo = ser.linkedTo
         chartSeriesData.data = this.normalized ? [...ser.normData] : [...ser.originalData];
         return chartSeriesData
@@ -81,7 +79,6 @@ class ChartManager {
 
     addSeries(series, addToChart = true, series_type = "original", merge_with = null) {
         this.removeSeries(series.id)
-        console.log("color", series.color)
         series_type = series.series_type ? series.series_type : series_type
         series.color = series.color !== undefined ? series.color : this.getColor(series_type)
         let ser = {
@@ -99,11 +96,6 @@ class ChartManager {
         if (series_type === "original") {
             this.originalSeries.push(ser);
         } else if (series_type === "injected") {
-            try {
-                updateExportInjectedButton(this.injectedSeries);
-            } catch (error) {
-                console.error('Failed to call updateExportInjectedButton:');
-            }
             this.injectedSeries.push(ser);
         } else if (series_type === "repair") {
             this.repairedSeries.push(ser);

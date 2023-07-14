@@ -18,12 +18,6 @@ def django_file_to_pandas(uploaded_file: UploadedFile) -> pd.DataFrame:
 
     print("first line", first_line)
     print(delimiter)
-    # print(uploaded_file)
-    # df = pd.read_csv(uploaded_file, delimiter=delimiter)
-    # print(df)
-    # df.columns = [column.strip() for column in df.columns]
-    # print(df.columns)
-    # print([type(column) for column in df.columns])
 
     if "." in first_line:
         # print("float detected no header applied")

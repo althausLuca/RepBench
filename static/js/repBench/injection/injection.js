@@ -7,8 +7,6 @@ let createInjectFormData = function (form_id) {
 const inject = function (injectionURL) {
     const formData = createInjectFormData('injectionForm')
     const columnsToInject = [...formData.getAll('data_columns')]
-    console.log(formData)
-    console.log(columnsToInject)
     const promises = []
     columnsToInject.forEach(val => {
         formData.set('data_columns', val)

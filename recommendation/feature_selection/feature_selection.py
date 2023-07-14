@@ -62,7 +62,7 @@ for k in n_features:
         cols_idxs = selector.get_support(indices=True)
         X_train_selected = X_train.iloc[:,cols_idxs].copy()
         selected_features = list(X_train_selected.columns)
-        print(f"selected features k={k}:{selected_features}")
+
         X_test_selected   = X_test[selected_features]
 
         flaml_search(automl_settings, X_train, y_train, verbose=2)

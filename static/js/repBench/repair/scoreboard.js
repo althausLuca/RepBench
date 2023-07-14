@@ -3,7 +3,6 @@ let scoreBoardLoadeer = function () {
 const createScoreBoard = function () {
 
     document.getElementById("score_container").style.display = "block";
-    console.log("createScoreBoard")
     RoundSliders.init(2, 15, 70);
 
     RoundSliders.updateValue("#RMSE-slider", 0, 0,);
@@ -15,7 +14,6 @@ const createScoreBoard = function () {
     // scoreBoardLoadeer = setDivLoading("score_container");
 }
 const updateScoreBoard = function (scores) {
-    console.log("SCORES", scores);
     RoundSliders.init(2, 15, 70);
 
     RoundSliders.updateValue("#RMSE-slider", scores.RMSE, scores.original_scores.RMSE);
@@ -25,6 +23,5 @@ const updateScoreBoard = function (scores) {
     RoundSliders.updateValue("#RMSE-Anomaly-slider", scores["RMSE on Anomaly"], 4);
     // RoundSliders.setTitle("#RMSE-Anomaly-slider", "RMSE on Anomaly");
     // scoreBoardLoadeer();
-    console.log("afterscores");
 }
 

@@ -31,9 +31,6 @@ def extract_opt_input(POST):
     algorithm = POST.get("algorithm")
     param_min_max_tuples = {}
     for k, v in dict(POST).items():
-        print(k)
-        print(type(k))
-        print("EYYYYYYYYYYYYY",k,v,)
         splitted_input = k.split("-")
         if len(splitted_input) == 3:
             v = v if not isinstance(v, list) else v[0]

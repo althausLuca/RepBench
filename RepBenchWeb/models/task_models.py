@@ -45,7 +45,7 @@ D       deletes the task and stops the corresponding celery task if it is runnin
         """
         try:
             revoke_task(self.celery_task_id)
-            print("old CELERY STOPPED")
+            print("previous task interputed")
         except:
             pass
         super().delete(*args, **kwargs)

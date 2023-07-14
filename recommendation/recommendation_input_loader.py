@@ -31,6 +31,10 @@ class RecommendationInputLoader:
         self.best_algorithms = algorithms_scores['best_algorithm']
         self.best_algorithms = encode(self.best_algorithms.values.flatten())
 
+
+        assert  np.array_equal(decode(self.best_algorithms), algorithms_scores['best_algorithm'].values.flatten()), "decoding and encoding of algorithms failed"
+
+
         self.feature_values = algorithms_scores['features'].copy()
 
         all_close = lambda col: np.allclose(col.values, col.values[0])
@@ -40,7 +44,6 @@ class RecommendationInputLoader:
                               and not all_close(self.feature_values[f_name])
                               ]
 
-        print(f"used features: {self.feature_names}")
         self.feature_values = self.feature_values[self.feature_names]
 
         ## add anomaly infos as a feature:
@@ -61,16 +64,16 @@ class RecommendationInputLoader:
             #replace nan values with 0
             self.feature_values = self.feature_values.fillna(0)
             nan_free_rows = ~np.isnan(self.feature_values.values).any(axis=1)
-            print(np.isnan(self.feature_values.values).any(axis=1))
+            # print(np.isnan(self.feature_values.values).any(axis=1))
             self.feature_values = self.feature_values.iloc[nan_free_rows, :]
             self.categories_encoded = self.categories_encoded[nan_free_rows]
 
         ## Split data into train and test sets
         n_train_split = int(len(self.best_algorithms) * train_split_r)
         train_split = np.random.choice(len(self.feature_values), n_train_split, replace=False)
-        print(train_split)
+        # print(train_split)
         test_split = np.setdiff1d(np.arange(self.feature_values.shape[0]), train_split)
-        print(test_split)
+        # print(test_split)
         self.X_train: pd.DataFrame = self.feature_values.iloc[train_split, :]
         self.X_test: pd.DataFrame = self.feature_values.iloc[test_split, :]
         self.y_train, self.y_test = self.categories_encoded[train_split], self.categories_encoded[test_split]
@@ -78,6 +81,7 @@ class RecommendationInputLoader:
         # check for NaN values
         assert not np.isnan(self.X_test.values).any(), self.X_test
         assert not np.isnan(self.X_train.values).any(), self.X_train
+
 
     def get_train_data(self,size_ratio=1):
         return self.X_train, self.y_train

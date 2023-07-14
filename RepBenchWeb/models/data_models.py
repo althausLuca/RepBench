@@ -29,7 +29,6 @@ class BaseDataSet(models.Model):
 
     def compute_features_(self):
         df = self.df
-        print(self.title)
         from recommendation.feature_extraction.feature_extraction import extract_features
         features_ = {col: extract_features(df, column=i) for i, col in enumerate(df.columns)}
         self.features = features_

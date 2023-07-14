@@ -9,7 +9,6 @@ let createBayesianOptFormData = function (form_id) {
     for (var pair of formData.entries()) {
         bayesienOptFormData.append(pair[0], pair[1]);
     }
-    console.log("token creation", csrftoken)
     bayesienOptFormData.append('csrfmiddlewaretoken', csrftoken)
     bayesienOptFormData.append("injected_series", JSON.stringify(chartManager.get_injected_norm_data()))
     bayesienOptFormData.append("setname", setname)
@@ -37,14 +36,10 @@ let optimizeCurrentData = (form_id) => {
 let create_job_id_form = function () {
     const empty_form = new FormData()
     empty_form.append('csrfmiddlewaretoken', csrftoken)
-    console.log("EYY")
-    console.log(csrftoken)
-    console.log("EMPTY fORM", csrftoken)
     return empty_form
 }
 
 let fetch_loop = function (n_initial_points, job_id) {
-    console.log("START FETCH")
     // Get the CSRF token value from the cookie
     fetch(fetch_opt_result, {
         method: 'POST', // or 'PUT'
@@ -53,9 +48,6 @@ let fetch_loop = function (n_initial_points, job_id) {
         response => {
             if (response.data.length > 0) {
                 let params = response.data[response.data.length -1].param_combinations
-
-                console.log("PARAMS", response.data)
-                console.log(params)
                 let param_names = Object.keys(params[0])
                 SuccessiveHalvingChart.setParamNames(param_names[0], param_names[1])
                 SuccessiveHalvingChart.update(params)

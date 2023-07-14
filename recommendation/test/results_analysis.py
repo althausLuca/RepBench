@@ -37,7 +37,7 @@ best_algorithms[no_alg_best] = "No algorithm"
 
 for injection_param in algorithms_scores["injection_parameters"]:
     try:
-        print(injection_param)
+
         data = algorithms_scores["injection_parameters"][injection_param]
         df = pd.DataFrame({'alg': best_algorithms, 'injection_param': data})
 

@@ -10,64 +10,14 @@
 
     {% block css %}
 
-        <style>
-
-            .reload-btn {
-                display: inline-block;
-                background-color: white;
-                border: 2px solid darkgray;
-                color: black;
-                font-weight: bold;
-                text-align: center;
-                text-decoration: none;
-                padding: 0px 6px;
-                border-radius: 4px;
-                transition: all 0.2s ease;
-            }
-
-            .reload-btn:hover {
-                background-color: darkgray;
-            {#border-color: #0D47A1;#}
-            }
-
-
-            .play-btn {
-                display: inline-block;
-                background-color: #2196F3;
-                border: 2px solid #2196F3;
-                color: #FFF;
-                font-weight: bold;
-                text-align: center;
-                text-decoration: none;
-                padding: 0px 10px;
-                border-radius: 5px;
-                transition: all 0.2s ease;
-            }
-
-            .play-btn:hover {
-                background-color: #0D47A1;
-                border-color: #0D47A1;
-                color: #FFF;
-            }
-
-            .play-btn:active {
-                background-color: #0D47A1;
-                border-color: #0D47A1;
-                color: #FFF;
-            }
-
-            .play-btn:hover, .play-btn:active {
-            {#box-shadow: 0px 0px 10px #BBB; /* Add a shadow effect on hover and click */#}
-            }
-        </style>
-
         <link href="{% static 'css/lib/perfect-scrollbar/perfect-scrollbar.css' %}" rel="stylesheet" type="text/css"/>
-        <!-- end: Global Styles Plugins -->
-        <!-- begin:Global Styles -->
         <link href="{% static 'css/fonts/materialdesignicons/materialdesignicons.min.css' %}" rel="stylesheet"
               type="text/css"/>
+
         <link href="{% static 'css/messages.css' %}" rel="stylesheet" type="text/css"/>
         <link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css"/>
+        <link href="{% static  'css/rebBenchWeb.css' %}" rel="stylesheet" type="text/css"/>
+
     {% endblock %}
     {% block head_js %}
         <meta http-equiv="cache-control" content="max-age=0"/>
@@ -95,23 +45,13 @@
             }
 
             const csrftoken = getCookie('csrftoken');
-            console.log("Cookie Set" + csrftoken);
-            console.log("Cookie Set" + '{{ csrf_token }}');
 
-            Highcharts.setOptions({
-                plotOptions: {
-                    series: {
-                        // animation: false,
-                    }
-                },
-                credits: {
-                    enabled: false
-                },
-            });
 
         </script>
-        {% include "play-buttons-script.html" %}
-        {%  include "displayDataset/download.html" %}
+        <script src={% static  'js/repBench/helpers.js' %} type="text/javascript"></script>
+
+{#        {% include "play-buttons-script.html" %}#}
+        {% include "displayDataset/download.html" %}
     {% endblock %}
 
 </head>
@@ -176,7 +116,7 @@
                                                     class="kt-menu__link-text">Synthetic Datasets</span></a></li>
 
                                             <li class="kt-menu__item " aria-haspopup="true"><a
-                                                    href="{% url 'upload'  %}"
+                                                    href="{% url 'upload' %}"
                                                     class="kt-menu__link"><i
                                                     class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span
                                                     class="kt-menu__link-text">New</span></a></li>

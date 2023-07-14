@@ -33,7 +33,6 @@ def start(job_id, param_ranges, alg_type, injected_data_container: InjectedDataC
           n_initial_points):
 
     def save(data):
-        print("SAVE")
         job_results[job_id].append(data)
 
     def callback():

@@ -29,14 +29,12 @@ def get_main_alg_name(name : str):
         return name
     else:
         for main_name, aliases_ in ac.AlgorithmAliases.items():
-            print(main_name, aliases_)
             if name in aliases_:
                 return main_name
         raise ValueError(f'Unknown algorithm name: {name} must be one from {alias_mapper.keys()}')
 
 
 def get_algorithm_params(alg_name):
-    # print("Loading parameters from parameters.toml")
     with open('repair/parameters.toml', 'r') as f:
         params = toml.load(f)
 

@@ -110,8 +110,6 @@ def store_data(request, setname):
     if selection_only:
         # cut min and max
         df_norm = df_norm.iloc[min:max]
-        print(min,max)
-        print(visible)
         for series_dict in injected_series:
             series_dict["data"] = series_dict["data"][min:max]
             # only select visible series

@@ -111,7 +111,6 @@ class BayesianOptimisationTask(SuccesiveHalvingTask):
         optimizer = BayesianOptimizer(alg, **opt_config)  # just a test before running with celery
 
 
-        print("PARAMRANGES", param_ranges)
         bayesian_optimization_task.delay(alg_type, param_ranges, opt_config,
                                          **repair_inputs,
                                          my_task_id=task_id)

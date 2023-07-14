@@ -23,7 +23,6 @@ let repair = (form_id) => {
 
         const chartRepairSeries = Object.keys(repSeries).map(key => {
             let repair = repSeries[key]
-            console.log(repair)
             return chartManager.addSeries(repair,true,"repair")
         })
         // chartManager.resetSeries(true)

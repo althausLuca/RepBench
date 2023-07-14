@@ -3,7 +3,7 @@
 
 {% block content %}
     <div class="row">
-        <div class="col-lg-8 col-md-8 col-sm-9 col-xs-9">
+        <div class="col-lg-8 col-md-8">
             <div class="kt-portlet">
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label">
@@ -35,9 +35,12 @@
                                 optimizationHandler.stopIteration();
                                 let selectElement = document.getElementById("optimizer-select");
                                 let selectedValue = selectElement.value;
+                                let bayesianOptPortlet = document.getElementById("bayesian-opt-portlet");
                                 if (selectedValue === "bayesian") {
                                     optimizationHandler.reInit("bayesian", start_bayesian_optimization_url, fetch_opt_result)
+                                    bayesianOptPortlet.classList.remove("disabled");
                                 } else {
+                                    bayesianOptPortlet.classList.add("disabled");
                                     optimizationHandler.reInit("successive_halving", start_successive_halving_url, fetch_opt_result)
                                 }
                             }
@@ -53,7 +56,6 @@
         </div>
         <div class="col-lg-4">
             {% include 'algorithmAnalysis/bayesianOptForm.html' %}
-
         </div>
     </div>
 
@@ -79,7 +81,7 @@
 
 
 {% block additional_bottom_js %}
-    <script type="text/javascript">
+    <script>
         let start_bayesian_optimization_url = "{% url 'start_bayesian_opt' %}"
         let start_successive_halving_url = "{% url 'start_successive_halving' %}"
         let setname = "{{ setname }}"
@@ -93,8 +95,6 @@
     {% include "algorithmAnalysis/optimization-script.html" %}
     <script>
         optimizationHandler.init("bayesian", start_bayesian_optimization_url, fetch_opt_result)
-    </script>
-
     </script>
 {% endblock %}
 

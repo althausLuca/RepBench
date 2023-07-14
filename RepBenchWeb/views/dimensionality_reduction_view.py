@@ -154,19 +154,6 @@ class DimensionalityReductionView(RepairView):
              for i, col in enumerate(df_reduced.columns) if
              i in injected_data_container.injected_columns]
 
-
-        # context["repaired_series"] = ""
-
-        # print(context["reductions"])
-        # print(context["final_reductions"])
-        # context["reductions"] = ""
-        # # context["injected_series"] = ""
-        # # context["injected_diff"] = ""
-        # # context["repair_iters"] = ""
-        # context["final_reductions"] = ""
-
-
-
         return RepBenchJsonRespone(context)
 
 

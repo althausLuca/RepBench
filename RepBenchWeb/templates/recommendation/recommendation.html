@@ -3,44 +3,6 @@
 
 
 {% block content %}
-    <style>
-        .kt-checkbox > span::after {
-            border: solid green;
-        }
-
-        #start-button-right-text {
-            color: gray;
-        }
-
-        .disable-mouse-events {
-            pointer-events: none;
-            opacity: 0.4;
-        }
-
-
-        #parameterTable {
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        #parameterTable th,
-        #parameterTable td {
-            padding: 8px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
-        #parameterTable th {
-            background-color: #f2f2f2;
-            font-weight: bold;
-        }
-
-        #parameterTable .parameters-cell p {
-            margin: 2px 0;
-        }
-    </style>
-
-
     <div class="row">
         {% block recommendation_computation %}
             <div class="col-md-12">
@@ -229,15 +191,11 @@
 
             const predictionUrl = '{% url 'get_recommendation' setname="placeholder" %}'.replace("placeholder", encodeURIComponent(selectedDataset))
             mainChart.showLoading()
-            console.log("get_prediction")
             $.ajax({
                 type: 'POST',
                 url: predictionUrl,
                 data: $('#start-form').serialize() + '&task_id=' + recommendationHandler.task_id,
                 success: function (response) {
-                    console.log("got results");
-                    console.log("EYYY", response);
-
                     const repairs = response.alg_repairs
                     const best_alg = response.recommended_algorithm
                     Object.entries(repairs).forEach(([repairs_key, repairs_values]) => {
@@ -257,9 +215,6 @@
 
                 },
                 error: function (response) {
-                    console.log("ERROR");
-                    console.log("Status:", response.status);
-                    console.log("Error message:", response.responseText);
                     alert('Error retrieving Flaml prediction');
                 }
             });

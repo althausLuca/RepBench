@@ -8,7 +8,8 @@
         html_id: "ErrorChart",
         chart: Highcharts.chart("ErrorChart", {
             chart: {
-                type: 'line'
+                type: 'line',
+                height: 390,
             },
             credits: {
                 enabled: false
@@ -42,17 +43,12 @@
                 showInLegend: false
             }]
         }),
-
-        {#add: function (dataPoint) {#}
-        {#    this.chart.series[0].addPoint(dataPoint);#}
-        {# },#}
+        minScore: 10000000,
         add: function (dataPoint) {
             if (dataPoint === undefined) {
                 return
             }
-
-            console.log("AAAAAAAAAAAAAAAAADDDDDDDDDDDDD")
-            let isBest = true;
+            let isBest = false;
 
             // reset color of last point and update best score
             if (this.chart.series[0].data.length > 0) {
@@ -60,15 +56,11 @@
                 {#lastPoint.update(defaultSettings);#}
 
                 //check if it has the lowest score (since we're tracking error)
-                console.log("AAAATENTION")
-                let scores = this.chart.series[0].data.map(d => {
-                    console.log("d", d);
-                    console.log("data.point", dataPoint);
-                    return d.y
-                });
-                let minScore = Math.min(...scores);
-                if (dataPoint > minScore) {
-                    isBest = false;
+
+                console.log(dataPoint)
+                if (dataPoint < this.minScore) {
+                    this.minScore = dataPoint;
+                    isBest = true;
                 }
             }
 
@@ -93,6 +85,7 @@
 
         clear: function () {
             this.chart.series[0].setData([]);
+            this.minScore = 10000000;
         }
     }
 
@@ -156,12 +149,6 @@
                 lineWidth: 0,
                 ...bestPointSettings
             },
-                {#    name: 'Latest Point',#}
-                {#    data: [],#}
-                {#    lineWidth: 0,#}
-                {#    ...defaultSettings,#}
-                {##}
-
             ],
 
             tooltip: {
@@ -180,26 +167,18 @@
         },
 
         add: function (dataPoint, score) {
-            console.log("SCOOOOORE", score)
+            console.log(dataPoint, score)
             let isBest = false
-            // reset color of last point and update best score
-            if (this.chart.series[0].data.length > 0) {
-                {#let lastPoint = this.chart.series[0].data[this.chart.series[0].data.length - 1]#}
-                {#lastPoint.update({color: 'rgba(119, 152, 191,1)'})#}
-
-                //check if it has the highest score
-                if (score < this.minScore) {
-                    isBest = true
-                    this.minScore = score
-                }
+            console.log(this.minScore)
+            if (score < this.minScore) {
+                isBest = true
+                this.minScore = score
             }
-
+            console.log("IS BEST", isBest)
             if (isBest) {
                 this.chart.series[this.chart.series.length - 1].data.forEach(d => {
-                    if (d.marker.symbol === "diamond") {
-                        d.update(defaultSettings, true, true)
-                    }
-                })
+                    d.update(defaultSettings, true, true)
+                 })
                 this.chart.addSeries({
                     name: 'Best Point',
                     data: [{
@@ -220,7 +199,6 @@
                     ...defaultSettings
                 });
             }
-
         },
 
         setParamNames: function (param_1, param_2) {
@@ -228,8 +206,6 @@
             this.chart.yAxis[0].setTitle({text: param_2});
             this.param_1 = param_1;
             this.param_2 = param_2;
-            this.minScore = 10000000;
-
         },
 
         clear: function () {

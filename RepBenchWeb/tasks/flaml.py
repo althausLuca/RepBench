@@ -17,7 +17,6 @@ def flaml_search_task(self, settings, X_train, y_train, X_test, y_test, my_task_
     # automl = AutoML(**settings)
     normal_write = sys.stdout.write
     setting_metric = settings["metric"]
-    print("MEEEETRIC", setting_metric)
     task_data = TaskData.objects.get(task_id=my_task_id)
     task_data.set_celery_task_id(self.request.id)
 
@@ -34,12 +33,11 @@ def flaml_search_task(self, settings, X_train, y_train, X_test, y_test, my_task_
         estimator.fit(X_train, y_train)
         y_pred = estimator.predict(X_val)
         score = metrics[setting_metric](y_pred, y_val)
-        print(y_pred,score)
+        # print(y_pred,score)
 
         estimator_name = str(estimator.__class__.__name__).split("Estimator")[0]
         if estimator_name == "LRL1Classifier":
             estimator_name = "LogisticRegression"
-        # print(estimator)
         task_data.add_data({"score": score, "pred_time": pred_time,
                             "estimator": estimator_name, "config": {"model": estimator_name, **estimator.get_params()}})
 
@@ -49,7 +47,6 @@ def flaml_search_task(self, settings, X_train, y_train, X_test, y_test, my_task_
     automl = AutoML()
 
     settings["metric"] = custom_metric
-    # print("start task")
 
     with warnings.catch_warnings():
         # warnings.simplefilter("ignore")
@@ -60,24 +57,3 @@ def flaml_search_task(self, settings, X_train, y_train, X_test, y_test, my_task_
     task_data.set_classifier(automl)
     task_data.set_done()
     print("DONE")
-
-    # classifier = automl.model
-    # try:
-    #     print(classifier.feature_names_)
-    # except:
-    #     print(classifier.feature_names_in_)
-
-    # print(X_train)
-    # classifier.fit(X_train, y_train)
-    # print(automl.best_estimator)
-    # print("prediction")
-    # for p in automl.predict(X_test):
-    #     print(p)
-    # print("DONE")
-    # print(classifier.feature_importances_)
-
-    # print("CLEERY DOOOOONE")
-    # print(task_data)
-
-
-# from recommendation.ray_tune.ray_tune_config import config as ray_tune_config

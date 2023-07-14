@@ -53,10 +53,6 @@ const events = {
 
 let tooltip = {
     formatter: function (e) {
-        // The first returned item is the header, subsequent items are the
-        // points
-        // console.log("this",this)
-        // console.log("e",e)
         let x = this.x
         // return ['<p style=\"color:black;font-size:15px;\"> ' + this.series.name + ': ' + this.y + '</p>'].concat(
         //     this.series.linkedSeries.map(function (s) {

@@ -78,13 +78,10 @@ class RepairView(SyntheticDatasetView):
 
                 injected_series = [
                     {"linkedTo": df_norm.columns[0], "data": almost_the_same, "id": f"{df_norm.columns[0]}_injected"}]
-                # print("injected_series", injected_series)
 
             injected_data_container = injected_container_None_Series(df_norm, injected_series)
             links = {inj_object["linkedTo"]: inj_object["id"] for inj_object in injected_series}
 
-        # print("injected_data_container", injected_data_container)
-        # print(injected_series)
         repairer = AnomalyRepairer(1, 1)
         repair_retval = repairer.repair_data_part(alg_type, injected_data_container, params)
         repair = repair_retval["repair"]
@@ -103,7 +100,6 @@ class RepairView(SyntheticDatasetView):
         output = {"repaired_series": repaired_series, "scores": scores, "metrics": metrics}
 
         original_scores = injected_data_container.original_scores
-        print("original_scores", original_scores)
         if not there_are_anomalies:
             original_scores = {k: 1.0 for k in original_scores.keys()}
 

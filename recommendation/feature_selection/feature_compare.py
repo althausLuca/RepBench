@@ -34,7 +34,7 @@ automl_settings = {
 
 for feature_endings in feature_names_list:
     for use_anom_info in [False,True]:
-        # print(f"{'use_anomaly_info' if use_anom_info else ''} {feature_endings}")
+        # label
         recommendation_input = RecommendationInputLoader(feature_file_name , features=feature_endings , include_anomaly_infos=use_anom_info)
         automl, automl_name = flaml_search(automl_settings, recommendation_input.X_train, recommendation_input.y_train
                                            )

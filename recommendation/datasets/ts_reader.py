@@ -16,10 +16,10 @@ store_folder = f"recommendation/datasets/{mode}/"
 
 for data_folder in os.listdir(folder):
     data_set = data_folder  # "BasicMotions"
-    print(data_set)
+
 
     filename = folder + data_set + "/" + data_set + "_" + mode.upper() + ".ts"
-    print(filename)
+
     try:
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
@@ -39,5 +39,5 @@ for data_folder in os.listdir(folder):
                     f.write(data_folder + "\n")
 
     except ValueError as  e :
-        print("failed")
+
         pass

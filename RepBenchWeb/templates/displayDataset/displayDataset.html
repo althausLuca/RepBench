@@ -10,11 +10,11 @@
     <link href="{% static 'css/lib/roundslider/roundslider.min.css' %}" rel="stylesheet" type="text/css"/>
     <link href="{% static 'css/lib/ion-rangeslider/ion.rangeSlider.min.css' %}" rel="stylesheet" type="text/css"/>
 
-    <style>
-        .highcharts-legend-item-hidden text {
-            text-decoration: none !important;
-        }
-    </style>
+{#    <style>#}
+{#        .highcharts-legend-item-hidden text {#}
+{#            text-decoration: none !important;#}
+{#        }#}
+{#    </style>#}
 {% endblock %}
 
 {% block head_js %}
@@ -88,7 +88,6 @@
         <script>
             const categories = {{ columns | safe }};
             const corr_data = {{ corr_data | safe }};
-            console.log('{{ setname | safe }}')
             initCorrTable(categories, corr_data, 'corr_container')
         </script>
     {% endblock %}

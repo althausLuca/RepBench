@@ -5,11 +5,11 @@
     {{ block.super }}
     <link href="{% static 'css/lib/datatables/datatables.css' %}" rel="stylesheet" type="text/css"/>
 
-    <style>
-        .table {
-            color: #8492A6;
-        }
-    </style>
+{#    <style>#}
+{#        .table {#}
+{#            color: #8492A6;#}
+{#        }#}
+{#    </style>#}
     <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
 
 {% endblock %}
@@ -35,7 +35,7 @@
                             <div class="row">
                                 <div class="col-sm-12" >
                                     <table id="table_real_world_datasets"
-                                           class="table table-bordered table-hover table-checkable dataTable no-footer dtr-inline"
+                                           class="table dataset-info-table table-bordered table-hover table-checkable dataTable no-footer dtr-inline"
                                            role="grid" aria-describedby="table_real_world_datasets_info"
                                            style="width: 1341px;">
                                         <thead>

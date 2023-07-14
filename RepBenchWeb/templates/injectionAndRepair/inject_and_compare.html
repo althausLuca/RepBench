@@ -8,23 +8,23 @@
     <script>
     var chartHeight = 822-61;
     </script>
-    <style>
-        #repairForm {
-            margin-top: 10px;
-        }
-
-        #repairForm label {
-            font-size: 20px;
+{#    <style>#}
+{#        #repairForm {#}
+{#            margin-top: 10px;#}
+{#        }#}
+{##}
+{#        #repairForm label {#}
+{#            font-size: 20px;#}
         {#background: black;#}
-        }
-
-        .loading-gif {
-            height: 20px;
-            width: 20px;
-            margin-left: 5px;
-        }
-
-    </style>
+{#        }#}
+{##}
+{#        .loading-gif {#}
+{#            height: 20px;#}
+{#            width: 20px;#}
+{#            margin-left: 5px;#}
+{#        }#}
+{##}
+{#    </style>#}
 
 
     <div class="row">
@@ -156,8 +156,6 @@
         let injectionButton = document.getElementById("injection-button");
         injectionButton.addEventListener("click", function (event) {
             event.preventDefault();
-            console.log("inject");
-            console.log(injection_url)
             inject(injection_url);
         })
 
@@ -192,7 +190,7 @@
                 for (const algorithm of selectedValues) {
                     const loadingGif = document.createElement("img");
                     loadingGif.src = "https://upload.wikimedia.org/wikipedia/commons/9/92/Loading_icon_cropped.gif";
-                    loadingGif.classList.add("loading-gif")
+                    loadingGif.classList.add("loading-gif-20")
                     const label = document.querySelector(`input[value="${algorithm}"]`).parentElement;
                     label.appendChild(loadingGif);
                     repairFormData.append("alg_type", algorithm);
@@ -208,7 +206,6 @@
 
                         const chartRepairSeries = Object.keys(repSeries).map(key => {
                             let repair = repSeries[key];
-                            {#console.log(repair);#}
                             return chartManager.addSeries(repair, true, "repair");
                         })[0];
 
@@ -281,28 +278,9 @@
 
 
     <script src="{% static 'js/repBench/injection/injection.js' %}" type="text/javascript"></script>
-    {#    <script src="{% static 'js/repBench/repair/repair.js' %}" type="text/javascript"></script>#}
 
 {% endblock %}
 
-
-
-
-
-
-
-
-
-
-
-{#{% block css %}#}
-{#    {{ block.super }}#}
-{#    <link href="{% static 'css/lib/highcharts/highcharts.css' %}" rel="stylesheet" type="text/css"/>#}
-{#    <link href="{% static 'css/custom/highcharts.css' %}" rel="stylesheet" type="text/css"/>#}
-{#    <link href="{% static 'css/lib/nouislider/nouislider.min.css' %}" rel="stylesheet" type="text/css"/>#}
-{#    <link href="{% static 'css/lib/roundslider/roundslider.min.css' %}" rel="stylesheet" type="text/css"/>#}
-{#    <link href="{% static 'css/lib/ion-rangeslider/ion.rangeSlider.min.css' %}" rel="stylesheet" type="text/css"/>#}
-{#{% endblock %}#}
 
 
 <div class="row">

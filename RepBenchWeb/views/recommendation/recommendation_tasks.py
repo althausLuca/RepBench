@@ -1,7 +1,7 @@
 from RepBenchWeb.views.task_view import TaskView
 
 from RepBenchWeb.models import TaskData
-from RepBenchWeb.celery import flaml_search_task, ray_tune_search_task
+from RepBenchWeb.tasks import flaml_search_task, ray_tune_search_task
 
 from RepBenchWeb.utils.encoder import RepBenchJsonRespone
 import time
@@ -67,7 +67,6 @@ class RayTuneTask(TaskView):
                          any([col_name.endswith(end_) for end_ in valid_endings])]
 
         estimator_list = dict(request.POST).get("ray_tunes_estimator_list")
-        print(estimator_list)
         estimator_list = estimator_list if isinstance(estimator_list, list) else estimator_list.split(",")
         automl_settings["estimator_list"] = estimator_list
 

@@ -18,14 +18,11 @@ def succesive_halving_task(self, alg_name, param_grid , opt_config, * , injected
                                     kept_param_combinations,
                                     end_results=None,
                                     end_score=None):
-        print(f"iter_{counter} {len(param_combinations)} parameter combinations data_size {data_size}")
-        print("avg error:", avg_error, "Parameters:", params_error)
-        print("Kept parameters: ", kept_param_combinations)
         if end_results is not None:
-            print("Final parameters: ", end_results)
+            # print("Final parameters: ", end_results)
             print("Final score: ", end_score)
 
-        print("---------------------------------------------------")
+        # print("---------------------------------------------------")
         # store everything inside a dict:
         results = {
             "iter": counter,

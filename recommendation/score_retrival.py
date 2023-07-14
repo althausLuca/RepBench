@@ -88,7 +88,7 @@ for columns, a_percentage, factor, a_type, dataset in itertools.product([ [0], [
             continue
         injected_df, truth_df = load_injected_data(injection_parameters,data_folder=data_folder)
 
-        print("file", dataset, "a_type", a_type, "factor", factor, "a_percentage", a_percentage, "columns", columns)
+
 
         injected_data_container = create_injected_container(injected_df=injected_df, truth_df=truth_df)
         injected_dfs.append(injected_df)
@@ -105,7 +105,7 @@ for columns, a_percentage, factor, a_type, dataset in itertools.product([ [0], [
         original_score = alg_constructor(**parameters).scores(**injected_data_container.repair_inputs)[
             "original_rmse"]
 
-        print(alg_results)
+
         results = {"original rmse": original_score, "alg_results": alg_results,
                    "injection_parameters": injection_parameters}
         append_to_file(results, output_filename)

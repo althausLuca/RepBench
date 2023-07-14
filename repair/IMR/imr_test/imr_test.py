@@ -3,7 +3,7 @@ import time
 import pandas as pd
 import numpy as np
 import testing_frame_work.repair as alg_runner
-from repair.IMR.IMR import imr, imr2
+from repair.IMR.IMR import imr
 import matplotlib.pyplot  as plt
 import matplotlib
 matplotlib.use('TKAgg')
@@ -26,13 +26,7 @@ assert all(my_y_0 == y_0)
 labels = np.arange(len(labels))[labels]
 start = time.time()
 my_repair = imr(injected,my_y_0,labels=labels,tau = 0.01, p =1)["repair"]
-print("t1",time.time()-start)
 start = time.time()
-
-my_repair2 = imr2(injected,my_y_0,labels=labels,tau = 0.01, p =1)["repair"]
-print("t2",time.time()-start)
-
-assert np.allclose(my_repair2 ,my_repair)
 
 paper_alg_repair = pd.read_csv("p1delta0.01.csv" , header=None).iloc[:,0].values
 diff = my_repair-paper_alg_repair

@@ -20,12 +20,9 @@ autoML_file_name_default = "flaml_classifier_accuracy_time_6_non_normalized"
 
 def get_recommendation(injected_data_container: InjectedDataContainer, classifier):
     features = extract_features(injected_data_container.injected, injected_data_container.injected_columns[0])
-    print("FEATURES", features.keys())
     used_features = classifier.feature_names_in_
-    print("Modelfeatures", list(used_features))
 
     fd = pd.DataFrame.from_dict({f_name: [v] for f_name, v in features.items() if f_name in used_features})
-    print("final features", fd.columns)
 
     probabilities = classifier.predict_proba(fd).flatten()
     recommended_algorithm = classifier.predict(fd).flatten()
@@ -42,7 +39,7 @@ def get_recommendation(injected_data_container: InjectedDataContainer, classifie
         "used_estimator": str(classifier.__class__.__name__.split("Estimator")[0]),
         "data_features": features
     }
-    print(results)
+    return results
 
 
 def get_all_repairs(injected_data_container: InjectedDataContainer):
@@ -100,20 +97,16 @@ def get_recommendation_from_classifier_and_features(classifier, features_per_col
     probabilities_per_col = []
     for col in injected_columns:
         features = features_per_col[col]
-        print("FEATURES", list(features.keys())[-20:])
-        print("used features", list(used_features)[-20:])
+        not_computed_features = set(used_features).difference(set(features.keys()))
+        print("missing features:",not_computed_features)
+        if len(not_computed_features) > 0:
+            features.update({f_name: 0 for f_name in not_computed_features})
 
         fd = pd.DataFrame.from_dict({f_name: [v] for f_name, v in features.items() if f_name in used_features})
-        print("final features", list(fd.columns)[0:10])
-        print("FEATURES", list(features.values())[0:10])
 
-        print("tsfel_features", {f for f in used_features if f.endswith("fel")})
-        prediction = classifier.predict(fd)[0]
-        print(f"AUTOML PREDICTION column: {col}", prediction)
-        print(f"AUTOML PREDICTION column: {col}decoded ", decode(prediction))
-
+        # prediction = classifier.predict(fd)[0]
         proba = classifier.predict_proba(fd)[0]
-        print(proba)
+
         probabilities = {str(decode(i)): p for i, p in enumerate(proba)}
         probabilities_per_col.append(probabilities)
 

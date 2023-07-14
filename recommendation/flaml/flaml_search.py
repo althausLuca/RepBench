@@ -20,51 +20,11 @@ def flaml_search(automl_settings, X_train, y_train, *, verbose=-1, ignore_flaml_
     #         warnings.simplefilter("ignore")
     #         automl.fit(X_train=X_train, y_train=y_train, verbose=2, **automl_settings)
     # else:
-    automl.fit(X_train=X_train, y_train=y_train, callback = lambda x : print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",x) , **automl_settings)
+    automl.fit(X_train=X_train, y_train=y_train, callback = lambda x : None , **automl_settings)
 
     store_estimator(automl, estimator_name=automl_result_name)
     return automl, automl_result_name
 
-
-# def flaml_search_advanced_output(automl_settings, X_train, y_train, *,
-#                                  file_name=None ,output_list = None):
-#     import threading
-#     import sys
-#
-#     if output_list is None:
-#         output_list = []
-#
-#
-#     if file_name is not None:
-#         automl_result_name = file_name
-#     else:
-#         automl_result_name = f"flaml_classifier_{automl_settings.get('metric')}_time_{automl_settings.get('time_budget')}"
-#
-#     def run_flaml_search(automl_settings_, X_train_, y_train_):
-#         automl = AutoML(**automl_settings)
-#         normal_write = sys.stdout.write
-#         def print_output(*args):
-#             thread_id = threading.get_ident()
-#             if thread_id == flaml_thread.ident:
-#                 output = ' '.join(str(a) for a in args)
-#                 output_list.append(output)
-#                 # normal_write(*args)
-#             else:
-#                 normal_write(*args)
-#
-#         sys.stdout.write = print_output
-#         with warnings.catch_warnings():
-#             warnings.simplefilter("ignore")
-#             automl.fit(X_train=X_train_, y_train=y_train_, **automl_settings_)
-#         sys.stdout = sys.__stdout__
-#
-#         store_estimator(automl, estimator_name=automl_result_name)
-#
-#
-#     flaml_thread = threading.Thread(target=run_flaml_search, args=(automl_settings, X_train.copy(), y_train.copy()))
-#     flaml_thread.start()
-#     print("started")
-#     return flaml_thread , output_list
 
 
 def flaml_search_multiprocess(automl_settings, X_train, y_train, *,file_name=None):
@@ -168,7 +128,6 @@ def compute_automl_scores(automl_or_automl_result_name, X_train, y_train, X_test
 
     if X_test is None or y_test is None:
         results.update(additional_info)
-        print(results)
         store_estimator_results(results, file_name=automl_result_name + "_results")
         return
 

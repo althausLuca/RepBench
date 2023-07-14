@@ -66,7 +66,7 @@ while True:
                           "best_estimator": match.group(4),
                           "best_error": float(match.group(5))
                           }
-                print(result)
+                label
                 print(output.split("cut")[-1] if "cut" in output else "")
 
     except Empty:

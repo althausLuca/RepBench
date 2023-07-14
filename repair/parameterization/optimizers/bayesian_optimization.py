@@ -36,7 +36,6 @@ class BayesianOptimizer(EstimatorOptimizer):
 
     def search(self, repair_inputs, param_grid, return_full_results=False):
         param_ranges = self.convert_to_range(param_grid)
-        print("Param Space:" ,param_ranges)
         param_keys, param_values  = param_ranges.keys(), param_ranges.values() # split parameter values and keys
 
         self.iter_counter = 0
@@ -49,7 +48,7 @@ class BayesianOptimizer(EstimatorOptimizer):
             score = estim.scores(**repair_inputs)[self.error_score]
             if self.iter_counter == self.n_initial_points:
                 print("Finished initial points, computing most promising parameters")
-            print("params:" , params , "score:"  ,score)
+            # print("params:" , params , "score:"  ,score)
             # sys.stdout.write(f"\rBayesian Optimization search {self.iter_counter / self.n_calls * 100:.1f} % {score}", )
             if self.callback is not None:
                 self.callback({"params": params, "score": score, "iter": self.iter_counter})

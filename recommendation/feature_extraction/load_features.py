@@ -86,6 +86,6 @@ def show_progress_bar(iteration, total, prefix='', suffix='', decimals=1, length
     filled_length = int(length * iteration // total)
     bar = fill * filled_length + '-' * (length - filled_length)
     print(f'\r{prefix} |{bar}| {percent}% {suffix}', end='\r')
-    # Print New Line on Complete
+    # label
     if iteration == total:
         print()

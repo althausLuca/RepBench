@@ -47,7 +47,6 @@ const ProbabilityChart = {
 
     update: function (probabilities) {
         const categories = Object.keys(probabilities).sort();
-        console.log(categories)
         this.chart.xAxis[0].setCategories(categories);
         const data = categories.map(function (key) {
             return {

@@ -16,8 +16,13 @@
             position: absolute;
             top: 5px; /* Adjust the positioning as needed */
             left: 98%;
-        {#transform: translateX(10px);#}{#background-color: #000;#}{#color: #fff;#} padding: 5px 10px;
+            padding: 5px 10px;
             border-radius: 5px;
+        }
+
+        #range-slider{
+            padding-left: 0;
+            padding-right: 0;
         }
     </style>
 
@@ -34,9 +39,9 @@
             const tooltipWidth = tooltip_.offsetWidth;
             const min = rangeSlider.min || 0;
             const max = rangeSlider.max || 100;
-            const percentage = ((value - min) / (max - min)) * 100;
+            {#const percentage = ((value - min) / (max - min)) * 100;#}
             {#const tooltipLeft = (percentage * rangeWidth) / 100 - tooltipWidth / 2;#}
-            tooltip_.style.left = `${tooltipLeft}px`;
+            {#tooltip_.style.left = `${tooltipLeft}px`;#}
         };
 
         // Add event listener for input event

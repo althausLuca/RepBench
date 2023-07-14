@@ -11,7 +11,6 @@ def encode(y:np.array):
     return np.array([encodings[label] for label in y])
 
 def get_reverse_mapping():
-    print("encodings" , encodings)
     return {v:k for k,v in encodings.items()}
 
 def decode(y_or_int):

@@ -27,7 +27,7 @@ optimizer = BayesianOptimizer(rpca_estimator,"rmse",n_initial_points=20)
 
 for result in score_results:
     injection_parameters = result["injection_parameters"]
-    print(injection_parameters)
+
     rpca_parameters = result["alg_results"]["rpca"]["parameters"]
 
 
@@ -39,8 +39,8 @@ for result in score_results:
     repair_inputs = {"injected":injected_df,"truth":truth_df,"columns_to_repair":injection_parameters["cols"]}
 
 
-    print("defaultscore", Robust_PCA_estimator(**rpca_parameters).scores(**repair_inputs))
-    print("WRITTENSCORE", result["alg_results"]["rpca"]["rmse"])
+
+
 
 
     ## old way score

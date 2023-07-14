@@ -22,7 +22,6 @@ let repair = (alg) => fetch(repair_url, {
     let color = null
     const chartRepairSeries = Object.keys(repSeries).map(key => {
         let repair = repSeries[key]
-        console.log(repair)
         return chartManager.addSeries(repair, false, "repair")
     })
     chartManager.resetSeries(true)
@@ -70,7 +69,6 @@ let repair = (alg) => fetch(repair_url, {
         left: 0,
         behavior: 'smooth'
     });
-    console.log(repairResponse)
     init_threshold_chart(repairResponse.injected_diff)
     thresholdChart.updateThreshold($("#threshold").val())
     initClassificationReductionChart(repairResponse.injected_series.concat(repairResponse.reductions))

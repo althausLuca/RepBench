@@ -16,7 +16,7 @@ from RepBenchWeb.views import (
 from RepBenchWeb.views.repair import repair_view
 
 from RepBenchWeb.views import dimensionality_reduction_view, synthetic_dataset_view, data_loader
-from RepBenchWeb.views.recommendation.recommendation_tasks import FlamlTask
+from RepBenchWeb.views.recommendation.recommendation_tasks import FlamlTask, RayTuneTask
 from RepBenchWeb.views.optimization.optimization_tasks import SuccesiveHalvingTask, BayesianOptimisationTask
 from RepBenchWeb.views.repair.repair_comparison import RepairAndCompare
 
@@ -58,7 +58,6 @@ urlpatterns = [
     path('opt', optimizationview.OptimizationView.as_view(), name="opt"),
     path('opt/<str:setname>', optimizationview.OptimizationView.as_view(), name="opt"),
 
-
     path('start_bayesian_opt', BayesianOptimisationTask.init_task, name='start_bayesian_opt'),
     path('start_succesive_halving', SuccesiveHalvingTask.init_task, name='start_successive_halving'),
 
@@ -87,25 +86,15 @@ urlpatterns = [
     ## recommendation
     path('recommendation_datasets', recommendation_view.RecommendationView().recommendation_datasets,
          name='recommendation_datasets'),
-
-
     path('recommendation/<str:type>', recommendation_view.RecommendationView.as_view(), name='recommendation'),
 
-    # path('get_recommendation_results/<str:setname>', recommendation_view.RecommendationView.get_recommendation,
-    #      name="get_recommendation"),
 
-    # path('user_recommendation', file_upload_view.upload_files, name="user_recommendation"),
-    path('userData/', file_upload_view.upload_files, name='upload_files'),
-    path('upload', data_upload_view.UploadView.as_view(), name='upload'),
 
     path('flaml_example',FlamlTask.init_task, name='start_flaml'),
-    path('raytunes_example',recommendation_example_view.start_raytunes, name='start_raytunes'),
+    path('raytunes_example',RayTuneTask.init_task, name='start_raytunes'),
 
-
-    path('recommendation_retrieve', FlamlTask.fetch_data,
-         name='retrieve_recommendation_results'),
+    path('recommendation_retrieve', FlamlTask.fetch_data,name='retrieve_recommendation_results'),
     path('get_recommendation/<str:setname>' , recommendation_example_view.flaml_prediction , name='get_recommendation'),
-    # path('user_recommendation', recommendation_view..as_view(), name='user_recommendation'),
 
 
 
@@ -113,6 +102,10 @@ urlpatterns = [
     #delete dataset
     path('delete/<str:setname>', dataset_views.delete_dataset, name='delete_dataset'),
     path('delete_dataset/<str:setname>', dataset_views.delete_dataset, name='delete_dataset'),
+
+    #save dataset
+    path('userData/', file_upload_view.upload_files, name='upload_files'),
+    path('upload', data_upload_view.UploadView.as_view(), name='upload'),
 ]
 
 

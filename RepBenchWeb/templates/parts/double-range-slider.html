@@ -1,5 +1,5 @@
 {# needs parameters min, max,step id and label  #}
-
+{% load static %}
 {% if not min %}
     {% with min=0 %}
     {% endwith %}
@@ -15,80 +15,18 @@
     {% endwith %}
 {% endif %}
 
-{#{% if not step %}#}
-{#    {% with step=1 %}#}
-{#    {% endwith %}#}
-{#{% endif %}#}
 
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-{#    <script src="https://code.jquery.com/jquery-3.6.0.js"></script> already imported#}
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-
-<style>
-    :root {
-        --slider-color: green;
-    }
-
-    .ui-slider-tooltip {
-        position: absolute;
-        padding: 4px 8px;
-        color: white;
-        font-weight: bold;
-        font-size: 10px;
-        border-radius: 5px;
-        z-index: 2;
-        transform: translate(-20%, -120%);
-    }
-
-    .ui-slider-handle {
-        width: 9px !important;
-        height: 1.2em !important;
-    {#top: 50%;#}{#margin-top: -.8em;#}{#text-align: center;#}{#line-height: 1.6em;#}
-
-    }
-
-    .ui-slider-tooltip,
-    .ui-state-active,
-    .ui-slider-range {
-        background-color: var(--slider-color);
-    }
-    .ui-state-active {
-        background: var(--slider-color) !important;
-    }
-
-
-
-    .ui-slider-min-tooltip,
-    .ui-slider-max-tooltip {
-        position: absolute;
-        background-color: transparent;
-        color: black;
-        font-weight: bold;
-        font-size: 12px;
-        border-radius: 4px;
-        z-index: 2;
-        transform: translate(-20%, -120%);
-    }
-
-    .ui-slider-max-tooltip {
-        transform: translate(-20px, -120%);
-        left: 100%;
-    }
-
-    .ui-slider-min-tooltip {
-        transform: translate(-18px, -124%);
-    }
-</style>
+<link href='{% static "css/customDoubleSlider.css" %}' rel="stylesheet" type="text/css">
 
 <div class="form-group">
     <input type="hidden" name="{{ id }}-min" id="{{ id }}-min" value="{{ min }}">
     <input type="hidden" name="{{ id }}-max" id="{{ id }}-max" value="{{ max }}">
 </div>
 
-
 <script>
     $(function () {
-        console.log("slider step {{ step }}");
         let sliderID = "#slider-range-{{ id }}";
         let amountID = "#amount-{{ id }}";
         let tooltipID = "#tooltip-{{ id }}";

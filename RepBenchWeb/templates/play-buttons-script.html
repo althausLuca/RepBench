@@ -1,36 +1,36 @@
-<script>
-
-    const registerPlayAndReloadBtns = function (name, handler) {
-
-        $('#play-' + name).on('click', function (event) {
-            console.log("recommendationHandler", handler)
-            event.preventDefault();
-            $(this).find('i').toggle();
-            handler.playing = !handler.playing
-            if (handler.computing) {
-            } else {
-                handler.computing = true;
-                handler.start()
-                console.log(name + 'started')
-            }
-        });
-
-        $('#reload-' + name).on('click', function (event) {
-            // Prevent form submission if it's a submit button
-            event.preventDefault();
-            if (handler.data.length > 0) {
-                handler.start()
-            }
-
-             if (handler.playing) {
-                handler.playing = false
-                $('#play-' + name).find('i').toggle();
-            }
-
-        });
-        console.log("recommendationHandler AAAAAA", name , $('#play-' + name))
-
-    }
-
-
-</script>
+{#<script>#}
+{##}
+{#    const registerPlayAndReloadBtns = function (name, handler) {#}
+{##}
+{#        $('#play-' + name).on('click', function (event) {#}
+{#            console.log("recommendationHandler", handler)#}
+{#            event.preventDefault();#}
+{#            $(this).find('i').toggle();#}
+{#            handler.playing = !handler.playing#}
+{#            if (handler.computing) {#}
+{#            } else {#}
+{#                handler.computing = true;#}
+{#                handler.start()#}
+{#                console.log(name + 'started')#}
+{#            }#}
+{#        });#}
+{##}
+{#        $('#reload-' + name).on('click', function (event) {#}
+{#            // Prevent form submission if it's a submit button#}
+{#            event.preventDefault();#}
+{#            if (handler.data.length > 0) {#}
+{#                handler.start()#}
+{#            }#}
+{##}
+{#             if (handler.playing) {#}
+{#                handler.playing = false#}
+{#                $('#play-' + name).find('i').toggle();#}
+{#            }#}
+{##}
+{#        });#}
+{#        console.log("recommendationHandler AAAAAA", name , $('#play-' + name))#}
+{##}
+{#    }#}
+{##}
+{##}
+{#</script>#}

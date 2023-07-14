@@ -19,7 +19,7 @@ recommendation_input = RecommendationInputLoader(feature_file_name,train_split_r
 X_test, y_test = recommendation_input.X_test, recommendation_input.y_test
 X_train ,  y_train = recommendation_input.X_train, recommendation_input.y_train
 
-print("NO ANOMALY INFOS")
+label
 for f in [os.listdir(automl_file_folder)[0]]:
     file_name = os.path.basename(f)
     automl = load_estimator(file_name)
@@ -28,7 +28,7 @@ for f in [os.listdir(automl_file_folder)[0]]:
 
 
 
-print("WITH ANOMALY INFOS")
+label
 recommendation_input = RecommendationInputLoader(feature_file_name,train_split_r=0.5,include_anomaly_infos=True)
 X_test, y_test = recommendation_input.X_test, recommendation_input.y_test
 X_train ,  y_train = recommendation_input.X_train, recommendation_input.y_train

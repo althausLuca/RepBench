@@ -9,7 +9,7 @@ def parse_recommendation_results(file_name, error="rmse"):
     json_array = parse_lines_file(file_name)
     df_dict: dict = sub_results_from_json_array(json_array)
     if "alg_results" in df_dict:
-        # print(df_dict["alg_results"])
+        #
         df_dict["best_algorithm"] = df_dict["alg_results"].apply(lambda row: min_alg(row, error), axis=1)
         df_dict["best_algorithm_error"] = df_dict["alg_results"].apply(lambda row: min_error(row, error), axis=1)
 

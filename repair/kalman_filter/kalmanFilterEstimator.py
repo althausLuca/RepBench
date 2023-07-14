@@ -10,7 +10,6 @@ class KalmanFilterEstimator(Estimator):
         #default is not threshold (threshold=-1.0) means that we don't use threshold and just return the smoothed result
         self.transition_cov = transition_cov
         self.threshold = threshold
-        print("KalmanFilterEstimator" , kwargs)
         # super().__init__(**kwargs)
 
     def get_fitted_params(self, **args):

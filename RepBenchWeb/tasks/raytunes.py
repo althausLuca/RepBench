@@ -71,7 +71,6 @@ def ray_tune_search_task(self, settings, X_train, y_train, X_test, y_text, my_ta
                      "config": result["config"].copy()
                      }
 
-            # print("DATA", data_)
             task_data.add_data(data_)
 
     def train_model(config):

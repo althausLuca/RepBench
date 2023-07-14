@@ -105,7 +105,7 @@ def extract_tsfel_features(data: np.ndarray):
     tsfel_features = tsfel.time_series_features_extractor(cfg_file, data)
     tsfel_features = dict(zip(tsfel_features.columns, tsfel_features.values.flatten()))
     tsfel_features = {name.replace(" ", "_") + feature_endings["tsfel"]: round(val, 5) for name, val in tsfel_features.items()}
-    print("TSFELL FEATURES", tsfel_features)
+    # labeltsfel_features)
 
     return tsfel_features
 

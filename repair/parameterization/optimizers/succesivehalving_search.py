@@ -49,16 +49,16 @@ class SuccessiveHalvingOptimizer(EstimatorOptimizer):
                 "columns_to_repair": repair_inputs["columns_to_repair"]
             }
 
-            plt.plot(injected_full.iloc[start_index:end_index, repair_inputs["columns_to_repair"]])
-            plt.plot(truth_full.iloc[start_index:end_index, repair_inputs["columns_to_repair"]])
-            plt.title(f"iter_{counter} {len(param_combinations)} combinations")
-            plt.show()
+            # plt.plot(injected_full.iloc[start_index:end_index, repair_inputs["columns_to_repair"]])
+            # plt.plot(truth_full.iloc[start_index:end_index, repair_inputs["columns_to_repair"]])
+            # plt.title(f"iter_{counter} {len(param_combinations)} combinations")
+            # plt.show()
             params_error = self.param_map(reduced_repair_indputs, param_combinations)
             avg_error = np.mean([error for _, error in params_error])
-            print("avg error:" , np.mean([error for _, error in params_error]), "Parameters:" ,params_error  )
+            # print("avg error:" , np.mean([error for _, error in params_error]), "Parameters:" ,params_error  )
             # reduce param combinations
             param_combinations = [params for i, (params, _) in enumerate(params_error) if i < len(params_error) / 2]
-            print("Kept parameters: " , param_combinations)
+            # print("Kept parameters: " , param_combinations)
 
             #increase size
             start_size = start_size*2
@@ -72,7 +72,7 @@ class SuccessiveHalvingOptimizer(EstimatorOptimizer):
 
         final_map = self.param_map(reduced_repair_indputs, param_combinations)
         final_parameters, score  =  self.param_map(reduced_repair_indputs,param_combinations)[0]
-        print("Final parameters: " , final_parameters)
+        # print("Final parameters: " , final_parameters)
         if self.callback is not None:
             self.callback(counter, [final_parameters], size, params_error, score, [final_parameters], final_parameters, score)
 

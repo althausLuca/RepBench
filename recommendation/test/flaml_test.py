@@ -84,8 +84,7 @@ def flaml_search(data_set, a_type, factor=2):
     }
     best_config, best_task_id = automl.fit(tasks, **automl_settings)
 
-    # Print the best hyperparameters and output value for the best task
-    print(f"Best hyperparameters for task {best_task_id}: {best_config}")
+    # label    print(f"Best hyperparameters for task {best_task_id}: {best_config}")
     print(f"Output value for task {best_task_id}: {automl.get_best_result()}")
 
 
