@@ -61,6 +61,8 @@
     padding: 0px 6px;
     border-radius: 4px;
     transition: all 0.2s ease;
+    padding-top: 4px;
+    padding-bottom: 4px;
 }
 
 .reload-btn:hover {
@@ -78,6 +80,8 @@
     padding: 0px 10px;
     border-radius: 5px;
     transition: all 0.2s ease;
+    padding-top: 4px;
+    padding-bottom: 4px;
 }
 
 .play-btn:hover {
@@ -95,6 +99,14 @@
 .play-btn:hover, .play-btn:active {
 }
 
+.form-group > a.btn {
+    padding-left: 2px !important;
+    padding-right: 2px !important;
+}
+
+#id_algorithms > div {
+    padding-bottom: 25px;
+}
 
 /*Forms-------*/
 #repairForm {
@@ -105,7 +117,7 @@
     font-size: 20px;
 }
 
-.loading-gif-20{
+.loading-gif-20 {
     height: 20px;
     width: 20px;
     margin-left: 5px;
@@ -171,9 +183,6 @@ tr.current-row > * {
 dataset-info-table {
     color: #8492A6;
 }
-
-
-
 
 
 /* charts */

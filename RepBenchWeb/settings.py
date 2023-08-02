@@ -87,9 +87,10 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'RepBenchWeb.urls'
 
 
-def title(request):
+def constants(request):
+    from RepBenchWeb.config import WEB_SIDE_NAME
     # return the value you want as a dictionary. you may add multiple values in there.
-    return {'Title': "RepBench"}
+    return {'Title': WEB_SIDE_NAME}
 
 
 TEMPLATES = [
@@ -103,7 +104,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'RepBenchWeb.settings.title',
+                'RepBenchWeb.settings.constants',
             ],
         },
     },

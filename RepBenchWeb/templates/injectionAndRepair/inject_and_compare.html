@@ -6,125 +6,132 @@
 
 {% block content %}
     <script>
-    var chartHeight = 822-61;
+        var chartHeight = 910    - 61;
     </script>
-{#    <style>#}
-{#        #repairForm {#}
-{#            margin-top: 10px;#}
-{#        }#}
-{##}
-{#        #repairForm label {#}
-{#            font-size: 20px;#}
-        {#background: black;#}
-{#        }#}
-{##}
-{#        .loading-gif {#}
-{#            height: 20px;#}
-{#            width: 20px;#}
-{#            margin-left: 5px;#}
-{#        }#}
-{##}
-{#    </style>#}
+    {#    <style>#}
+    {#        #repairForm {#}
+    {#            margin-top: 10px;#}
+    {#        }#}
+    {##}
+    {#        #repairForm label {#}
+    {#            font-size: 20px;#}
+    {#background: black;#}
+    {#        }#}
+    {##}
+    {#        .loading-gif {#}
+    {#            height: 20px;#}
+    {#            width: 20px;#}
+    {#            margin-left: 5px;#}
+    {#        }#}
+    {##}
+    {#    </style>#}
 
 
     <div class="row">
-        <div class="col-md-10">
+        <div class="col-md-8">
             {% include "displayDataset/chartSelection.html" with include_reset=1 %}
         </div>
-        <div class="col-md-2">
-            <div id="form_portlets">
-                <div id="injection_portlet" class="kt-portlet" data-ktportlet="true">
-                    <div class="kt-portlet__head">
-                        <div class="kt-portlet__head-label">
-                            <h3 class="kt-portlet__head-title">Anomaly Injection</h3>
-                        </div>
-                        <div class="kt-portlet__head-toolbar">
-                        </div>
-                    </div>
-                    <div class="kt-portlet__body kt-portlet__body--fit">
-                        <form id="injectionForm" name="injectionForm_name" class="kt-form"
-                                {#                                  onsubmit="inject('{% url 'inject_data' setname=setname %}'); return false;"#}
-                              enctype="multipart/form-data"
-                        >
-                            {% csrf_token %}
-                            <div class="kt-portlet__body">
-                                {% for field in injection_form.visible_fields %}
-                                    <div class="form-group">
-                                        {{ field.label_tag }}
-                                        {% if field.field.widget.attrs.myInfo %}
-                                            <a tabindex="0" class="btn" role="button" data-toggle="kt-popover"
-                                               data-placement="top" data-trigger="focus"
-                                               data-content="{{ field.field.widget.attrs.myInfo }}"
-                                               data-original-title=""
-                                               title=""><i
-                                                    class="mdi mdi-information-outline mdi-18px"></i></a>
-                                        {% endif %}
-                                        {{ field }}
+        <div class="col-md-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <div id="form_portlets">
+                        <div id="injection_portlet" class="kt-portlet" data-ktportlet="true">
+                            <div class="kt-portlet__head">
+                                <div class="kt-portlet__head-label">
+                                    <h3 class="kt-portlet__head-title">Anomaly Injection</h3>
+                                </div>
+                                <div class="kt-portlet__head-toolbar">
+                                </div>
+                            </div>
+                            <div class="kt-portlet__body kt-portlet__body--fit">
+                                <form id="injectionForm" name="injectionForm_name" class="kt-form"
+                                        {#                                  onsubmit="inject('{% url 'inject_data' setname=setname %}'); return false;"#}
+                                      enctype="multipart/form-data"
+                                >
+                                    {% csrf_token %}
+                                    <div class="kt-portlet__body">
+                                        {% for field in injection_form.visible_fields %}
+                                            <div class="form-group">
+                                                {{ field.label_tag }}
+                                                {% if field.field.widget.attrs.myInfo %}
+                                                    <a tabindex="0" class="btn" role="button" data-toggle="kt-popover"
+                                                       data-placement="top" data-trigger="focus"
+                                                       data-content="{{ field.field.widget.attrs.myInfo }}"
+                                                       data-original-title=""
+                                                       title=""><i
+                                                            class="mdi mdi-information-outline mdi-18px"></i></a>
+                                                {% endif %}
+                                                {{ field }}
+                                            </div>
+                                        {% endfor %}
+                                        <!-- Invisible fields -->
+                                        {% for field in invisible_fields %}
+                                            {{ field }}
+                                        {% endfor %}
+                                        <div class="kt-form__actions">
+                                            <button id="injection-button" type="submit" class="btn btn-primary">Inject
+                                            </button>
+                                        </div>
                                     </div>
-                                {% endfor %}
-                                <!-- Invisible fields -->
-                                {% for field in invisible_fields %}
-                                    {{ field }}
-                                {% endfor %}
-                                <div class="kt-form__actions">
-                                    <button id="injection-button" type="submit" class="btn btn-primary">Inject
-                                    </button>
-                                </div>
-                            </div>
 
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div id="form_portlets">
-                <div id="repair_portlet" class="kt-portlet ">
-                    <div class="kt-portlet__head">
-                        <div class="kt-portlet__head-label">
-                            <h3 class="kt-portlet__head-title">Repair</h3>
-                        </div>
-                        <div class="kt-portlet__head-toolbar">
+                                </form>
+                            </div>
                         </div>
                     </div>
-                    <div class="kt-portlet__body kt-portlet__body--fit-top">
-                        <form id="repairForm" name="repairForm_name" class="kt-form"
-                                {#                                  onsubmit="inject('{% url 'inject_data' setname=setname %}'); return false;"#}
-                              enctype="multipart/form-data"
-                        >
-                            {% csrf_token %}
-                            {% for field in algorithm_form.visible_fields %}
-                                <div class="form-group">
-                                    {#                                        {{ field.label_tag }}#}
-                                    {% if field.field.widget.attrs.myInfo %}
-                                        <a tabindex="0" class="btn" role="button" data-toggle="kt-popover"
-                                           data-placement="top" data-trigger="focus"
-                                           data-content="{{ field.field.widget.attrs.myInfo }}"
-                                           data-original-title=""
-                                           title=""><i
-                                                class="mdi mdi-information-outline mdi-18px"></i></a>
-                                    {% endif %}
-                                    {{ field }}
+                </div>
+                <div class="col-md-6">
+                    <div id="form_portlets">
+                        <div id="repair_portlet" class="kt-portlet ">
+                            <div class="kt-portlet__head">
+                                <div class="kt-portlet__head-label">
+                                    <h3 class="kt-portlet__head-title">Repair</h3>
                                 </div>
-                            {% endfor %}
-                            <!-- Invisible fields -->
-                            {% for field in invisible_fields %}
-                                {{ field }}
-                            {% endfor %}
-                            <div class="kt-form__actions">
-                                <button id="repair-button" type="submit" class="btn btn-primary">Repair
-                                </button>
+                                <div class="kt-portlet__head-toolbar">
+                                </div>
                             </div>
+                            <div class="kt-portlet__body kt-portlet__body--fit-top">
+                                <form id="repairForm" name="repairForm_name" class="kt-form"
+                                        {#                                  onsubmit="inject('{% url 'inject_data' setname=setname %}'); return false;"#}
+                                      enctype="multipart/form-data"
+                                >
+                                    {% csrf_token %}
+                                    {% for field in algorithm_form.visible_fields %}
+                                        <div class="form-group">
+                                            {#                                        {{ field.label_tag }}#}
+                                            {% if field.field.widget.attrs.myInfo %}
+                                                <a tabindex="0" class="btn" role="button" data-toggle="kt-popover"
+                                                   data-placement="top" data-trigger="focus"
+                                                   data-content="{{ field.field.widget.attrs.myInfo }}"
+                                                   data-original-title=""
+                                                   title=""><i
+                                                        class="mdi mdi-information-outline mdi-18px"></i></a>
+                                            {% endif %}
+                                            {{ field }}
+                                        </div>
+                                    {% endfor %}
+                                    <!-- Invisible fields -->
+                                    {% for field in invisible_fields %}
+                                        {{ field }}
+                                    {% endfor %}
+                                    <div class="kt-form__actions">
+                                        <button id="repair-button" type="submit" class="btn btn-primary">Repair
+                                        </button>
+                                    </div>
 
-                        </form>
+                                </form>
+                            </div>
+                        </div>
                     </div>
+
                 </div>
             </div>
-
+            <div class="col-md-12" id="scores" style="display:none;"></div>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-12" id="scores" style="display:none;"></div>
-    </div>
+    {#    <div class="row">#}
+    {#        <div class="col-md-12" id="scores" style="display:none;"></div>#}
+    {#    </div>#}
 
     <script>
         let repair_url = null

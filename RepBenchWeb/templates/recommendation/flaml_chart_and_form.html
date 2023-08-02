@@ -1,48 +1,56 @@
 {% extends "parts/kt-portlet.html" %}
 {% load static %}
 
+{#{% block portlet-title %}#}
+{#       <h3 class="kt-portlet__head-title">#}
+{#       Recommendation#}
+{#       </h3>#}
+{#{% endblock %}#}
 
 {% block portlet-title %}
-    <h3 class="kt-portlet__head-title"></h3> <!--needed for button size -->
-    <form id="start-form">
-        {% csrf_token %}
-        <button id="play-recommendation" type="submit" class="play-btn"
-        >
-            <i class="mdi mdi-24px mdi-play"></i>
-            <i style="display:none" class="mdi mdi-24px mdi-pause"></i>
+    <div style="margin-top: 5px; margin-bottom: 5px">
+{#        <h2 class="" style="margin-bottom: 0px"> Recommendation#}
+{#            {% include "parts/info-box.html" with id="rec-info" %}#}
+{#        </h2>#}
+{#        <div id="rec-info" style="display:none; margin-top: -3px; margin-bottom: 3px">#}
+{#            Using the <a href="https://microsoft.github.io/FLAML/">FLAML</a> autoML library#}
+{#            we display the current scores of the different classification estimators (in black)#}
+{#            while keeping track of the current best estimator (in red).#}
+{#        </div>#}
 
-        </button>
-        <button id="reload-recommendation" type="submit" class="reload-btn"
-        >
-            <i class="mdi mdi-24px mdi-reload"></i>
-            <i style="display:none" class="mdi mdi-24px mdi-pause"></i>
 
-        </button>
-        <div id="start-button-right" style="display: inline;">
-            <h6 id="play-recommendation-info-text" style="display: inline;"></h6>
-        </div>
-    </form>
-{% endblock %}
+        <form id="start-form" style="margin-top: 5px; margin-bottom: 10px">
+            {% csrf_token %}
+            <button id="play-recommendation" type="submit" class="play-btn"
+                    style="padding-top: 4px ; padding-bottom:4px">
+                <i class="mdi mdi-24px mdi-play"></i>
+                <i style="display:none" class="mdi mdi-24px mdi-pause"></i>
 
-{% block portlet-toolbar %}
-    <div>
-        <div>
-            <div style="position:absolute;right:0;top:0">
-                {% include "parts/info-box.html" with id="rec-info" %}
+            </button>
+            <button id="reload-recommendation" type="submit" class="reload-btn"
+            >
+                <i class="mdi mdi-24px mdi-reload"></i>
+                <i style="display:none" class="mdi mdi-24px mdi-pause"></i>
+
+            </button>
+            <div id="start-button-right" style="display: inline;">
+                <h6 id="play-recommendation-info-text" style="display: inline;"></h6>
             </div>
-        </div>
-        <div id="rec-info" style="display:none; margin-top: 35px">
-            <li>
-                Recommendation using <a href="https://microsoft.github.io/FLAML/">FLAML</a>
-            </li>
-            <li>
-                We display the scores of the different classification estimators <br>
-                while keeping track of the current best estimator and their parameters.
-            </li>
-        </div>
+        </form>
     </div>
-
 {% endblock %}
+
+{#{% block portlet-toolbar %}#}
+{#    <div>#}
+{#        <div>#}
+{#            <div style="position:absolute;right:0;top:0">#}
+{#                {% include "parts/info-box.html" with id="rec-info" %}#}
+{#            </div>#}
+{#        </div>#}
+{#        #}
+{#    </div>#}
+{##}
+{#{% endblock %}#}
 {% block portlet-body %}
     <div class="row" style="height:520px">
         <div class="col-md-9">
@@ -71,7 +79,7 @@
                         {% endif %}
                     </div>
                 {% endfor %}
-            {% include "parts/range_slider.html" %}
+                {% include "parts/range_slider.html" %}
             </form>
         </div>
 

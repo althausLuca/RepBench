@@ -19,8 +19,9 @@ from RepBenchWeb.views import dimensionality_reduction_view, synthetic_dataset_v
 from RepBenchWeb.views.recommendation.recommendation_tasks import FlamlTask, RayTuneTask
 from RepBenchWeb.views.optimization.optimization_tasks import SuccesiveHalvingTask, BayesianOptimisationTask
 from RepBenchWeb.views.repair.repair_comparison import RepairAndCompare
+from RepBenchWeb.config import WEB_SIDE_NAME
 
-app_name = 'RepBenchWeb'
+app_name = WEB_SIDE_NAME
 
 urlpatterns = [
     path('', index_view.index, name='index'),
@@ -101,7 +102,7 @@ urlpatterns = [
 
     #delete dataset
     path('delete/<str:setname>', dataset_views.delete_dataset, name='delete_dataset'),
-    path('delete_dataset/<str:setname>', dataset_views.delete_dataset, name='delete_dataset'),
+    # path('delete_dataset/<str:setname>', dataset_views.delete_dataset, name='delete_dataset'),
 
     #save dataset
     path('userData/', file_upload_view.upload_files, name='upload_files'),

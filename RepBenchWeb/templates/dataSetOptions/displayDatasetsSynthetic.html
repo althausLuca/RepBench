@@ -59,7 +59,7 @@
                                             </th>
                                             <th class="" tabindex="0" aria-controls="table_real_world_datasets"
                                                 rowspan="1" colspan="1" style="width: 91.5px;"
-                                                aria-label="actions: activate to sort column ascending">Action
+                                                aria-label="actions: activate to sort column ascending">Actions
                                             </th>
                                         </tr>
                                         </thead>
@@ -67,22 +67,23 @@
 
                                         {% for name,attr in  syntheticDatasets.items %}
                                             <tr>
-                                                <td tabindex="0" class="">{{ attr.title }}</td>
+                                                <td tabindex="0" class="">   <a href="{% url 'synthetic_dataset_view' setname=name %}">  {{ attr.title }} </a> </td>
                                                 <td>
-                                                    <a href="{% url 'synthetic_dataset_view' setname=name %}"> {{ attr.url_text }}</a>
+                                                    <a href="{% url 'display_dataset' setname=attr.original_data_set %}"> {{ attr.original_data_set }}</a>
                                                 </td>
                                                 <td style="text-align: left">{{ attr.ts_nbr }}</td>
                                                 <td style="text-align: left">{{ attr.values }}</td>
-                                                <td style="text-align: left">-</td>
+                                                <td style="text-align: left"> {{ attr.granularity }}</td>
+                                               <td style="text-align: left"> <button onclick="confirmDelete('{{ name }}')">Delete</button></td>
                                                 {#                <td style="text-align: right"><a href="{% url 'injection' setname=attr.title %}">Inject and Repair</a></td>#}
-                                                <td>
-                                                    {% if option == "Repair" %}
-                                                        <a href="{% url 'injectAndRepair' setname=name %}">{{ option }}</a>
-                                                    {% elif option == "Optimize" %}
-                                                        <a href="{% url 'opt' setname=name %}">{{ option }}</a>
-                                                    {% else %}
-                                                        <a href="{% url 'synthetic_dataset_view' setname=name %}">Display</a>
-                                                    {% endif %}
+{#                                                <td>#}
+{#                                                    {% if option == "Repair" %}#}
+{#                                                        <a href="{% url 'injectAndRepair' setname=name %}">{{ option }}</a>#}
+{#                                                    {% elif option == "Optimize" %}#}
+{#                                                        <a href="{% url 'opt' setname=name %}">{{ option }}</a>#}
+{#                                                    {% else %}#}
+{#                                                        <a href="{% url 'synthetic_dataset_view' setname=name %}">Display</a>#}
+{#                                                    {% endif %}#}
                                             </tr>
                                         {% endfor %}
                                         </tbody>
@@ -110,9 +111,4 @@
     {{ block.super }}
     <script src="{% static 'js/lib/datatables/datatables.js' %}" type="text/javascript"></script>
     <script src="{% static 'js/custom/datatables.init.js' %}" type="text/javascript"></script>
-    {#    <script type="text/javascript">#}
-    {#        jQuery(document).ready(function () {#}
-    {#            VadetisDatatables.init("table_real_world_datasets", "{% url 'vadetisweb:display_real_world_datasets_datatable-list' %}?format=datatables");#}
-    {#        });#}
-    {#    </script>#}
 {% endblock %}

@@ -12,6 +12,7 @@ services:
       - redis
     environment:
       - DJANGO_SETTINGS_MODULE=RepBenchWeb.settings
+    restart: always
 
   celery:
     build: .
@@ -29,5 +30,8 @@ services:
       - redis
     environment:
       - DJANGO_SETTINGS_MODULE=RepBenchWeb.settings
+    restart: always
+
   redis:
     image: redis
+    restart: always

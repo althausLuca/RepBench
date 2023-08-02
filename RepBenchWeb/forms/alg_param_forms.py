@@ -1,19 +1,20 @@
 import numpy as np
 
 from django import forms
-from repair.algorithms_config import SPEEDandAcceleration, IMR, SCREEN, RPCA, CDREP , ALGORITHM_TYPES , SCR , KalmanFilter
+from repair.algorithms_config import SPEEDandAcceleration, IMR, SCREEN, RPCA, CDREP, ALGORITHM_TYPES, SCR, KalmanFilter
 from RepBenchWeb.forms.utils import hiddenField
 
 ALGORITHM_CHOICES = [(a, a) for a in ALGORITHM_TYPES]
 
 
 class AlgorithmsForm(forms.Form):
-    algorithms = forms.MultipleChoiceField(label='Algorithms',
-                              initial=[choice[1] for choice in ALGORITHM_CHOICES],
-                              widget=forms.CheckboxSelectMultiple(
-                                  attrs={'class': 'multi-checkbox', "name": 'algorithms[]'}),
-                              choices=ALGORITHM_CHOICES
-                              )
+    algorithms = forms.MultipleChoiceField(label='Algorithmss',
+                                           initial=[choice[1] for choice in ALGORITHM_CHOICES[:3]],
+                                           widget=forms.CheckboxSelectMultiple(
+                                               attrs={'class': 'multi-checkbox', "name": 'algorithms[]'}),
+                                           choices=ALGORITHM_CHOICES,
+
+                                           )
 
 
 class RPCAparamForm(forms.Form):
@@ -68,7 +69,7 @@ class SpeedAndAccelerationField(forms.Form):
     amax = forms.FloatField(help_text="Maximal change in acceleration greater than 0.", label='AMAX', initial=0.5,
                             widget=forms.NumberInput(attrs={'min': "0", "step": "any", "class": 'form-control'}))
 
-    #smin = forms.FloatField(help_text="Minimal change less than 0.", label='SMIN', initial=-0.5,
+    # smin = forms.FloatField(help_text="Minimal change less than 0.", label='SMIN', initial=-0.5,
     #                        widget=forms.NumberInput(attrs={'max': "0", "step": "any", "class": 'form-control'}))
     smax = forms.FloatField(help_text="Maximal change greater than 0.", label='SMAX', initial=0.5,
                             widget=forms.NumberInput(attrs={'min': "0", "step": "any", "class": 'form-control'}))
@@ -77,17 +78,16 @@ class SpeedAndAccelerationField(forms.Form):
 class SRCFForm(forms.Form):
     alg_type = hiddenField(SCR)
     THETA = forms.FloatField(help_text="Theta", label='Theta', initial=5,
-                            widget=forms.NumberInput(attrs={'min': "0", "step": 1 , "class": 'form-control'}))
+                             widget=forms.NumberInput(attrs={'min': "0", "step": 1, "class": 'form-control'}))
     delta = forms.FloatField(help_text="Delta", label='Delta', initial=500,
-                            widget=forms.NumberInput(attrs={'min': "0", "step": "any", "class": 'form-control'}))
-
+                             widget=forms.NumberInput(attrs={'min': "0", "step": "any", "class": 'form-control'}))
 
 
 class KalmanFilterFilterForm(forms.Form):
     alg_type = hiddenField(KalmanFilter)
     transition_cov = forms.FloatField(help_text="transition_covariance", label='Cov', initial=0.5,
-                             widget=forms.NumberInput(attrs={'min': 0, "step": 0.1,"max":1, "class": 'form-control'}))
-
+                                      widget=forms.NumberInput(
+                                          attrs={'min': 0, "step": 0.1, "max": 1, "class": 'form-control'}))
 
 
 ParamForms = {"SCREEN": SCREENparamForm(), "RPCA": RPCAparamForm(), "CDrec": CDparamForm(), "IMR": IMRparamField()}

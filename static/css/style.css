@@ -10637,7 +10637,6 @@ code {
   .form-group.form-group-marginless, .form-group.form-group-last {
     margin-bottom: 0px; }
   .form-group label {
-    font-size: 1rem;
     font-weight: 400; }
   .form-group .invalid-feedback,
   .form-group .valid-feedback {

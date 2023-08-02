@@ -1,18 +1,40 @@
 <div class="kt-portlet">
-    <div class="kt-portlet__head">
+    <div class="kt-portlet__head kt-portlet__head kt-portlet__head-progress">
         <div class="kt-portlet__head-label">
             {% block portlet-label %}
                 <h3 class="kt-portlet__head-title">
-                    {% block portlet-title %}
-                    {% endblock %}
+                    <div>
+                        {% block portlet-title %}
+                        {% endblock %}
+                    </div>
+                    <div>
+                        {% block portlet-below-title %}
+                        {% endblock %}
+                    </div>
                 </h3>
             {% endblock %}
         </div>
-        <div class="kt-portlet__head-toolbar">
+
+        <div class="kt-portlet__head-toolbar ">
             {% block portlet-toolbar %}
             {% endblock %}
         </div>
     </div>
+
+    {#    {% block portlet-below-title %}#}
+    {#         Empty block, this will be overridden in child templates if needed #}
+    {#    {% endblock %}#}
+    {##}
+    {#    {% if block.super %}#}
+    {#        <div class="kt-portlet__head">#}
+    {#            <div class="kt-portlet__head-label">#}
+    {#                <h3 class="kt-portlet__head-title">#}
+    {#                    {{ block.super }}#}
+    {#                </h3>#}
+    {#            </div>#}
+    {#        </div>#}
+    {#    {% endif %}#}
+
     <div class="kt-portlet__body">
         {% block portlet-body %}
         {% endblock %}

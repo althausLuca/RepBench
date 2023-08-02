@@ -12,7 +12,7 @@
     <div class="kt-portlet">
         <div class="kt-portlet__head">
             <div class="kt-portlet__head-label">
-                <h3 class="kt-portlet__head-title">Benchmark Tool for Anomaly Repair in Time Series</h3>
+                <b><h3 class="kt-badge--bold"> Benchmark Tool for Anomaly Repair in Time Series </h3> </b>
             </div>
         </div>
         <div class="kt-portlet__body">
@@ -36,32 +36,37 @@
                             </ul>
                             <ul>
                                 <li><a href="{% url 'display_datasets' option="Display" synthetic="True" %}">
-                                       Synthetic Datasets</a>
+                                    Synthetic Datasets</a>
                                 </li>
                             </ul>
                         </li>
-                        <li>Repair
+                        <li>Anomaly Repair
                             <ul>
                                 <li><a href="{% url 'display_datasets' option="Repair" %}">Inject and Repair
                                     Datasets</a>
                                 </li>
-                                <li><a href="{% url 'inject_and_compare' %}">Compare different Repair Techniques</a>
+                                <li><a href="{% url 'inject_and_compare' %}">Compare Repair Techniques</a>
                                 </li>
                             </ul>
                         </li>
                         <li>Recommendation
                             <ul>
-                                <li><a  href="{% url 'recommendation' type="FLAML" %}">Model Selection using Flaml</a></li>
-                                <li><a href="{% url 'recommendation' type="RayTune" %}">Model Selection using RayTune</a></li>
+                                <li><a href="{% url 'recommendation' type="FLAML" %}">Model Selection using Flaml</a>
+                                </li>
+                                <li><a href="{% url 'recommendation' type="RayTune" %}">Model Selection using
+                                    RayTune</a></li>
                             </ul>
                         </li>
-                        <li>Algorithm Analysis
+                        <li>Algorithm Tuning
                             <ul>
-                                <li><a href="{% url 'repair_datasets' type='dimensionality_reduction' %}">Detailed
-                                    Repair of Matrix
-                                    decomposition Techniques</a></li>
-                                <li><a href=" {% url 'optimization_datasets' %}">Display Parameter Search using Bayesian
-                                    Optimization or Successive Halving Search</a></li>
+                                <li><a href="{% url 'repair_datasets' type='dimensionality_reduction' %}">
+{#                                    Detailed Repair of Matrix#}
+                                   Matrix decomposition
+{#                                    Techniques#}
+                                </a></li>
+                                <li><a href=" {% url 'optimization_datasets' %}">Parameter Search
+{#                                    using Bayesian Optimization or Successive Halving Search#}
+                                    </a></li>
                             </ul>
                         </li>
                     </ul>
@@ -74,8 +79,27 @@
                         <li>Stream Data Cleaning under Speed Constraints (SCREEN) <a
                                 href="https://sxsong.github.io/doc/15sigmod-screen.pdf" target="_"> [SIGMOD 2015] </a>
                         </li>
-                        <li>CDrep (Repair based on the Centroid Decomposition)</li>
-                        <li>RPCA (Robust PCA using Huber Loss Function)</li>
+                        <li>CDrep (Repair based on the Centroid Decomposition)
+                            <a href="https://link.springer.com/epdf/10.1007/s10115-019-01421-7?sharing_token=ArbT02FoYBvvgtLRFAD7WPe4RwlQNchNByi7wbcMAY68PG4PyZ1qFeajhCtjowDpPRkXLjAKmZcG0dA9vjhyjkIqCQMfdzMyXZT2QMdmzvex9vXSyXvOAKeZ1X0HOSyJfEYW5o-B83UrvUz4FIBQqHZuw_r7BgeQ4HMvBzQnU10="
+                               target="_"> [VLDB 2021] </a>
+                        </li>
+                        <li>RPCA (Robust PCA using Huber Loss Function)
+                            <a href="https://link.springer.com/article/10.1134/S0005117917030092"
+                               target="_"> [ARC 17] </a>
+                        </li>
+                        {#  Journal “Avtomatika i Telemekhanika” is published in Russian and translated in ... Abbreviation: АиТ (in Russian), AiT (transliterated), ARC (English title)#}
+                    </ul>
+
+                    <p><b>Algorithm Selection </b></p>
+                    <ul>
+                        <li> A Fast Library for Automated Machine Learning & Tuning<a href="https://microsoft.github.io/FLAML/"
+                                                                 target="_"> (FLAML) </a></li>
+                        <li>Ray Tune: Hyperparameter Tuning (<a
+                                href="https://arxiv.org/abs/1807.05118" target="_">Paper </a>
+                            |<a
+                                href="https://docs.ray.io/en/latest/tune/index.html" target="_"> Documentation</a>)
+                        </li>
+
                     </ul>
                 </div>
             </div>

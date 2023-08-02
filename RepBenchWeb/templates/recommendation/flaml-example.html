@@ -11,6 +11,16 @@
     })
 </script>
 
+<h2 class="" style="margin-bottom: 5px"> Recommendation
+    {% include "parts/info-box.html" with id="rec-info" %}
+</h2>
+<div id="rec-info" style="display:none; margin-top: -3px; margin-bottom: 3px">
+    Using the <a href="https://microsoft.github.io/FLAML/">FLAML</a> autoML library
+    we display the current scores of the different classification estimators (in black)
+    while keeping track of the current best estimator (in red).
+</div>
+
+
 <div class="row">
     <div class="col-md-8">
         {% include "recommendation/flaml_chart_and_form.html" %}
@@ -39,11 +49,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="kt-portlet__head-toolbar">
-                </div>
+                {#                <div class="kt-portlet__head-toolbar">#}
+                {#                </div>#}
             </div>
-            <div class="kt-portlet__body" style="height:560px">
-                <table id="parameterTable">
+            <div class="kt-portlet__body" style="height:604px">
+                <table id="parameterTable" style="font-size: 16px !important;">
                     <thead>
                     <tr>
                         <th>Estimator</th>
