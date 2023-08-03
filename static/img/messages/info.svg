@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" xmlns:xlink="http://www.w3.org/1999/xlink" height="24px" version="1.1" viewBox="0 0 24 24" width="24px">
+<title/>
+<desc/>
+<defs/>
+<g fill="none" fill-rule="evenodd" id="miu" stroke="none" stroke-width="1">
+    <g id="Artboard-1" transform="translate(-755.000000, -119.000000)">
+        <g id="slice" transform="translate(215.000000, 119.000000)"/>
+        <path d="M756,130.5 C756,124.148725 761.148725,119 767.5,119 C773.851275,119 779,124.148725 779,130.5 C779,136.851275 773.851275,142 767.5,142 C761.148725,142 756,136.851275 756,130.5 Z M767.75,126 C768.440356,126 769,125.440356 769,124.75 C769,124.059644 768.440356,123.5 767.75,123.5 C767.059644,123.5 766.5,124.059644 766.5,124.75 C766.5,125.440356 767.059644,126 767.75,126 Z M765,127 L765,128 L766.5,128 L766.5,135 L765,135 L765,136 L770.5,136 L770.5,135 L769,135 L769,127 L765,127 Z" fill="#77c0d9" id="circle-info-more-information-detail-glyph"/>
+    </g>
+</g>
+</svg>
