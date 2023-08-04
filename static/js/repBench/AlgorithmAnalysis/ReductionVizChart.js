@@ -32,7 +32,7 @@ const init_threshold_chart = function (series = [{
         plotOptions: {
             series: {
                 pointStart: Date.UTC(2010, 0, 1),
-                pointInterval: timeInterval* 1000 // one day
+                pointInterval: timeInterval * 1000 // one day
             }
         },
         chart: {
@@ -48,18 +48,20 @@ const init_threshold_chart = function (series = [{
         }
     });
     thresholdChart.updateThreshold = function (threshold) {
-        thresholdChart.yAxis[0].addPlotLine({
-            color: 'red',
-            width: 5,
+        console.log("updating plot line" , threshold)
+       thresholdChart.update( {  yAxis: {
+        plotLines: [{
             value: threshold,
-            yAxis: 2,
+            width: 1,
+            color: 'red',
             label: {
                 text: 'Threshold',
                 align: 'right',
-                x: -10
+                y: 12,
+                x: 0
             }
-
-        })
+        }]
+    },}   )
     }
     mainChartFetchPromise.then(() => {
             thresholdChart.xAxis[0].setExtremes(mainChart.xAxis[0].min, mainChart.xAxis[0].max)
@@ -78,7 +80,7 @@ const initClassificationReductionChart = function (series_array = [{
         plotOptions: {
             series: {
                 pointStart: Date.UTC(2010, 0, 1),
-                pointInterval: timeInterval* 1000 // one day
+                pointInterval: timeInterval * 1000 // one day
             }
         },
 
@@ -95,7 +97,7 @@ const initClassificationReductionChart = function (series_array = [{
         }
     });
 
-   mainChartFetchPromise.then(() => {
+    mainChartFetchPromise.then(() => {
             classificationReductionChart.xAxis[0].setExtremes(mainChart.xAxis[0].min, mainChart.xAxis[0].max)
             bindZoom(mainChart, thresholdChart, classificationReductionChart)
         }
@@ -110,7 +112,7 @@ const initRepairIterChart = function (series_array = [{
         plotOptions: {
             series: {
                 pointStart: Date.UTC(2010, 0, 1),
-                pointInterval: timeInterval* 1000 // one day
+                pointInterval: timeInterval * 1000 // one day
             }
         },
         chart: {
@@ -126,9 +128,9 @@ const initRepairIterChart = function (series_array = [{
         }
     });
 
-   mainChartFetchPromise.then(() => {
+    mainChartFetchPromise.then(() => {
             classificationReductionChart.xAxis[0].setExtremes(mainChart.xAxis[0].min, mainChart.xAxis[0].max)
-            bindZoom(mainChart, thresholdChart, classificationReductionChart,RepairIterChart)
+            bindZoom(mainChart, thresholdChart, classificationReductionChart, RepairIterChart)
         }
     )
 }

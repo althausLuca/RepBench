@@ -514,8 +514,8 @@ circle.highcharts-legend-nav-active, circle.highcharts-legend-nav-inactive {
 
 .highcharts-plot-line {
   fill: none;
-  stroke: #999999;
-  stroke-width: 1px;
+  /*stroke: #999999;*/
+  /*stroke-width: 1px;*/
 }
 
 /* Highcharts More and modules */

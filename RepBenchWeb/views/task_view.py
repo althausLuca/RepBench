@@ -16,14 +16,18 @@ class TaskView:
 
     @classmethod
     def init_task(cls,request):
+        print("init task")
         task_id = request.POST.get("task_id",False) or  request.POST.get("csrfmiddlewaretoken")
 
         try:  # clear older task running with same id
             TaskData.objects.get(task_id=task_id).delete()
         except TaskData.DoesNotExist:
             pass
+        print("deleted old task")
+
         task_data = TaskData(task_id=task_id, data_type=cls.data_type)
         task_data.save()
+        print("created task")
         return cls.specific_task(request, task_id)
 
     @staticmethod

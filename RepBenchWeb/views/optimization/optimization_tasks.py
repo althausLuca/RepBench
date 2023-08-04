@@ -33,6 +33,8 @@ class SuccesiveHalvingTask(TaskView):
 
     @classmethod
     def specific_task(cls, request, task_id):
+        print("starting specific task")
+
         alg_type, param_ranges = extract_opt_input(request.POST)
 
         post = request.POST.dict()
@@ -44,6 +46,8 @@ class SuccesiveHalvingTask(TaskView):
         injected_series = json.loads(post.pop("injected_series"))
 
         set_name = post.pop("setname")
+
+        print("computing paramgrid")
 
         paramgrid = {}
         for k, v in param_ranges.items():
@@ -57,8 +61,11 @@ class SuccesiveHalvingTask(TaskView):
 
         opt_config = {}
 
+        print("loading opt inputs")
+
         repair_inputs: dict = cls.load_optimization_data(set_name, injected_series)
 
+        print("starting celery task")
         succesive_halving_task.delay(alg_type, paramgrid, opt_config,
                                      **repair_inputs,
                                      my_task_id=task_id)
@@ -80,6 +87,8 @@ class SuccesiveHalvingTask(TaskView):
 class BayesianOptimisationTask(SuccesiveHalvingTask):
     @classmethod
     def specific_task(cls, request, task_id):
+        print("starting specific task")
+
         alg_type, param_ranges = extract_opt_input(request.POST)
 
         post = request.POST.dict()
@@ -99,6 +108,7 @@ class BayesianOptimisationTask(SuccesiveHalvingTask):
         repair_inputs: dict = cls.load_optimization_data(set_name, injected_series)
 
         alg = algo_mapper[alg_type]()
+        print("loading opt inputs")
 
         alg_params = alg.get_fitted_params()
         for key in param_ranges.keys():
@@ -110,7 +120,7 @@ class BayesianOptimisationTask(SuccesiveHalvingTask):
 
         optimizer = BayesianOptimizer(alg, **opt_config)  # just a test before running with celery
 
-
+        print("starting celery task")
         bayesian_optimization_task.delay(alg_type, param_ranges, opt_config,
                                          **repair_inputs,
                                          my_task_id=task_id)

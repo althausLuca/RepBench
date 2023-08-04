@@ -3,6 +3,16 @@
 
 
 {% block aboveChartContent %}
+    <style>
+        .form-group {
+            display: inline-block;
+         }
+        .run-btn {
+            transform: translate(0, -10px);
+         }
+
+    </style>
+
       <div class="kt-portlet kt-portlet__body--fill">
         <div class="kt-portlet__head">
             <div class="kt-portlet__head-label">
@@ -12,15 +22,9 @@
             </div>
         </div>
         <div class="kt-portlet__body" style="text-align:center;">
-            <div class="row alg-selection" style="display: flex; justify-content: center; align-items: center;">
+            <div class="row" style="display: flex; justify-content: center; align-items: center;">
                 <div class="form-group inline-form" id="alg-selection">
                     <label>Algorithm
-                        {#                        <a tabindex="10" class="btn" role="button" data-toggle="kt-popover"#}
-                        {#                                       data-placement="top"#}
-                        {#                                       data-trigger="focus"#}
-                        {#                                       data-content="Select the algorithm you want to use for repair"#}
-                        {#                                       data-original-title="" title=""><i#}
-                        {#                            class="mdi mdi-information-outline mdi-18px"></i></a>#}
                     </label>
                     <select class="form-control" name="algorithm" onchange="displayfunc(value)">
                         {% for key, _ in alg_forms.items %}
@@ -40,15 +44,6 @@
 {% endblock %}
 
 {% block belowChartContent %}
-
-{#    <style>#}
-        {#.form-group {#}
-        {#    display: inline-block;#}
-        {# }#}
-        {#.run-btn {#}
-        {#    transform: translate(0, -10px);#}
-        {# }#}
-{#    </style>#}
     <div class="kt-portlet">
         <div class="kt-portlet__head">
             <div class="kt-portlet__head-label">

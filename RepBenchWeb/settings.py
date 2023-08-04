@@ -189,8 +189,8 @@ sys.path.append(normpath(join(PROJECT_ROOT, 'apps')))
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
-CELERY_BROKER_URL = 'redis://redis:6379'
-CELERY_RESULT_BACKEND = 'redis://redis:6379'
+CELERY_BROKER_URL = 'redis://redis:1234'
+CELERY_RESULT_BACKEND = 'redis://redis:1234'
 CELERY_TASK_RESULT_EXPIRES = 1800  # 30min
 CELERYD_CONCURRENCY = 5
 CELERYD_PREFETCH_MULTIPLIER = 0

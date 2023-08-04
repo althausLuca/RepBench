@@ -83,6 +83,7 @@
             if(this.timeoutID != null) {
                 clearTimeout(this.timeoutID); // Clear the ongoing timeout/iteration
             }
+            console.log("START OPTIMIZATION")
             $.ajax({
                 type: 'POST',
                 url: this.start_url,
@@ -94,8 +95,6 @@
                     this.getResults();
                     this.iterateData();
                     {#RecommendationChart.chart.hideLoading()#}
-
-
                     optimData = response
                 },
                 error: function (response) {

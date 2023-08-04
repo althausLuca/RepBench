@@ -27,7 +27,7 @@ urlpatterns = [
     path('', index_view.index, name='index'),
     path(app_name, index_view.index, name='index'),
     path(app_name+'/', index_view.index, name='index'),
-
+    path("about/", index_view.about, name='about'),
 
     path('display_datasets/', dataset_views.display_datasets, name='display_datasets'),
     path('display_datasets/<str:option>', dataset_views.display_datasets, name='display_datasets'),

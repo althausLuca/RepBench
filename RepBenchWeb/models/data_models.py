@@ -82,7 +82,14 @@ class DataSet(BaseDataSet):
         Returns: pandas.DataFrame from stored json attribute
         """
 
-        data_frame = pd.read_json(self.dataframe)
+        json_data = self.dataframe
+        # parse index values as numeric if possible
+
+        import warnings
+        with warnings.catch_warnings():
+            warnings.filterwarnings("ignore", category=FutureWarning)
+            data_frame = pd.read_json(self.dataframe)
+
         data_frame.columns = [c if isinstance(c, int) else c.replace(" ", "") for c in data_frame.columns]
         return data_frame
 

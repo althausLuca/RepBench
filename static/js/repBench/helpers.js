@@ -2,6 +2,8 @@ const registerPlayAndReloadBtns = function (name, handler) {
     $('#play-' + name).on('click', function (event) {
         event.preventDefault();
         $(this).find('i').toggle();
+        console.log('play')
+        console.log(handler)
         handler.playing = !handler.playing
         if (handler.computing) {
         } else {
