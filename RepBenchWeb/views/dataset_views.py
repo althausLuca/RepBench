@@ -79,6 +79,8 @@ def display_datasets(request=None,option="Display" , synthetic=False):
 
 
 def delete_dataset(request,setname):
+    print("delete_dataset")
+    print(setname)
     try:
         dataSet = DataSet.objects.get(title=setname)
         dataSet.delete()
@@ -88,9 +90,12 @@ def delete_dataset(request,setname):
     except:
         try:
             dataSet = InjectedContainer.objects.get(title=setname)
+            print(dataSet,"EEEEEEEE")
             dataSet.delete()
             response = f"{setname} (synthetic) deleted"
-        except:
+        except Exception as e:
+            print(f"could not delete {setname} in {DataSet.objects.all()} or {InjectedContainer.objects.all()}" )
+            raise e
             response = f"could not delete {setname}"
 
     return display_datasets(request)

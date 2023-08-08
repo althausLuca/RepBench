@@ -127,7 +127,6 @@ class InjectedContainer(BaseDataSet):
         injectedDataContainer: InjectedDataContainer = self.injected_container
         a_rates = injectedDataContainer.get_a_rate_per_col()
         a_nbr = injectedDataContainer.get_n_anomalies_per_col()
-        print("AAAAAAAAA NBR", a_nbr)
         scores = injectedDataContainer.original_scores
         scores = {score_map[k]: round(v, 4) for k, v in scores.items() if k in score_map.keys()}
 

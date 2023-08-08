@@ -140,8 +140,6 @@ class InjectedDataContainer:
         result = {}
         cols = self.injected.columns
         for col in cols:
-            print(self.class_df[col].values.astype(int))
-            print(np.diff(self.class_df[col].values.astype(int),1) > 0)
             result[col] = np.sum(np.diff(self.class_df[col].values.astype(int)) > 0)
         return result
 

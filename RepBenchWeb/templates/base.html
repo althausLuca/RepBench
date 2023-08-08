@@ -64,11 +64,10 @@
             }
 
             function sendPostRequest(link) {
+                const formDataCookie = new FormData(document.getElementById('empty-form'));
                 fetch(link, {
                     method: 'POST',
-                    body: JSON.stringify({
-                        'csrfmiddlewaretoken': csrftoken
-                    })
+                    body: formDataCookie
                 }).then(function (response) {
                     if (response.status === 200) {
                         console.log('Item was deleted successfully.');
@@ -88,6 +87,10 @@
     {% endblock %}
 
 </head>
+
+<form id="empty-form" style="display: none">
+    {% csrf_token %}
+</form>
 
 <!-- begin: Body -->
 <body class="kt-page--loading-enabled kt-page--loading kt-page--fixed kt-quick-panel--right kt-demo-panel--right kt-offcanvas-panel--right kt-header--fixed kt-header--minimize-menu kt-header-mobile--fixed kt-subheader--enabled kt-subheader--transparent kt-aside--enabled kt-aside--left kt-aside--fixed kt-page--loading">
@@ -214,7 +217,7 @@
                                         </ul>
                                     </div>
                                 </li>
-                                 <li class="kt-menu__item kt-menu__item--rel"><a href="{% url 'about' %}"
+                                <li class="kt-menu__item kt-menu__item--rel"><a href="{% url 'about' %}"
                                                                                 class="kt-menu__link"><span
                                         class="kt-menu__link-text">About</span></a></li>
                             </ul>
@@ -282,7 +285,7 @@
                             {#                                                        {% include 'vadetisweb/parts/messages.html' %}#}
                             {#                                                    </div>#}
                             <!-- begin: Main Content -->
-                            {% block  contnet_header  %}{% endblock %}
+                            {% block  contnet_header %}{% endblock %}
                             {% block content %}{% endblock %}
                             <!-- end: Main Content -->
                         </div>

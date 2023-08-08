@@ -31,94 +31,154 @@
                     </div>
                 </div>
                 <div class="kt-portlet__body">
+                    {#                    <table class="table table-striped" style="margin-bottom: 0 !important;">#}
+                    {#                        <thead>#}
+                    {#                        <tr>#}
+                    {#                            <th>Time Series</th>#}
+                    {#                            <th>Anomaly Rate</th>#}
+                    {#                        </tr>#}
+                    {#                        </thead>#}
+                    {#                    </table>#}
+                    {##}
+                    {#                    <div style="max-height: 200px; overflow-y: scroll">#}
+                    {#                        <table class="table table-striped">#}
+                    {#                            <tbody>#}
+                    {#                            {% for ts,a_rate in data_info.injected_rates.items %}#}
+                    {#                                <tr>#}
+                    {#                                    <td>{{ ts }}</td>#}
+                    {#                                    <td>{{ a_rate }}</td>#}
+                    {#                                </tr>#}
+                    {#                            {% endfor %}#}
+                    {#                            </tbody>#}
+                    {#                        </table>#}
+                    {#                    </div>#}
+                    {#                    <table class="table table-striped" style="margin-bottom: 0 !important;">#}
+                    {#                        <thead>#}
+                    {#                        <tr>#}
+                    {#                            <th>Time Series</th>#}
+                    {#                            <th>#Anomalies</th>#}
+                    {#                        </tr>#}
+                    {#                        </thead>#}
+                    {#                    </table>#}
+                    {##}
+                    {#                    <div style="max-height: 200px; overflow-y: scroll">#}
+                    {#                        <table class="table table-striped">#}
+                    {#                            <tbody>#}
+                    {#                            {% for ts, a_nmbr in data_info.a_nbr.items %}#}
+                    {#                                <tr>#}
+                    {#                                    <td>{{ ts }}</td>#}
+                    {#                                    <td>{{ a_nmbr }}</td>#}
+                    {#                                </tr>#}
+                    {#                            {% endfor %}#}
+                    {#                            </tbody>#}
+                    {#                        </table>#}
+                    {#                    </div>#}
+                    {#                    <table class="table table-striped" style="margin-bottom: 0 !important;">#}
+                    {#                        <thead>#}
+                    {#                        <tr>#}
+                    {#                            <th>Time Series</th>#}
+                    {#                            <th>Contamination Rate</th>#}
+                    {#                            <th>#Anomalies</th>#}
+                    {#                        </tr>#}
+                    {#                        </thead>#}
+                    {#                        <tbody>#}
+                    {#                        {% for ts, a_rate in data_info.injected_rates.items %}#}
+                    {#                            <tr>#}
+                    {#                                <td>{{ ts }}</td>#}
+                    {#                                <td>{{ a_rate }}</td>#}
+                    {#                                <td>{{ data_info.a_nbr[ts] }}</td>#}
+                    {#                            </tr>#}
+                    {#                        {% endfor %}#}
+                    {#                        </tbody>#}
+                    {#                    </table>#}
                     <table class="table table-striped" style="margin-bottom: 0 !important;">
                         <thead>
                         <tr>
                             <th>Time Series</th>
-                            <th>Anomaly Rate</th>
-                        </tr>
-                        </thead>
-                    </table>
-
-                    <div style="max-height: 200px; overflow-y: scroll">
-                        <table class="table table-striped">
-                            <tbody>
-                            {% for ts,a_rate in data_info.injected_rates.items %}
-                                <tr>
-                                    <td>{{ ts }}</td>
-                                    <td>{{ a_rate }}</td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    <table class="table table-striped" style="margin-bottom: 0 !important;">
-                        <thead>
-                        <tr>
-                            <th>Time Series</th>
+                            <th>Contamination Rate</th>
                             <th>#Anomalies</th>
                         </tr>
                         </thead>
-                    </table>
-
-                    <div style="max-height: 200px; overflow-y: scroll">
-                        <table class="table table-striped">
-                            <tbody>
-                            {% for ts,a_rate in data_info.a_nbr.items %}
-                                <tr>
-                                    <td>{{ ts }}</td>
-                                    <td>{{ a_rate }}</td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-
-                </div>
-
-
-            </div>
-        </div>
-
-
-        <div class="col-md-4">
-            <div class="kt-portlet">
-                <div class="kt-portlet__head">
-                    <div class="kt-portlet__head-label">
-                        <h3 class="kt-portlet__head-title"> Scores </h3>
-                    </div>
-                    <div class="kt-portlet__head-toolbar">
-                    </div>
-                </div>
-                <div class="kt-portlet__body">
-                    <table class="table table-striped" style="margin-bottom: 0 !important;">
-
-                        <thead>
-                        <tr>
-                            <th>Metric</th>
-                            <th>Value</th>
-                        </tr>
-
-                        </thead>
-                        <tbody>
-                        {% for score,value in data_info.scores.items %}
-                            <tr>
-                                <td>{{ score }}</td>
-                                <td>{{ value }}</td>
-                            </tr>
-                        {% endfor %}
+                        <tbody id="combinedTableBody">
                         </tbody>
                     </table>
+
+                    <script>
+                        const injectedRates =
+                        {{ data_info.injected_rates | safe }}
+                        const aNbr =
+                        {{ data_info.a_nbr | safe }}
+
+                        const combinedTableBody = document.getElementById('combinedTableBody');
+
+                        for (const ts in injectedRates) {
+                            const row = document.createElement('tr');
+
+                            const tsCell = document.createElement('td');
+                            tsCell.textContent = ts;
+                            row.appendChild(tsCell);
+
+                            const aRateCell = document.createElement('td');
+                            aRateCell.textContent = injectedRates[ts];
+                            row.appendChild(aRateCell);
+
+                            const aNbrCell = document.createElement('td');
+                            aNbrCell.textContent = aNbr[ts] !== undefined ? aNbr[ts] : 'N/A';
+                            row.appendChild(aNbrCell);
+
+                            combinedTableBody.appendChild(row);
+                        }
+                    </script>
+
+
                 </div>
+
 
             </div>
         </div>
+
+
+        {#        <div class="col-md-4">#}
+        {#            <div class="kt-portlet">#}
+        {#                <div class="kt-portlet__head">#}
+        {#                    <div class="kt-portlet__head-label">#}
+        {#                        <h3 class="kt-portlet__head-title"> Scores </h3>#}
+        {#                    </div>#}
+        {#                    <div class="kt-portlet__head-toolbar">#}
+        {#                    </div>#}
+        {#                </div>#}
+        {#                <div class="kt-portlet__body">#}
+        {#                    <table class="table table-striped" style="margin-bottom: 0 !important;">#}
+        {##}
+        {#                        <thead>#}
+        {#                        <tr>#}
+        {#                            <th>Metric</th>#}
+        {#                            <th>Value</th>#}
+        {#                        </tr>#}
+        {##}
+        {#                        </thead>#}
+        {#                        <tbody>#}
+        {#                        {% for score,value in data_info.scores.items %}#}
+        {#                            <tr>#}
+        {#                                <td>{{ score }}</td>#}
+        {#                                <td>{{ value }}</td>#}
+        {#                            </tr>#}
+        {#                        {% endfor %}#}
+        {#                        </tbody>#}
+        {#                    </table>#}
+        {#                </div>#}
+        {##}
+        {#            </div>#}
+        {#        </div>#}
+        <div id="correlation" class="col-md-4">
+
+            <div id="corr_container" style="max-height: 700px;"></div>
+               </div>
+
     </div>
 
-    <div id="correlation" class="col-md-6">
-        <div id="corr_container" style="max-height: 700px;"></div>
-    </div>
-     {% block js %}
+
+    {% block js %}
         <script src='{% static "js/repBench/display/corr-table.js" %}'></script>
         <script>
             const categories = {{ data_info.columns | safe }};

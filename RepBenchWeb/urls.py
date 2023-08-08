@@ -102,7 +102,6 @@ urlpatterns = [
 
     #delete dataset
     path('delete/<str:setname>', dataset_views.delete_dataset, name='delete_dataset'),
-    # path('delete_dataset/<str:setname>', dataset_views.delete_dataset, name='delete_dataset'),
 
     #save dataset
     path('userData/', file_upload_view.upload_files, name='upload_files'),

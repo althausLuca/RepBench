@@ -4,8 +4,7 @@ from RepBenchWeb.models import InjectedContainer
 
 
 class OptimizationModel(models.Model):
-    injected_container = models.ForeignKey(InjectedContainer, on_delete=models.CASCADE)
-
+    injected_container = models.Field(InjectedContainer)
     aquisition_functions = models.JSONField(default=list)
     algorithms = models.JSONField(default=list)
     metrics = models.JSONField(default=dict)
