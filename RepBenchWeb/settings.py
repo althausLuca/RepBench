@@ -125,7 +125,7 @@ DATABASES = {
     }
 
 }
-
+DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880000 # 5000 MB
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
