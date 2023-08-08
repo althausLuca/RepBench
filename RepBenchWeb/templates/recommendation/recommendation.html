@@ -9,7 +9,7 @@
                 {% include 'recommendation/flaml-example.html' %}
             </div>
         {% endblock %}
-    {% include "recommendation/recommendation-script.html" %}
+        {% include "recommendation/recommendation-script.html" %}
 
         {#        <div id="below-chart" class="row col-md-12">#}
         <div id="main-chart" class="col-md-6 disable-mouse-events"> {# disable-mouse-events #}
@@ -21,7 +21,7 @@
                                 <form id="select-dataset" action="" onsubmit="return false">
                                     {% csrf_token %}
                                     {% for field in  injected_datasets_form.visible_fields %}
-                                         {{ field }}
+                                        {{ field }}
                                     {% endfor %}
                                 </form>
                                 <button class="btn btn-primary" style="margin-left:10px"

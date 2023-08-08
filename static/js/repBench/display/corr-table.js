@@ -22,14 +22,20 @@ function getRGBColor(value) {
     // }
 
     const blue = 0 // value > 0 ? 0 : Math.round(255);
-    const green =  value < 0 ? 0 : Math.round(155)
-    const red =  value > 0 ? 0 : Math.round(255)
-    return `rgb(${red}, ${green}, ${blue} , ${Math.pow(absValue,1.5)})`;
+    const green = value < 0 ? 0 : Math.round(155)
+    const red = value > 0 ? 0 : Math.round(255)
+    return `rgb(${red}, ${green}, ${blue} , ${Math.pow(absValue, 1.5)})`;
 }
 
-
+let corr_table_chart = null;
+let full_corr_data = null;
 initCorrTable = function (categories, data, id) {
-    Highcharts.chart(id, {
+    full_corr_data = {
+        data: data,
+        categories: categories
+    };
+
+    corr_table_chart = Highcharts.chart(id, {
         chart: {
             type: 'heatmap',
             marginTop: 40,
@@ -66,15 +72,15 @@ initCorrTable = function (categories, data, id) {
         colorAxis: {
             stops: [
                 [0, getRGBColor(-1)],
-                [0.1, getRGBColor(-1+0.1*2)],
-                [0.2, getRGBColor(-1+0.2*2)],
-                [0.3, getRGBColor(-1+0.3*2)],
-                [0.4, getRGBColor(-1+0.4*2)],
-                [0.5, getRGBColor(-1+0.5*2)],
-                [0.6, getRGBColor(-1+0.6*2)],
-                [0.7, getRGBColor(-1+0.7*2)],
-                [0.8, getRGBColor(-1+0.8*2)],
-                [0.9, getRGBColor(-1+0.9*2)],
+                [0.1, getRGBColor(-1 + 0.1 * 2)],
+                [0.2, getRGBColor(-1 + 0.2 * 2)],
+                [0.3, getRGBColor(-1 + 0.3 * 2)],
+                [0.4, getRGBColor(-1 + 0.4 * 2)],
+                [0.5, getRGBColor(-1 + 0.5 * 2)],
+                [0.6, getRGBColor(-1 + 0.6 * 2)],
+                [0.7, getRGBColor(-1 + 0.7 * 2)],
+                [0.8, getRGBColor(-1 + 0.8 * 2)],
+                [0.9, getRGBColor(-1 + 0.9 * 2)],
                 [1, getRGBColor(1)],
             ],
             min: -1,
@@ -102,7 +108,7 @@ initCorrTable = function (categories, data, id) {
         series: [{
             name: 'Correlation',
             borderWidth: 0,
-            data: corr_data.map(function (point) {
+            data: data.map(function (point) {
                 return {
                     x: point[0],
                     y: point[1],
@@ -140,3 +146,51 @@ initCorrTable = function (categories, data, id) {
 
     });
 }
+
+updateCorrTable = function (series_to_show) {
+    let categories = [...series_to_show]
+
+    if (series_to_show.length === 0) {
+        categories = full_corr_data.categories
+    }
+
+    console.log(full_corr_data)
+    let fullCategories = full_corr_data.categories
+    let indices = [...categories.map(category => fullCategories.indexOf(category))]
+    console.log("indices", indices)
+    let newCorrData = [...full_corr_data.data.filter(point => (indices.includes(point[0]) && indices.includes(point[1])))]
+    delete indices
+    console.log("categories", categories)
+    console.log("new_data", newCorrData)
+
+    corr_table_chart.xAxis[0].categories = categories;
+    corr_table_chart.yAxis[0].categories = categories;
+    corr_table_chart.update({
+        //  xAxis: {
+        //     categories: categories
+        // },
+        //
+        // yAxis: {
+        //     categories: categories,
+        //     reversed: true
+        // },
+        series: [{
+            name: 'Correlation',
+            borderWidth: 0,
+            data: newCorrData.map(function (point) {
+                return {
+                    x: indices.indexOf(point[0]),
+                    y: indices.indexOf(point[1]),
+                    value: point[2],
+                    color: getRGBColor(point[2])
+                }
+            }),
+        }],
+
+    }, true, true, false);
+}
+
+
+
+
+

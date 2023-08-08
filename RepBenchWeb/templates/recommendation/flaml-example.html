@@ -11,14 +11,19 @@
     })
 </script>
 
-<h2 class="" style="margin-bottom: 5px"> Recommendation
-    {% include "parts/info-box.html" with id="rec-info" %}
-</h2>
-<div id="rec-info" style="display:none; margin-top: -3px; margin-bottom: 3px">
-    Using the <a href="https://microsoft.github.io/FLAML/">FLAML</a> autoML library
-    we display the current scores of the different classification estimators (in black)
-    while keeping track of the current best estimator (in red).
-</div>
+{% block  contnet_header %}
+    <h2 class="" style="margin-bottom: 5px"> Recommendation
+        {% include "parts/info-box.html" with id="rec-info" %}
+    </h2>
+    <div class="toggle-page-info" id="rec-info">
+        <li>
+            Using the <a href="https://microsoft.github.io/FLAML/">FLAML</a> autoML library
+            we display the current scores of the different classification estimators (in black)
+            while keeping track of the current best estimator (in red).
+        </li>
+
+    </div>
+{% endblock %}
 
 
 <div class="row">

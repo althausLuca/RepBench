@@ -7,23 +7,6 @@ from RepBenchWeb.views import data_loader
 import RepBenchWeb.models.datasetsConfig as datasetsConfig
 from RepBenchWeb.models import DataSet, InjectedContainer
 
-
-# class NpEncoder(json.JSONEncoder):
-#     def default(self, obj):
-#         if isinstance(obj, np.integer):
-#             return int(obj)
-#         if isinstance(obj, np.floating):
-#             return round(float(obj), 3)
-#         if isinstance(obj, np.ndarray):
-#             return obj.tolist()
-#         if isinstance(obj, float):
-#             return round(obj, 3)
-#         if isinstance(obj, np.nan):
-#             return None
-#
-#         return json.JSONEncoder.default(self, obj)
-
-
 class DatasetView(View):
     default_nbr_of_ts_to_display = 5
     template = DISPLAY_DATASET_TEMPLATE
@@ -36,17 +19,17 @@ class DatasetView(View):
 
         # generatate correlation data for highcharts
         df = dataSet.df
-        corr = df.corr().round(3)
-        corr_data = []
-        for i, row in enumerate(corr.values):
-            for j, v in enumerate(row):
-                corr_data.append([i, j, v])
-        columns = df.columns.tolist()
+        # corr = df.corr().round(3)
+        # corr_data = []
+        # for i, row in enumerate(corr.values):
+        #     for j, v in enumerate(row):
+        #         corr_data.append([i, j, v])
+        # columns = df.columns.tolist()
 
         context = {}
         context["data_info"] = dataSet.get_info()
-        context["columns"] = columns
-        context["corr_data"] = corr_data
+        # context["columns"] = columns
+        # context["corr_data"] = corr_data
         # context.update(dataSet.get_catch_22_features())
         return context
 

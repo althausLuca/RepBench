@@ -16,6 +16,23 @@
 }
 
 
+/*page info*/
+
+.toggle-page-info {
+  display:none;
+    margin-top: -3px;
+    margin-bottom: 3px;
+    margin-left: 20px;
+    font-size: 18px;
+}
+
+.content-header {
+    margin-bottom: 5px;
+    font-size: 30px;
+
+}
+
+
 /*Buttons*/
 .graph-button {
     font-size: 12px;

@@ -41,7 +41,7 @@ class BaseDataSet(models.Model):
         """
         Returns: dict of features for each column
         """
-        #if self.features == {}:
+        # if self.features == {}:
         self.compute_features()
         return self.features
 
@@ -60,6 +60,13 @@ class BaseDataSet(models.Model):
         raise NotImplementedError("This method should be implemented in a subclass")
 
     def get_info_(self):
+        corr = self.df.corr().round(3)
+        corr_data = []
+        for i, row in enumerate(corr.values):
+            for j, v in enumerate(row):
+                corr_data.append([i, j, v])
+        columns = self.df.columns.tolist()
+
         return {
             "length": self.length,
             "ts_nbr": self.ts_nbr,
@@ -68,8 +75,9 @@ class BaseDataSet(models.Model):
             "description": self.description,
             "granularity": self.granularity,
             "time_interval": granularity_to_time_interval(self.granularity),
+            "columns": columns,
+            "corr_data": corr_data,
         }
-
 
 class DataSet(BaseDataSet):
     dataframe = models.JSONField(null=False, blank=False)
@@ -97,7 +105,6 @@ class DataSet(BaseDataSet):
         info: dict = self.get_info_()
         info["ref_url"] = self.ref_url
         info["url_text"] = self.url_text
-
         return info
 
 
@@ -119,14 +126,16 @@ class InjectedContainer(BaseDataSet):
     def get_info(self):
         injectedDataContainer: InjectedDataContainer = self.injected_container
         a_rates = injectedDataContainer.get_a_rate_per_col()
+        a_nbr = injectedDataContainer.get_n_anomalies_per_col()
+        print("AAAAAAAAA NBR", a_nbr)
         scores = injectedDataContainer.original_scores
         scores = {score_map[k]: round(v, 4) for k, v in scores.items() if k in score_map.keys()}
 
         info = self.get_info_()
         info["injected_rates"] = {ts: r for ts, r in a_rates.items() if r > 0}
+        info["a_nbr"] = {ts: n for ts, n in a_nbr.items() if n > 0}
         info["scores"] = scores
         info["original_data_set"] = self.original_data_set
-
         return info
 
     def recommendation_context(self, automl=None):
@@ -137,8 +146,8 @@ class InjectedContainer(BaseDataSet):
         df_original = original_data.df
         injected_data_container = self.injected_container
         truth = injected_data_container.truth
-        recommendation_results = get_recommendation_and_repair(injected_data_container, classifier=automl,features=features)
-
+        recommendation_results = get_recommendation_and_repair(injected_data_container, classifier=automl,
+                                                               features=features)
 
         repairs = recommendation_results["alg_repairs"]
         repair_converted = {}
@@ -147,7 +156,7 @@ class InjectedContainer(BaseDataSet):
             repair_norm = (repair - mean) / std
             # normalize truth data w.r.t injected series
             repair_converted[alg_name] = map_repair_data(repair_norm, injected_data_container, alg_name=alg_name,
-                                                         links=None, df_original=truth , distinct_ids=True)
+                                                         links=None, df_original=truth, distinct_ids=True)
         recommendation_results["alg_repairs"] = repair_converted
 
         # self.recommendation = json.dumps(recommendation_results, cls=)

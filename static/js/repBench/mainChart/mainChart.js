@@ -1,6 +1,6 @@
 let chartManager = new ChartManager()
 if (typeof chartHeight === 'undefined') {
-  var chartHeight = 750; // Variable declaration and assignment
+    var chartHeight = 750; // Variable declaration and assignment
 }
 
 
@@ -217,6 +217,30 @@ const initMainChart = function (series = {}, addSeriesToChartManager = false, co
         })
     }
 
+
+    mainChart.update({
+        chart: {
+            events: {
+                redraw: function () {
+                    if (typeof updateCorrTable === 'function') {
+                        console.log("redraw")
+                        let series_to_show = mainChart.series.filter(s => s.visible && !(typeof s.name === "string" && s.name.includes("Navigator"))).map(s => s.name)
+                        updateCorrTable(series_to_show)
+                    }
+
+                },
+                load: function () {
+                    if (typeof updateCorrTable === 'function') {
+                        console.log("load")
+                        let series_to_show = mainChart.series.filter(s => s.visible &&
+                            !(typeof s.name === "string" &&
+                                s.name.includes("Navigator"))).map(s => s.name)
+                        updateCorrTable(series_to_show)
+                    }
+                },
+            }
+        },
+    });
 
 
 }

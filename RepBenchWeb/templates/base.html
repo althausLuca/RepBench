@@ -214,7 +214,9 @@
                                         </ul>
                                     </div>
                                 </li>
-
+                                 <li class="kt-menu__item kt-menu__item--rel"><a href="{% url 'about' %}"
+                                                                                class="kt-menu__link"><span
+                                        class="kt-menu__link-text">About</span></a></li>
                             </ul>
                         </div>
                     </div>
@@ -280,6 +282,7 @@
                             {#                                                        {% include 'vadetisweb/parts/messages.html' %}#}
                             {#                                                    </div>#}
                             <!-- begin: Main Content -->
+                            {% block  contnet_header  %}{% endblock %}
                             {% block content %}{% endblock %}
                             <!-- end: Main Content -->
                         </div>

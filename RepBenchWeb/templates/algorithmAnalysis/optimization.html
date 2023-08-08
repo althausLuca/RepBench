@@ -1,9 +1,43 @@
 {% extends "displayDataset/displayDatasetSynthetic.html" %}
 {% load static %}
 
+
+
+{% block  contnet_header %}
+    <h2 class="content-header"> Optimization
+        {% include "parts/info-box.html" with id="opt-info" %}
+    </h2>
+    <div class="toggle-page-info" id="opt-info">
+        <li>
+           Define a parameter space by selecting a lower and upper bound for the parameter values.
+        </li>
+        <li>
+           For large dataset only a subset of the data is used for calibration.
+        </li>
+
+    </div>
+{% endblock %}
+
+
 {% block content %}
+
     <div class="row">
-        <div class="col-lg-8 col-md-8">
+
+        <div class="col-lg-4">
+            {% include 'algorithmAnalysis/bayesianOptForm.html' %}
+        </div>
+        <div class="col-lg-8">
+            <div style="display:block">
+                {% block  chartContent %}
+                    {% with chartHeight=400 %}
+                        {{ block.super }}
+                    {% endwith %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
             <div class="kt-portlet">
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label">
@@ -54,29 +88,16 @@
 
             </div>
         </div>
-        <div class="col-lg-4">
-            {% include 'algorithmAnalysis/bayesianOptForm.html' %}
+     <div class="col-lg-6">
+            {#                        {% block blowChartContent %}#}
+            <div id="SucessiveHalvingChart">
+            </div>
+            {% include "algorithmAnalysis/optimization_charts.html" %}
+{#                        {% endblock %}#}
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-lg-6">
-            {% block blowChartContent %}
-                <div id="SucessiveHalvingChart">
-                </div>
-                {% include "algorithmAnalysis/optimization_charts.html" %}
-            {% endblock %}
-        </div>
-        <div class="col-lg-6">
-            <div style="display:block">
-                {% block  chartContent %}
-                    {% with chartHeight=400 %}
-                        {{ block.super }}
-                    {% endwith %}
-                {% endblock %}
-            </div>
-        </div>
-    </div>
+
 {% endblock %}
 
 

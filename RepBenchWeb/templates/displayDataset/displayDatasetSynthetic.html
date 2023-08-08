@@ -50,10 +50,32 @@
                                 </tr>
                             {% endfor %}
                             </tbody>
-
                         </table>
                     </div>
+                    <table class="table table-striped" style="margin-bottom: 0 !important;">
+                        <thead>
+                        <tr>
+                            <th>Time Series</th>
+                            <th>#Anomalies</th>
+                        </tr>
+                        </thead>
+                    </table>
+
+                    <div style="max-height: 200px; overflow-y: scroll">
+                        <table class="table table-striped">
+                            <tbody>
+                            {% for ts,a_rate in data_info.a_nbr.items %}
+                                <tr>
+                                    <td>{{ ts }}</td>
+                                    <td>{{ a_rate }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
                 </div>
+
 
             </div>
         </div>
@@ -93,4 +115,24 @@
         </div>
     </div>
 
+    <div id="correlation" class="col-md-6">
+        <div id="corr_container" style="max-height: 700px;"></div>
+    </div>
+     {% block js %}
+        <script src='{% static "js/repBench/display/corr-table.js" %}'></script>
+        <script>
+            const categories = {{ data_info.columns | safe }};
+            const corr_data = {{ data_info.corr_data | safe }};
+            console.log("corr_data", corr_data)
+            initCorrTable(categories, corr_data, 'corr_container')
+        </script>
+    {% endblock %}
+    {#    {% block js %}#}
+    {#        <script src='{% static "js/repBench/display/corr-table.js" %}'></script>#}
+    {#        <script>#}
+    {#            const categories = {{ data_info.columns | safe }};#}
+    {#            const corr_data = {{ data_info.corr_data | safe }};#}
+    {#            initCorrTable(categories, corr_data, 'corr_container')#}
+    {#        </script>#}
+    {#    {% endblock %}#}
 {% endblock %}

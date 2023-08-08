@@ -24,24 +24,24 @@ from ray.tune.search.zoopt import ZOOptSearch
 
 
 
-### Raytune does not work when celery is used for some reason (because of the logging setup)
-@signals.setup_logging.connect
-def setup_celery_logging(**kwargs):  #disble default celery logging setup for ray tunes to function
-    pass
-@celery.signals.after_setup_logger.connect
-def on_after_setup_logger(**kwargs): ## add some  logging
-    logger = logging.getLogger('celery')
-    logger.propagate = True
-    logger = logging.getLogger('celery.app.trace')
-    logger.propagate = True
+# ### Raytune does not work when celery is used for some reason (because of the logging setup)
+# @signals.setup_logging.connect
+# def setup_celery_logging(**kwargs):  #disble default celery logging setup for ray tunes to function
+#     pass
+# @celery.signals.after_setup_logger.connect
+# def on_after_setup_logger(**kwargs): ## add some  logging
+#     logger = logging.getLogger('celery')
+#     logger.propagate = True
+#     logger = logging.getLogger('celery.app.trace')
+#     logger.propagate = True
 
 
-
-import logging
-class TaskFilter(logging.Filter):
-    def filter(self, record):
-        task_name = getattr(record, 'task_name', '')
-        return task_name != 'RepBenchWeb.tasks.raytunes.ray_tune_search_task'
+#
+# import logging
+# class TaskFilter(logging.Filter):
+#     def filter(self, record):
+#         task_name = getattr(record, 'task_name', '')
+#         return task_name != 'RepBenchWeb.tasks.raytunes.ray_tune_search_task'
 
 
 @shared_task(bind=True)
@@ -49,8 +49,8 @@ def ray_tune_search_task(self, settings, X_train, y_train, X_test, y_text, my_ta
 
     from RepBenchWeb.models import TaskData
 
-    logger = logging.getLogger(__name__)
-    logger.addFilter(TaskFilter())
+    # logger = logging.getLogger(__name__)
+    # logger.addFilter(TaskFilter())
 
 
 

@@ -136,6 +136,15 @@ class InjectedDataContainer:
             result[col] = round(np.mean(self.class_df[col].values), rounding)
         return result
 
+    def get_n_anomalies_per_col(self):
+        result = {}
+        cols = self.injected.columns
+        for col in cols:
+            print(self.class_df[col].values.astype(int))
+            print(np.diff(self.class_df[col].values.astype(int),1) > 0)
+            result[col] = np.sum(np.diff(self.class_df[col].values.astype(int)) > 0)
+        return result
+
     @property
     def truth_corr(self):
         return self.truth_.corr()

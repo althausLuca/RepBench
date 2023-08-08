@@ -31,6 +31,7 @@ services:
     environment:
       - DJANGO_SETTINGS_MODULE=RepBenchWeb.settings
     restart: always
+#    network_mode: "host"
 
   redis:
     image: redis
