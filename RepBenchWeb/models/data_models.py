@@ -13,7 +13,7 @@ class BaseDataSet(models.Model):
     title = models.CharField(max_length=64, null=False, blank=False, unique=True)
     description = models.CharField(max_length=200, null=True, blank=True)
     granularity = models.CharField(max_length=200, null=True, blank=True)
-    additional_info = models.JSONField(default=dict)
+    additional_info = models.JSONField(default=dict , required=False)
 
     ## infered attributes
     ts_nbr = models.IntegerField(default=0)
