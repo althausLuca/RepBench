@@ -112,7 +112,7 @@ class InjectedContainer(BaseDataSet):
     injectedContainer_json = models.JSONField(null=False, blank=False)
     original_data_set = models.CharField(max_length=100, null=True)
     granularity = models.CharField(max_length=200, null=True, blank=True)
-    recommendation = models.JSONField(blank=False, null=True)  # recomendation for the model
+    recommendation = models.JSONField(blank=True, null=True)  # recomendation for the model
 
     @property
     def injected_container(self):
