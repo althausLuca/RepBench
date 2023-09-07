@@ -169,7 +169,7 @@ To use the WebApp, you need to install [Docker](https://docs.docker.com/engine/i
     $ docker-compose exec web bash python3 manage.py makemigrations
     $ docker-compose exec web bash python3 manage.py migrate
 ```
-
+[Load Initial Datasets](https://github.com/althausLuca/RepBench/edit/master/RepBenchWeb/models/README.md)
 ## Injection and Repair
 
 Inject real-world data with anomalies. Select the time series and anomaly type to inject. Multiple injections are
