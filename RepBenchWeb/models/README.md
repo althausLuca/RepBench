@@ -11,9 +11,6 @@ Note `repbench-web-1` is the name of the container running the Django web server
 ```bash
  sudo docker exec -it repbench-web-1 python3 manage.py shell
 ``
-Add the data set to [models](RepBenchWeb/models/datasetsConfig.py)
-The store folder root is the data folder.
-
 In the shell:
 ```python
 from RepBenchWeb.models.populateDB import *
