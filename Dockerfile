@@ -20,11 +20,14 @@ RUN pip install -U hyperopt
 RUN pip install nevergrad
 RUN pip install -U zoopt
 RUN pip install tsfel
-
+RUN pip install tsfresh==0.20.0
 RUN apt-get install -y openjdk-17-jdk
 RUN pip install JPype1
 
 RUN pip install pykalman
+
+RUN pip install numba
+
 
 # Copy project
 COPY . /code/

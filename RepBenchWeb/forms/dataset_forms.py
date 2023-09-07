@@ -12,7 +12,7 @@ class DataSetsForm(forms.Form):
 class InjectedDataSetForm(forms.Form):
     dataset = forms.CharField(
         label='Dataset',
-        initial=get_injected_data_set_choices()[0],
+        initial= None if len(get_injected_data_set_choices()) == 0 else get_injected_data_set_choices()[0],
         widget=forms.Select(
             choices=get_injected_data_set_choices(),
             attrs={

@@ -11,8 +11,8 @@ from recommendation.recommendation_input_loader import RecommendationInputLoader
 
 
 multiclass_metrics = ['accuracy', 'macro_f1', 'micro_f1']
-feature_file_name = "features_train"
-recommendation_input_loader : RecommendationInputLoader = RecommendationInputLoader("features_train")
+feature_file_name = "features_train.csv"
+recommendation_input_loader : RecommendationInputLoader = RecommendationInputLoader("features_train.csv")
 X_train , y_train = recommendation_input_loader.get_train_data()
 X_test , y_test = recommendation_input_loader.get_test_data()
 
