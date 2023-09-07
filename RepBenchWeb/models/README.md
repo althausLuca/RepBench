@@ -1,14 +1,16 @@
 # Django Model Manipulation
 
+## Migrate the database 
+```bash
+ sudo docker exec -it repbench_web_1 python manage.py makemigrations
+ sudo docker exec -it repbench_web_1 python manage.py migrate
+```
+Note `repbench-web-1` is the name of the container running the Django web server. You can find the name of your container by running `sudo docker ps` and select the container name from the `repbench_web` image.
 
-## Accessing the Django Shell
+## Accessing the Django shell to load initial datasets
 ```bash
  sudo docker exec -it repbench-web-1 python3 manage.py shell
-```
-Remark that `repbench-web-1` is the name of the container running the Django web server. You can find the name of your container by running `sudo docker ps` and looking for the container with the `repbench_web` image.
-
-
-## Store a Dataset
+``
 Add the data set to [models](RepBenchWeb/models/datasetsConfig.py)
 The store folder root is the data folder.
 
