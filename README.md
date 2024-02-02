@@ -168,7 +168,15 @@ To use the WebApp, you need to install [Docker](https://docs.docker.com/engine/i
     docker-compose up
     docker-compose exec web bash python3 manage.py makemigrations
     docker-compose exec web bash python3 manage.py migrate
+    docker-compose exec web bash python3 manage.py shell
 ```
+
+``
+In the shell:
+```python
+from RepBenchWeb.models.populateDB import *
+```
+
 [Load Initial Datasets](https://github.com/althausLuca/RepBench/edit/master/RepBenchWeb/models/README.md)
 ## Injection and Repair
 
