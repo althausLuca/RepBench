@@ -35,22 +35,22 @@ ___
 install python and pip
 
 ```bash
-$ sudo apt install python3-dev
-$ sudo apt install python3-pip
+sudo apt install python3-dev
+sudo apt install python3-pip
 ```
 
 create a activate a virtual environment
 
 ```bash
-$ sudo apt install python3-venv
-$ python3 -m venv venv
-$ source venv/bin/activate
+sudo apt install python3-venv
+python3 -m venv venv
+source venv/bin/activate
 ```
 
 install the requirements for the Benchmark
 
 ```bash
-$ pip3 install -r testing_frame_work/testing_framework_requierements.txt
+pip3 install -r testing_frame_work/testing_framework_requierements.txt
 ```
 
 Additionaly, to use the SRC algorithm you need Java to run on your system e.g., openjdk-17-jre.
@@ -61,7 +61,7 @@ ___
 ## Execution
 
 ```bash
-$ python3 TestingFramework.py -d dataset -a anomaly_type -scen scenario_type -alg algorithm
+python3 TestingFramework.py -d dataset -a anomaly_type -scen scenario_type -alg algorithm
 ```
 
 ### Arguments
@@ -100,20 +100,20 @@ in [here](https://github.com/althausLuca/RepBench/blob/master/repair/parameters.
    anomaly (shift)
 
 ```bash
-$ python3 TestingFramework.py -d bafu5k -scen ts_nbr  -a shift -alg cdrep
+python3 TestingFramework.py -d bafu5k -scen ts_nbr  -a shift -alg cdrep
 ```
 
 2. Run two algorithms (cdrec, rpca) on two dataset (bafu5k,msd) using one scenario (a_rate) and two anomalies (
    shift,outlier)
 
 ```bash
-$ python3 TestingFramework.py  -d bafu5k,msd -scen ts_nbr -a shift,outlier -alg cdrep,rpca
+python3 TestingFramework.py  -d bafu5k,msd -scen ts_nbr -a shift,outlier -alg cdrep,rpca
 ```
 
 3. Run the whole benchmark: all the algorithms , all the dataset on all scenarios with all anomalies (takes ~6 hours)
 
 ```bash
-$ python3 TestingFramework.py -d all -scen all  -a all -alg all
+python3 TestingFramework.py -d all -scen all  -a all -alg all
 ```
 
 # Anomaly Injection
@@ -121,7 +121,7 @@ $ python3 TestingFramework.py -d all -scen all  -a all -alg all
 ## Execution
 
 ```bash
-$ python3 inject.py -d dataset -a anomaly_type -f factor/amplitude -r rate -ts time_series [-l lenght ]
+python3 inject.py -d dataset -a anomaly_type -f factor/amplitude -r rate -ts time_series [-l lenght ]
 ```
 
 ## Arguments
@@ -164,10 +164,10 @@ python3 inject.py -d humidity -a outlier -f 3 -r 0.25 -ts 1,2,3
 To use the WebApp, you need to install [Docker](https://docs.docker.com/engine/install/ubuntu/) and
 
 ```bash
-    $ docker-compose build
-    $ docker-compose up
-    $ docker-compose exec web bash python3 manage.py makemigrations
-    $ docker-compose exec web bash python3 manage.py migrate
+    docker-compose build
+    docker-compose up
+    docker-compose exec web bash python3 manage.py makemigrations
+    docker-compose exec web bash python3 manage.py migrate
 ```
 [Load Initial Datasets](https://github.com/althausLuca/RepBench/edit/master/RepBenchWeb/models/README.md)
 ## Injection and Repair
