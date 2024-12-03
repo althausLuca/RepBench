@@ -203,7 +203,12 @@ class InjectedDataContainer:
         import csv
         with open(f"{folder}/{self.name}_repairs.csv", 'w') as f:
             w = csv.writer(f)
-            w.writerows(self.repairs.items())
+            # w.writerows(self.repairs.items())
+            for key, value in self.repairs.items():
+                if isinstance(value, pd.DataFrame):
+                    f.write(value.to_string(index=False))  # Write full DataFrame as a string
+                else:
+                    w.writerow([key, value])
 
     def plot(self, injected_ts_only=True, show=True):
         return plot_injected_container(self, injected_ts_only, show)
