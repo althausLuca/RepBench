@@ -6,6 +6,9 @@ import hashlib
 import pandas as pd
 
 
+pd.set_option('display.max_rows', None)
+pd.set_option('display.max_columns', None)
+
 class InjectedDataContainer:
     def __init__(self, injected, truth, *, class_df=None, labels, name="injected_container" , is_checked=False):
         assert injected.shape == truth.shape
@@ -209,6 +212,7 @@ class InjectedDataContainer:
                     f.write(value.to_string(index=False))  # Write full DataFrame as a string
                 else:
                     w.writerow([key, value])
+            w.writerow('\n')
 
     def plot(self, injected_ts_only=True, show=True):
         return plot_injected_container(self, injected_ts_only, show)
