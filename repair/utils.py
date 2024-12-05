@@ -7,7 +7,6 @@ Mapping of algorithm names to the actual estimator classes (used when ever we ne
 make sure to include the estimator in the repair.__init__.py file 
 """
 algo_mapper = {
-    ac.RPCA: algs.Robust_PCA_estimator,
     ac.SCREEN: algs.SCREENEstimator,
     ac.IMR: algs.IMR_estimator,
     ac.CDREP: algs.CDRecEstimator,
