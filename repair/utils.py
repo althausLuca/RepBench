@@ -16,6 +16,16 @@ algo_mapper = {
     ac.KalmanFilter : algs.KalmanFilterEstimator,
 }
 
+# algo_mapper = {
+#     ac.RPCA: algs.Robust_PCA_estimator,
+#     ac.SCREEN: algs.SCREENEstimator,
+#     ac.IMR: algs.IMR_estimator,
+#     ac.CDREP: algs.CDRecEstimator,
+#     ac.SPEEDandAcceleration: algs.SpeedAndAccelerationEstimator,
+#     ac.SCR: algs.SCREstimator,
+#     ac.KalmanFilter : algs.KalmanFilterEstimator,
+# }
+
 alias_mapper = {}
 aliases = ac.AlgorithmAliases
 for alg_name,estimator in algo_mapper.items():
