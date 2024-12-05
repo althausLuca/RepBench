@@ -6,20 +6,22 @@ This name will be shown in the webtool and plots
 """
 IMR = "IMR"
 SCREEN = "SCREEN"
-RPCA = "RPCA"
-Robust_PCA = RPCA
+# RPCA = "RPCA"
+# Robust_PCA = RPCA
 CDREP = "CDREP"
 SCR = "SCR"
 KalmanFilter = "KFilter"
 SPEEDandAcceleration = "SCREEN2"
 
-ALGORITHM_TYPES = (IMR, SCREEN, RPCA, CDREP, SPEEDandAcceleration, SCR, KalmanFilter)
-MAIN_ALGORITHMS = (IMR, SCREEN, RPCA, CDREP, KalmanFilter)
+ALGORITHM_TYPES = (IMR, SCREEN, CDREP, SPEEDandAcceleration, SCR, KalmanFilter)
+MAIN_ALGORITHMS = (IMR, SCREEN, CDREP, KalmanFilter)
+# ALGORITHM_TYPES = (IMR, SCREEN, RPCA, CDREP, SPEEDandAcceleration, SCR, KalmanFilter)
+# MAIN_ALGORITHMS = (IMR, SCREEN, RPCA, CDREP, KalmanFilter)
 
 # aliases for the algorithms names
 AlgorithmAliases = {IMR: ["imr"],
                     SCREEN: ["screen","speed"],
-                    RPCA: ["rpca"],
+                    # RPCA: ["rpca"],
                     CDREP: ["cdrep"],
                     KalmanFilter: ["kfilter"],
                     SPEEDandAcceleration: ["screen*"],
@@ -29,8 +31,10 @@ AlgorithmAliases = defaultdict(lambda: [], AlgorithmAliases)
 
 
 # black is used for the truth, and red for anomalies
-ALGORITHM_COLORS = {IMR: "blue", SCREEN: "purple", RPCA: "green", CDREP: "orange", KalmanFilter: "brown",
+ALGORITHM_COLORS = {IMR: "blue", SCREEN: "purple", CDREP: "orange", KalmanFilter: "brown",
                     SPEEDandAcceleration: "pink"}
+# ALGORITHM_COLORS = {IMR: "blue", SCREEN: "purple", RPCA: "green", CDREP: "orange", KalmanFilter: "brown",
+#                     SPEEDandAcceleration: "pink"}
 ALGORITHM_COLORS = defaultdict(lambda: 'cyan', ALGORITHM_COLORS)
 
 
