@@ -9,7 +9,6 @@ make sure to include the estimator in the repair.__init__.py file
 algo_mapper = {
     ac.SCREEN: algs.SCREENEstimator,
     ac.IMR: algs.IMR_estimator,
-    ac.CDREP: algs.CDRecEstimator,
     ac.SPEEDandAcceleration: algs.SpeedAndAccelerationEstimator,
     ac.SCR: algs.SCREstimator,
     ac.KalmanFilter : algs.KalmanFilterEstimator,
